@@ -42,7 +42,7 @@ jobs:
         id: string
         uses: ASzc/change-string-case-action@v1
         with:
-          string: ${{ github.actor }}
+          string: ${{ github.repository_owner }}
 
       - name: Docker meta
         id: meta
