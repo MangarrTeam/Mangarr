@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-18 18:31+0200\n"
+"POT-Creation-Date: 2025-05-18 19:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -277,92 +277,92 @@ msgid "frontend.settings.locale"
 msgstr "Locale"
 
 #: .\plugins\templates\plugins\manager.html:5
-#: .\plugins\templates\plugins\manager.html:8
+#: .\plugins\templates\plugins\manager.html:9
 msgid "plugins.manager.plugin_manager"
 msgstr "Plugin manager"
 
-#: .\plugins\templates\plugins\manager.html:13
-#: .\plugins\templates\plugins\manager.html:157
+#: .\plugins\templates\plugins\manager.html:14
+#: .\plugins\templates\plugins\manager.html:161
 msgid "plugins.manager.resume_downloads"
 msgstr "<i class='fa fa-play'></i> Resume downloads"
 
-#: .\plugins\templates\plugins\manager.html:15
-#: .\plugins\templates\plugins\manager.html:157
+#: .\plugins\templates\plugins\manager.html:16
+#: .\plugins\templates\plugins\manager.html:161
 msgid "plugins.manager.pause_downloads"
 msgstr "<i class='fa fa-pause'></i> Pause downloads"
 
-#: .\plugins\templates\plugins\manager.html:21
+#: .\plugins\templates\plugins\manager.html:23
 msgid "plugins.manager.core_plugins"
 msgstr "Core plugins"
 
-#: .\plugins\templates\plugins\manager.html:25
-#: .\plugins\templates\plugins\manager.html:90
+#: .\plugins\templates\plugins\manager.html:27
+#: .\plugins\templates\plugins\manager.html:92
 msgid "plugins.manager.domain"
 msgstr "Domain"
 
-#: .\plugins\templates\plugins\manager.html:26
-#: .\plugins\templates\plugins\manager.html:91
+#: .\plugins\templates\plugins\manager.html:28
+#: .\plugins\templates\plugins\manager.html:93
 msgid "plugins.manager.name"
 msgstr "Name"
 
-#: .\plugins\templates\plugins\manager.html:27
-#: .\plugins\templates\plugins\manager.html:92
+#: .\plugins\templates\plugins\manager.html:29
+#: .\plugins\templates\plugins\manager.html:94
 msgid "plugins.manager.version"
 msgstr "Version"
 
-#: .\plugins\templates\plugins\manager.html:28
-#: .\plugins\templates\plugins\manager.html:93
+#: .\plugins\templates\plugins\manager.html:30
+#: .\plugins\templates\plugins\manager.html:95
 msgid "plugins.manager.status"
 msgstr "Status"
 
-#: .\plugins\templates\plugins\manager.html:29
-#: .\plugins\templates\plugins\manager.html:94
+#: .\plugins\templates\plugins\manager.html:31
+#: .\plugins\templates\plugins\manager.html:96
 msgid "plugins.manager.action"
 msgstr "Action"
 
-#: .\plugins\templates\plugins\manager.html:40
+#: .\plugins\templates\plugins\manager.html:42
 msgid "plugins.manager.installed"
 msgstr "Installed"
 
-#: .\plugins\templates\plugins\manager.html:42
+#: .\plugins\templates\plugins\manager.html:44
 msgid "plugins.manager.update_available"
 msgstr "Update available"
 
-#: .\plugins\templates\plugins\manager.html:48
-#: .\plugins\templates\plugins\manager.html:105
+#: .\plugins\templates\plugins\manager.html:50
+#: .\plugins\templates\plugins\manager.html:107
 msgid "plugins.manager.downloaded"
 msgstr "Downloaded"
 
-#: .\plugins\templates\plugins\manager.html:50
-#: .\plugins\templates\plugins\manager.html:107
+#: .\plugins\templates\plugins\manager.html:52
+#: .\plugins\templates\plugins\manager.html:109
 msgid "plugins.manager.not_downloaded"
 msgstr "Not downloaded"
 
-#: .\plugins\templates\plugins\manager.html:59
+#: .\plugins\templates\plugins\manager.html:61
 msgid "plugins.manager.update"
 msgstr "Update"
 
-#: .\plugins\templates\plugins\manager.html:61
-#: .\plugins\templates\plugins\manager.html:115
+#: .\plugins\templates\plugins\manager.html:63
+#: .\plugins\templates\plugins\manager.html:117
 msgid "plugins.manager.redownload"
 msgstr "Redownload"
 
-#: .\plugins\templates\plugins\manager.html:66
-#: .\plugins\templates\plugins\manager.html:119
+#: .\plugins\templates\plugins\manager.html:68
+#: .\plugins\templates\plugins\manager.html:121
 msgid "plugins.manager.delete"
 msgstr "Delete"
 
-#: .\plugins\templates\plugins\manager.html:71
-#: .\plugins\templates\plugins\manager.html:124
+#: .\plugins\templates\plugins\manager.html:73
+#: .\plugins\templates\plugins\manager.html:126
 msgid "plugins.manager.download"
 msgstr "Download"
 
-#: .\plugins\templates\plugins\manager.html:79
-#: .\plugins\templates\plugins\manager.html:132
+#: .\plugins\templates\plugins\manager.html:81
+#: .\plugins\templates\plugins\manager.html:134
 msgid "plugins.manager.no_plugins_found"
 msgstr "No plugins foud"
 
-#: .\plugins\templates\plugins\manager.html:86
+#: .\plugins\templates\plugins\manager.html:88
 msgid "plugins.manager.community_plugins"
 msgstr "Community plugins"
 
