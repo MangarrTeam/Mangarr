@@ -1,0 +1,50 @@
+{% extends "core.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block styles %}
+<style>
+    body {
+        height: 100vh !important;
+    }
+</style>
+{% endblock %}
+
+{% block base %}
+<main class="py-4 h-100">
+    <div class="container h-100">
+        <div class="d-flex justify-content-center align-items-center h-100">
+            <div class="col-md-4">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header text-center background-middle text-white">
+                        <h3>Login</h3>
+                    </div>
+                    <div class="card-body background-light text-white">
+                        <form method="post">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                {{ form.username.label_tag }}
+                                {{ form.username }}
+                            </div>
+
+                            <div class="mb-3">
+                                {{ form.password.label_tag }}
+                                {{ form.password }}
+                            </div>
+
+                            {% if form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    {{ form.non_field_errors }}
+                                </div>
+                            {% endif %}
+
+                            <button type="submit" class="btn btn-primary w-100">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

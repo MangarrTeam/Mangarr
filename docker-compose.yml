@@ -1,0 +1,9 @@
+services:
+  mangarr:
+    image: ghcr.io/makhuta/mangarr
+    container_name: mangarr
+    ports:
+      - "8080:80"
+    volumes:
+      - project_root:/app/project_root
+    restart: unless-stopped

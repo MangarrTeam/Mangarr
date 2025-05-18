@@ -1,0 +1,52 @@
+{% extends "core.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block styles %}
+<style>
+    body {
+        height: 100vh !important;
+    }
+</style>
+{% endblock %}
+
+{% block base %}
+<main class="py-4 h-100">
+    <div class="container h-100">
+        <div class="d-flex justify-content-center align-items-center h-100">
+            <div class="col-md-4">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header text-center background-middle text-white">
+                        <h3>Register</h3>
+                    </div>
+                    <div class="card-body background-light text-white">
+                        <form method="post">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                {{ form.username.label_tag }}
+                                {{ form.username }}
+                                {{ form.username.errors }}
+                            </div>
+
+                            <div class="mb-3">
+                                {{ form.password.label_tag }}
+                                {{ form.password }}
+                                {{ form.password.errors }}
+                            </div>
+
+                            <div class="mb-3">
+                                {{ form.password_repeat.label_tag }}
+                                {{ form.password_repeat }}
+                                {{ form.password_repeat.errors }}
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

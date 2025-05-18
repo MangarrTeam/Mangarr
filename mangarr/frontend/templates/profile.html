@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "frontend.profile.profile" %}{% endblock %}
+
+{% block content %}
+<h1 class="mb-4 text-white">{% trans "frontend.profile.profile" %}</h1>
+
+<form method="post" action="{% url 'profile' %}" id="profile-form">
+    {% csrf_token %}
+
+    <div class="card mb-3 text-white border-0 rounded-2">
+        <div class="card-header background-middle h4">{% trans "frontend.profile.account" %}</div>
+        <div class="card-body background-light">
+            <!-- Username -->
+            <div class="form-group mb-2 d-flex flex-column-reverse">
+                <input type="text" class="form-control bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white"
+                       id="username" name="username" value="{{ user.username }}">
+                <label for="username">{% trans "frontend.profile.username" %}</label>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group mb-2 d-flex flex-column-reverse">
+                <input type="email" class="form-control bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white"
+                       id="email" name="email" value="{{ user.email }}">
+                <label for="email">{% trans "frontend.profile.email" %}</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-start pb-2">
+        <button type="submit" class="btn btn-primary">{% trans "frontend.profile.save" %}</button>
+    </div>
+</form>
+
+<form method="post" action="{% url 'change_password' %}" class="pt-5" id="password-form">
+    {% csrf_token %}
+
+    <div class="card mb-3 text-white border-0 rounded-2">
+        <div class="card-header background-middle h4">{% trans "frontend.profile.password" %}</div>
+
+        <div class="card-body background-light">
+            <!-- Old password -->
+            <div class="form-group mb-2 d-flex flex-column">
+                <label>{% trans "frontend.profile.old_password" %}</label>
+                <div class="input-group flex-row">
+                    <input type="password" class="form-control bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white" name="old_password" id="old_password" required>
+                    <button class="btn btn-outline-secondary ml-2" type="button" onclick="togglePass('old_password', this)">
+                        <i class="fa fa-eye-slash"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- New password 1 -->
+            <div class="form-group mb-2 d-flex flex-column">
+                <label>{% trans "frontend.profile.new_password" %}</label>
+                <div class="input-group flex-row">
+                    <input type="password" class="form-control bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white" name="new_password1" id="new_password1" required>
+                    <button class="btn btn-outline-secondary ml-2" type="button" onclick="togglePass('new_password1', this)">
+                        <i class="fa fa-eye-slash"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- New password 2 -->
+            <div class="form-group mb-2 d-flex flex-column">
+                <label>{% trans "frontend.profile.confirm_password" %}</label>
+                <div class="input-group flex-row">
+                <input type="password" class="form-control bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white" name="new_password2" id="new_password2" required>
+                    <button class="btn btn-outline-secondary ml-2" type="button" onclick="togglePass('new_password2', this)">
+                        <i class="fa fa-eye-slash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-start pb-2">
+        <button type="submit" class="btn btn-primary">{% trans "frontend.profile.change_password" %}</button>
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function togglePass(for_item, btn) {
+        const pass_input = document.getElementById(for_item);
+        const isPassword = pass_input.type === 'password';
+        pass_input.type = isPassword ? 'text' : 'password';
+        if (isPassword) {
+            btn.querySelector("i").classList.remove("fa-eye-slash");
+            btn.querySelector("i").classList.add("fa-eye");
+        } else {
+            btn.querySelector("i").classList.remove("fa-eye");
+            btn.querySelector("i").classList.add("fa-eye-slash");
+        }
+    }
+</script>
+{% endblock %}

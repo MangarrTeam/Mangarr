@@ -1,0 +1,127 @@
+{% extends "core.html" %}
+{% load static %}
+{% load i18n %}
+{% load has_permition %}
+
+{% block base %}
+<header>
+    <nav class="navbar navbar-expand-lg secondary-color background-light px-0 pb-0 fixed-top" >
+        <a class="navbar-brand accent-color pl-2" href="{% url 'index' %}"><h2 class="my-auto text-white"><img src="{% static 'imgs/logo.svg' %}" width="60" height="60" alt="Mangarr"><span class="d-none d-md-inline">Mangarr</span></h2></a>
+
+        <button class="btn bg-transparent d-lg-none mr-2 text-white" id="sidebarToggle" aria-label="Toggle sidebar">
+            <i class="fa fa-bars text-white"></i>
+        </button>
+        
+        <div class="nav-item d-flex flex-grow-1 search-bar">
+            <input type="text" id="tableFilter" class="form-control my-2 py-2 border-top-0 border-left-0 border-right-0 rounded-0 bg-transparent text-white w-100" placeholder="{% trans 'frontend.base.search' %}">
+        </div>
+        <div class="btn-group ml-auto pr-2">
+            <button type="button" class="btn bg-transparent dropdown-toggle {% if user.is_superuser %}text-orange{% elif user.is_staff %}text-yellow{% else %}text-white{% endif %}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {% if user.is_superuser %}<i class="fa fa-crown"></i>{% endif %}
+                <span class="d-none d-md-inline px-2">{{ user.username }}</span>
+                <i class="fa fa-user"></i>
+            </button>
+            <div class="dropdown-menu background-light border-dark dropdown-menu-right mt-2 pt-0">
+                <!--
+                    <button class="dropdown-item text-white" type="button">Action</button>
+                    <button class="dropdown-item text-white" type="button">Another action</button>
+                    -->
+                <div class="d-inline d-md-none">    
+                    <div class="background-dark py-2">
+                        <span class="dropdown-item {% if user.is_superuser %}text-orange{% elif user.is_staff %}text-yellow{% else %}text-white{% endif %}">{{ user.username }}</span>
+                    </div>
+                </div>
+                    <a href="{% url 'profile' %}" role="button" class="highlighted dropdown-item text-white"><i class="fa fa-user"></i> {% trans "frontend.base.profile" %}</a>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button style="cursor: pointer;" class="highlighted dropdown-item text-danger" type="submit"><i class="fa fa-sign-out-alt"></i> {% trans "frontend.base.logout" %}</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+</header>
+
+<aside id="sidebar" class="bottom-0 sidebar">
+    <ul class="nav flex-column">
+        <!--
+        <li class="nav-item">
+            <a href="{% url 'settings' %}" class="nav-link text-white">
+                <i class="fa fa-cogs text-white"></i> {% trans "frontend.base.settings" %}
+            </a>
+        </li>
+        -->
+        
+        <!-- Collapsible Dropdown -->
+        <li class="nav-item">
+            <button class="nav-link text-white d-flex align-items-center w-100 bg-transparent border-0 text-left" 
+                data-toggle="collapse" data-target="#dropdownSettings" 
+                aria-expanded="false" aria-controls="dropdownSettings" style="cursor: pointer;">
+                <i class="fa fa-cogs mr-2"></i><p class="my-auto"> {% trans "frontend.base.settings" %}</p>
+            </button>
+            
+            <div class="collapse pl-4 pt-2" id="dropdownSettings">
+                <a href="{% url 'profile' %}" class="nav-link text-white d-flex flex-row my-auto">
+                    <i class="fa fa-user text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.profile" %}</p>
+                </a>
+                {% if user|has_permition:'database.can_change_settings' %}
+                <a href="{% url 'settings' %}" class="nav-link text-white d-flex flex-row my-auto">
+                    <i class="fa fa-server text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.server_settings" %}</p>
+                </a>
+                {% endif %}
+                {% if user.is_superuser or user.is_staff %}
+                <a href="{% url 'manager_user_list' %}" class="nav-link text-white d-flex flex-row my-auto">
+                    <i class="fa fa-users my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.users" %}</p>
+                </a>
+                {% endif %}
+                
+                {% if user|has_permition:'database.can_restart' %}
+                <div class="nav-link text-danger d-flex flex-row my-auto" id="restart">
+                    <i class="fa fa-undo my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.restart" %}</p>
+                </div>
+                {% endif %}
+            </div>
+        </li>
+    </ul>
+</aside>
+
+<main id="content" class="px-4 pb-4 background-dark">
+  {% block content %}{% endblock %}
+</main>
+
+{% endblock %}
+
+
+{% block base_scripts %}
+<script src="{% static 'js/base.js' %}"></script>
+<script>
+document.getElementById("restart").addEventListener("click", function () {
+    fetch("{% url 'restart' %}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer {{ user.profile.token }}"
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error("Request failed");
+        return response.json();
+    })
+    .then(data => {
+        console.log("Success:", data);
+        setTimeout(function() {
+            location.reload();
+        }, 5000)
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+});
+window.addEventListener("load",function() {
+    //alert(`Height: ${window.innerHeight}, Width: ${window.innerWidth}`);
+})
+</script>
+{% block scripts %}
+{% endblock %}
+{% endblock %}
+

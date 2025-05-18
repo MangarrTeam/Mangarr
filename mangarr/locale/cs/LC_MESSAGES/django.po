@@ -1,0 +1,277 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-18 01:54+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n "
+"<= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
+
+#: .\database\models.py:12
+msgid "permission.can_restart"
+msgstr "Může restartovat"
+
+#: .\database\models.py:13
+msgid "permission.can_change_settings"
+msgstr "Může měnit nastavení"
+
+#: .\database\models.py:14
+msgid "permission.can_invite"
+msgstr "Může pozvat"
+
+#: .\frontend\templates\base.html:16
+msgid "frontend.base.search"
+msgstr "Hledat..."
+
+#: .\frontend\templates\base.html:34 .\frontend\templates\base.html:65
+msgid "frontend.base.profile"
+msgstr "Profil"
+
+#: .\frontend\templates\base.html:37
+msgid "frontend.base.logout"
+msgstr "Odhlásit"
+
+#: .\frontend\templates\base.html:50 .\frontend\templates\base.html:60
+msgid "frontend.base.settings"
+msgstr "Nastavení"
+
+#: .\frontend\templates\base.html:69
+msgid "frontend.base.server_settings"
+msgstr "Nastavení serveru"
+
+#: .\frontend\templates\base.html:74
+msgid "frontend.base.users"
+msgstr "Uživatelé"
+
+#: .\frontend\templates\base.html:80
+msgid "frontend.base.restart"
+msgstr "Restartovat"
+
+#: .\frontend\templates\manager\user_list.html:6
+msgid "frontend.manager_panel.manager_panel"
+msgstr "Panel správce"
+
+#: .\frontend\templates\manager\user_list.html:13
+msgid "frontend.manager_panel.user_management"
+msgstr "Správa uživatelů"
+
+#: .\frontend\templates\manager\user_list.html:18
+msgid "frontend.manager_panel.username"
+msgstr "Uživatelské jméno"
+
+#: .\frontend\templates\manager\user_list.html:19
+msgid "frontend.manager_panel.email"
+msgstr "Email"
+
+#: .\frontend\templates\manager\user_list.html:20
+msgid "frontend.manager_panel.is_manager"
+msgstr "Je správce"
+
+#: .\frontend\templates\manager\user_list.html:21
+#: .\frontend\templates\manager\user_list.html:77
+msgid "frontend.manager_panel.actions"
+msgstr "Akce"
+
+#: .\frontend\templates\manager\user_list.html:29
+msgid "frontend.manager_panel.is_manager_yes"
+msgstr "Ano"
+
+#: .\frontend\templates\manager\user_list.html:29
+msgid "frontend.manager_panel.is_manager_no"
+msgstr "Ne"
+
+#: .\frontend\templates\manager\user_list.html:34
+msgid "frontend.manager_panel.edit_permissions"
+msgstr "Upravit práva"
+
+#: .\frontend\templates\manager\user_list.html:42
+msgid "frontend.manager_panel.add_staff"
+msgstr "Přidat správce"
+
+#: .\frontend\templates\manager\user_list.html:45
+msgid "frontend.manager_panel.remove_staff"
+msgstr "Odebrat správce"
+
+#: .\frontend\templates\manager\user_list.html:51
+#: .\frontend\templates\manager\user_list.html:93
+msgid "frontend.manager_panel.delete"
+msgstr "Smazat"
+
+#: .\frontend\templates\manager\user_list.html:54
+msgid "frontend.manager_panel.superuser"
+msgstr "Superuser"
+
+#: .\frontend\templates\manager\user_list.html:64
+msgid "frontend.manager_panel.register_tokens_management"
+msgstr "Správa registračních tokenů"
+
+#: .\frontend\templates\manager\user_list.html:68
+msgid "frontend.manager_panel.register_token_add"
+msgstr "<i class='fa fa-plus'></i> Vytvořit"
+
+#: .\frontend\templates\manager\user_list.html:76
+msgid "frontend.manager_panel.token"
+msgstr "Token"
+
+#: .\frontend\templates\manager\user_list.html:87
+msgid "frontend.manager_panel.copy_token"
+msgstr "Zkopírovat token"
+
+#: .\frontend\templates\manager\user_list.html:90
+msgid "frontend.manager_panel.copy_token_url"
+msgstr "Zkopírovat token s URL"
+
+#: .\frontend\templates\manager\user_list.html:101
+msgid "frontend.manager_panel.no_register_tokens_found"
+msgstr "Nebyly nalezeny žádné registrační tokeny"
+
+#: .\frontend\templates\manager\user_list.html:113
+msgid "frontend.manager_panel.edit_permissions_for"
+msgstr "Upravit práva pro <span id='modalUsername'></span>"
+
+#: .\frontend\templates\manager\user_list.html:126
+msgid "frontend.manager_panel.close"
+msgstr "Zavřít"
+
+#: .\frontend\templates\manager\user_list.html:127
+msgid "frontend.manager_panel.save_changes"
+msgstr "Uložit změny"
+
+#: .\frontend\templates\manager\user_list.html:138
+#: .\frontend\templates\manager\user_list.html:157
+msgid "frontend.manager_panel.confirm_delete_title"
+msgstr "Opravdu smazat"
+
+#: .\frontend\templates\manager\user_list.html:142
+msgid "frontend.manager_panel.confirm_delete_user_text"
+msgstr "Jste si jisti že chcete smazat <strong id='deleteUsername'></strong>?"
+
+#: .\frontend\templates\manager\user_list.html:145
+#: .\frontend\templates\manager\user_list.html:164
+msgid "frontend.manager_panel.cancel"
+msgstr "Zrušit"
+
+#: .\frontend\templates\manager\user_list.html:146
+#: .\frontend\templates\manager\user_list.html:165
+msgid "frontend.manager_panel.confirm"
+msgstr "Potvrdit"
+
+#: .\frontend\templates\manager\user_list.html:161
+msgid "frontend.manager_panel.confirm_delete_token_text"
+msgstr "Jste si jisti že chcete smazat <strong id='deleteTokenname'></strong>?"
+
+#: .\frontend\templates\profile.html:5 .\frontend\templates\profile.html:8
+msgid "frontend.profile.profile"
+msgstr "Profil"
+
+#: .\frontend\templates\profile.html:14
+msgid "frontend.profile.account"
+msgstr "Účet"
+
+#: .\frontend\templates\profile.html:20
+msgid "frontend.profile.username"
+msgstr "Uživatelské jméno"
+
+#: .\frontend\templates\profile.html:27
+msgid "frontend.profile.email"
+msgstr "Email"
+
+#: .\frontend\templates\profile.html:33
+msgid "frontend.profile.save"
+msgstr "Uložit"
+
+#: .\frontend\templates\profile.html:41
+msgid "frontend.profile.password"
+msgstr "Heslo"
+
+#: .\frontend\templates\profile.html:46
+msgid "frontend.profile.old_password"
+msgstr "Původní heslo"
+
+#: .\frontend\templates\profile.html:57
+msgid "frontend.profile.new_password"
+msgstr "Nové heslo"
+
+#: .\frontend\templates\profile.html:68
+msgid "frontend.profile.confirm_password"
+msgstr "Potvrzení hesla"
+
+#: .\frontend\templates\profile.html:80
+msgid "frontend.profile.change_password"
+msgstr "Změnit heslo"
+
+#: .\frontend\templates\settings.html:9 .\frontend\templates\settings.html:13
+msgid "frontend.settings.settings"
+msgstr "Nastavení"
+
+#: .\frontend\templates\settings.html:76
+msgid "frontend.settings.save_settings"
+msgstr "Uložit nastavení"
+
+#: .\frontend\templates\settings.html:78
+msgid "frontend.settings.restart"
+msgstr "Restartovat"
+
+#: .\frontend\views.py:94 .\frontend\views.py:100 .\frontend\views.py:106
+msgid "frontend.settings.django"
+msgstr "Django"
+
+#: .\frontend\views.py:95
+msgid "frontend.settings.secret_key"
+msgstr "Soukromý klíč"
+
+#: .\frontend\views.py:101
+msgid "frontend.settings.debug"
+msgstr "Debug"
+
+#: .\frontend\views.py:107
+msgid "frontend.settings.tz"
+msgstr "TZ"
+
+#: .\frontend\views.py:115 .\frontend\views.py:121
+msgid "frontend.settings.networking"
+msgstr "Síť"
+
+#: .\frontend\views.py:116
+msgid "frontend.settings.allowed_hosts"
+msgstr "Povolení hostitelé"
+
+#: .\frontend\views.py:122
+msgid "frontend.settings.csrf_trusted_origins"
+msgstr "Důvěryhodné zdroje CSRF"
+
+#: .\frontend\views.py:129
+msgid "frontend.settings.other"
+msgstr "Jiné"
+
+#: .\frontend\views.py:130
+msgid "frontend.settings.instance_name"
+msgstr "Jméno instance"
+
+#: .\frontend\views.py:137
+msgid "frontend.settings.localization"
+msgstr "Lokalizace"
+
+#: .\frontend\views.py:138
+msgid "frontend.settings.locale"
+msgstr "Lokalita"
+
+#: .\server\settingz\localization.py:14
+msgid "langs.english"
+msgstr "Angličtina"
+
+#: .\server\settingz\localization.py:15
+msgid "langs.czech"
+msgstr "Čeština"

@@ -1,0 +1,45 @@
+:root {
+    --background-light: #272727;
+    --background-middle: #242424;
+    --background-dark: #222222;
+}
+
+.background-light {
+    background-color: var(--background-light) !important;
+}
+
+.background-middle {
+    background-color: var(--background-middle) !important;
+}
+
+.background-dark {
+    background-color: var(--background-dark) !important;
+}
+
+.border-light {
+    border-color: var(--background-light) !important;
+}
+
+.border-middle {
+    border-color: var(--background-middle) !important;
+}
+
+.border-dark {
+    border-color: var(--background-dark) !important;
+}
+
+.text-orange {
+    color: orange !important;
+}
+
+.text-yellow {
+    color: yellow !important;
+}
+
+.background-orange {
+    background-color: orange !important;
+}
+
+.background-yellow {
+    background-color: yellow !important;
+}

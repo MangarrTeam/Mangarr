@@ -1,0 +1,67 @@
+name: Release Mangarr
+
+env:
+  IMAGE_NAME: mangarr
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  containerise:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Get tag
+        id: tag
+        uses: dawidd6/action-get-tag@v1
+
+      - name: Determine tag type (beta or latest)
+        id: tag_type
+        run: |
+          if ${{ github.event.release.prerelease }}; then
+            echo "tag=${{ steps.tag.outputs.tag }}-beta" >> $GITHUB_ENV
+            echo "tag_name=beta" >> $GITHUB_ENV
+          else
+            echo "tag=${{ steps.tag.outputs.tag }}" >> $GITHUB_ENV
+            echo "tag_name=latest" >> $GITHUB_ENV
+          fi
+
+      - name: Log into GitHub Container Registry
+        run: echo "${{ secrets.REGISTRY_ACCESS_TOKEN }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Lowercase GitHub username for GHCR
+        id: string
+        uses: ASzc/change-string-case-action@v1
+        with:
+          string: ${{ github.actor }}
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ghcr.io/${{ steps.string.outputs.lowercase }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=${{ env.tag_name }}
+            type=raw,value=${{ env.tag }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          provenance: false
+          build-args: |
+            IMAGE_NAME=${{ env.IMAGE_NAME }}

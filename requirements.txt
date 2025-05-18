@@ -1,0 +1,8 @@
+Django==4.2.19
+djangorestframework
+whitenoise
+requests
+Pillow
+gunicorn
+flask
+pytz

@@ -1,0 +1,276 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-18 01:54+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\database\models.py:12
+msgid "permission.can_restart"
+msgstr "Can restart"
+
+#: .\database\models.py:13
+msgid "permission.can_change_settings"
+msgstr "Can change settings"
+
+#: .\database\models.py:14
+msgid "permission.can_invite"
+msgstr "Can invite"
+
+#: .\frontend\templates\base.html:16
+msgid "frontend.base.search"
+msgstr "Search..."
+
+#: .\frontend\templates\base.html:34 .\frontend\templates\base.html:65
+msgid "frontend.base.profile"
+msgstr "Profile"
+
+#: .\frontend\templates\base.html:37
+msgid "frontend.base.logout"
+msgstr "Logout"
+
+#: .\frontend\templates\base.html:50 .\frontend\templates\base.html:60
+msgid "frontend.base.settings"
+msgstr "Settings"
+
+#: .\frontend\templates\base.html:69
+msgid "frontend.base.server_settings"
+msgstr "Server settings"
+
+#: .\frontend\templates\base.html:74
+msgid "frontend.base.users"
+msgstr "Users"
+
+#: .\frontend\templates\base.html:80
+msgid "frontend.base.restart"
+msgstr "Restart"
+
+#: .\frontend\templates\manager\user_list.html:6
+msgid "frontend.manager_panel.manager_panel"
+msgstr "Manager panel"
+
+#: .\frontend\templates\manager\user_list.html:13
+msgid "frontend.manager_panel.user_management"
+msgstr "User management"
+
+#: .\frontend\templates\manager\user_list.html:18
+msgid "frontend.manager_panel.username"
+msgstr "Username"
+
+#: .\frontend\templates\manager\user_list.html:19
+msgid "frontend.manager_panel.email"
+msgstr "Email"
+
+#: .\frontend\templates\manager\user_list.html:20
+msgid "frontend.manager_panel.is_manager"
+msgstr "Is manager"
+
+#: .\frontend\templates\manager\user_list.html:21
+#: .\frontend\templates\manager\user_list.html:77
+msgid "frontend.manager_panel.actions"
+msgstr "Actions"
+
+#: .\frontend\templates\manager\user_list.html:29
+msgid "frontend.manager_panel.is_manager_yes"
+msgstr "Yes"
+
+#: .\frontend\templates\manager\user_list.html:29
+msgid "frontend.manager_panel.is_manager_no"
+msgstr "No"
+
+#: .\frontend\templates\manager\user_list.html:34
+msgid "frontend.manager_panel.edit_permissions"
+msgstr "Edit permissions"
+
+#: .\frontend\templates\manager\user_list.html:42
+msgid "frontend.manager_panel.add_staff"
+msgstr "Add staff"
+
+#: .\frontend\templates\manager\user_list.html:45
+msgid "frontend.manager_panel.remove_staff"
+msgstr "Remove staff"
+
+#: .\frontend\templates\manager\user_list.html:51
+#: .\frontend\templates\manager\user_list.html:93
+msgid "frontend.manager_panel.delete"
+msgstr "Delete"
+
+#: .\frontend\templates\manager\user_list.html:54
+msgid "frontend.manager_panel.superuser"
+msgstr "Superuser"
+
+#: .\frontend\templates\manager\user_list.html:64
+msgid "frontend.manager_panel.register_tokens_management"
+msgstr "Register token management"
+
+#: .\frontend\templates\manager\user_list.html:68
+msgid "frontend.manager_panel.register_token_add"
+msgstr "<i class='fa fa-plus'></i> Add"
+
+#: .\frontend\templates\manager\user_list.html:76
+msgid "frontend.manager_panel.token"
+msgstr "Token"
+
+#: .\frontend\templates\manager\user_list.html:87
+msgid "frontend.manager_panel.copy_token"
+msgstr "Copy token"
+
+#: .\frontend\templates\manager\user_list.html:90
+msgid "frontend.manager_panel.copy_token_url"
+msgstr "Copy token with URL"
+
+#: .\frontend\templates\manager\user_list.html:101
+msgid "frontend.manager_panel.no_register_tokens_found"
+msgstr ""
+
+#: .\frontend\templates\manager\user_list.html:113
+msgid "frontend.manager_panel.edit_permissions_for"
+msgstr "Edit permissions for <span id='modalUsername'></span>"
+
+#: .\frontend\templates\manager\user_list.html:126
+msgid "frontend.manager_panel.close"
+msgstr "Close"
+
+#: .\frontend\templates\manager\user_list.html:127
+msgid "frontend.manager_panel.save_changes"
+msgstr "Save changes"
+
+#: .\frontend\templates\manager\user_list.html:138
+#: .\frontend\templates\manager\user_list.html:157
+msgid "frontend.manager_panel.confirm_delete_title"
+msgstr "Confirm delete"
+
+#: .\frontend\templates\manager\user_list.html:142
+msgid "frontend.manager_panel.confirm_delete_user_text"
+msgstr "Are you sure you want to delete <strong id='deleteUsername'></strong>?"
+
+#: .\frontend\templates\manager\user_list.html:145
+#: .\frontend\templates\manager\user_list.html:164
+msgid "frontend.manager_panel.cancel"
+msgstr "Cancel"
+
+#: .\frontend\templates\manager\user_list.html:146
+#: .\frontend\templates\manager\user_list.html:165
+msgid "frontend.manager_panel.confirm"
+msgstr "Confirm"
+
+#: .\frontend\templates\manager\user_list.html:161
+msgid "frontend.manager_panel.confirm_delete_token_text"
+msgstr "Are you sure you want to delete <strong id='deleteTokenname'></strong>?"
+
+#: .\frontend\templates\profile.html:5 .\frontend\templates\profile.html:8
+msgid "frontend.profile.profile"
+msgstr "Profile"
+
+#: .\frontend\templates\profile.html:14
+msgid "frontend.profile.account"
+msgstr "Account"
+
+#: .\frontend\templates\profile.html:20
+msgid "frontend.profile.username"
+msgstr "Username"
+
+#: .\frontend\templates\profile.html:27
+msgid "frontend.profile.email"
+msgstr "Email"
+
+#: .\frontend\templates\profile.html:33
+msgid "frontend.profile.save"
+msgstr "Save"
+
+#: .\frontend\templates\profile.html:41
+msgid "frontend.profile.password"
+msgstr "Password"
+
+#: .\frontend\templates\profile.html:46
+msgid "frontend.profile.old_password"
+msgstr "Old password"
+
+#: .\frontend\templates\profile.html:57
+msgid "frontend.profile.new_password"
+msgstr "New password"
+
+#: .\frontend\templates\profile.html:68
+msgid "frontend.profile.confirm_password"
+msgstr "Confirm password"
+
+#: .\frontend\templates\profile.html:80
+msgid "frontend.profile.change_password"
+msgstr "Change password"
+
+#: .\frontend\templates\settings.html:9 .\frontend\templates\settings.html:13
+msgid "frontend.settings.settings"
+msgstr "Settings"
+
+#: .\frontend\templates\settings.html:76
+msgid "frontend.settings.save_settings"
+msgstr "Save settings"
+
+#: .\frontend\templates\settings.html:78
+msgid "frontend.settings.restart"
+msgstr "Restart"
+
+#: .\frontend\views.py:94 .\frontend\views.py:100 .\frontend\views.py:106
+msgid "frontend.settings.django"
+msgstr "Django"
+
+#: .\frontend\views.py:95
+msgid "frontend.settings.secret_key"
+msgstr "Secret key"
+
+#: .\frontend\views.py:101
+msgid "frontend.settings.debug"
+msgstr "Debug"
+
+#: .\frontend\views.py:107
+msgid "frontend.settings.tz"
+msgstr "TZ"
+
+#: .\frontend\views.py:115 .\frontend\views.py:121
+msgid "frontend.settings.networking"
+msgstr "Networking"
+
+#: .\frontend\views.py:116
+msgid "frontend.settings.allowed_hosts"
+msgstr "Allowed hosts"
+
+#: .\frontend\views.py:122
+msgid "frontend.settings.csrf_trusted_origins"
+msgstr "CSRF trusted origins"
+
+#: .\frontend\views.py:129
+msgid "frontend.settings.other"
+msgstr "Other"
+
+#: .\frontend\views.py:130
+msgid "frontend.settings.instance_name"
+msgstr "Instance name"
+
+#: .\frontend\views.py:137
+msgid "frontend.settings.localization"
+msgstr "Localization"
+
+#: .\frontend\views.py:138
+msgid "frontend.settings.locale"
+msgstr "Locale"
+
+#: .\server\settingz\localization.py:14
+msgid "langs.english"
+msgstr "English"
+
+#: .\server\settingz\localization.py:15
+msgid "langs.czech"
+msgstr "Czech"

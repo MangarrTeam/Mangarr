@@ -1,0 +1,306 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load has_permition %}
+{% load my_reverse %}
+{% load get_full_uri %}
+
+{% block title %}{% trans "frontend.manager_panel.manager_panel" %}{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/user_list.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1 class="text-white">{% trans "frontend.manager_panel.user_management" %}</h1>
+
+<div class="table-responsive">
+  <table class="table table-hover text-center">
+    <thead class="background-middle text-white">
+      <tr>
+        <th class="border-0 text-nowrap">{% trans "frontend.manager_panel.username" %}</th>
+        <th class="border-0 text-nowrap">{% trans "frontend.manager_panel.email" %}</th>
+        <th class="border-0 text-nowrap">{% trans "frontend.manager_panel.is_manager" %}</th>
+        <th class="border-0 col-3 text-nowrap">{% trans "frontend.manager_panel.actions" %}</th>
+      </tr>
+    </thead>
+    <tbody class="background-light text-white">
+      {% for luser in users %}
+      <tr class="{% if luser.is_superuser %}text-muted{% endif %}">
+        <td class="align-middle text-truncate" style="max-width: 180px; cursor: default;" title="{{ luser.username }}">
+          {{ luser.username }}
+        </td>
+        <td class="align-middle text-truncate" style="max-width: 250px; cursor: default;" title="{{ luser.email }}">
+          {{ luser.email }}
+        </td>
+        <td class="align-middle text-nowrap">
+          {% if luser.is_staff or luser.is_superuser %}
+            {% trans 'frontend.manager_panel.is_manager_yes' %}
+          {% else %}
+            {% trans 'frontend.manager_panel.is_manager_no' %}
+          {% endif %}
+        </td>
+        <td>
+          <div class="d-flex flex-column">
+            {% if not luser.is_superuser %}
+            <button class="btn btn-sm btn-primary my-1" onclick="editPermissions({{ luser.id }}, '{{ luser.username }}')">
+              {% trans "frontend.manager_panel.edit_permissions" %}
+            </button>
+            {% if user.is_superuser %}
+            <form method="post" action="{% url 'toggle_user_staff' luser.id %}" class="my-1">
+              {% csrf_token %}
+              <input type="hidden" value="manager_user_list" id="zource" name="zource">
+              {% if not luser.is_staff %}
+              <button type="submit" class="btn btn-sm btn-info w-100" onclick="editPermissions({{ luser.id }}, '{{ luser.username }}')">
+                {% trans "frontend.manager_panel.add_staff" %}
+              </button>
+              {% else %}
+              <button type="submit" class="btn btn-sm btn-warning w-100" onclick="editPermissions({{ luser.id }}, '{{ luser.username }}')">
+                {% trans "frontend.manager_panel.remove_staff" %}
+              </button>
+              {% endif %}
+            </form>
+            {% endif %}
+            <button class="btn btn-sm btn-danger my-1" onclick="confirmDeleteUser({{ luser.id }}, '{{ luser.username }}')">
+              {% trans "frontend.manager_panel.delete" %}
+            </button>
+            {% else %}
+            <em>{% trans "frontend.manager_panel.superuser" %}</em>
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+<div class="d-flex pt-4">
+  <h1 class="text-white">{% trans "frontend.manager_panel.register_tokens_management" %}</h1>
+  {% if user|has_permition:"database.can_invite" %}
+  <form method="post" action="{% url 'create_register_token' %}" class="ml-auto my-auto">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-sm btn-success py-2">{% trans "frontend.manager_panel.register_token_add" %}</button>
+  </form>
+  {% endif %}
+</div>
+
+<table class="table table-hover text-center">
+    <thead class="background-middle text-white">
+        <tr>
+            <th class="border-0 ">{% trans "frontend.manager_panel.token" %}</th>
+            <th class="border-0 col-3">{% trans "frontend.manager_panel.actions" %}</th>
+        </tr>
+    </thead>
+    <tbody class="background-light text-white">
+        {% for register_token in register_tokens %}
+        <tr class="{% if luser.is_superuser %}text-muted{% endif %}">
+            <td class="align-middle text-truncate" style="max-width: 40vw;">{{ register_token.token }}</td>
+            <td>
+              <div class="d-flex flex-column">
+                <button class="btn btn-sm btn-success my-1" onclick="copyToken('{{ register_token.token }}')">
+                    {% trans "frontend.manager_panel.copy_token" %}
+                </button>
+                <button class="btn btn-sm btn-success my-1" onclick="copyTokenURL('{{ register_token.token }}')">
+                    {% trans "frontend.manager_panel.copy_token_url" %}
+                </button>
+                <button class="btn btn-sm btn-danger my-1" onclick="confirmDeleteToken({{ register_token.id }}, '{{ register_token.token }}')">
+                    {% trans "frontend.manager_panel.delete" %}
+                </button>
+              </div>
+            </td>
+        </tr>
+        
+        {% empty %}
+          <tr>
+              <td colspan="2" class="text-center">{% trans "frontend.manager_panel.no_register_tokens_found" %}</td>
+          </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Permission Modal -->
+<div class="modal fade" id="permissionModal" tabindex="-1" role="dialog" aria-labelledby="permissionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content text-white">
+      <div class="modal-header background-dark border-0">
+        <h5 class="modal-title" id="permissionModalLabel">
+          {% trans "frontend.manager_panel.edit_permissions_for" %}
+        </h5>
+        <button type="button" class="btn-close" data-dismiss="modal"></button>
+      </div>
+      <div class="modal-body background-light">
+        <form id="permissionForm">
+          <div id="permissionsList" class="form-check">
+            <!-- Filled dynamically -->
+          </div>
+          <input type="hidden" name="user_id" id="modalUserId">
+        </form>
+      </div>
+      <div class="modal-footer background-light border-0">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "frontend.manager_panel.close" %}</button>
+        <button type="button" class="btn btn-success" onclick="submitPermissions()">{% trans "frontend.manager_panel.save_changes" %}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete User Modal -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-white">
+      <div class="modal-header background-light border-0">
+        <h5 class="modal-title">{% trans "frontend.manager_panel.confirm_delete_title" %}</h5>
+        <button type="button" class="btn-close" data-dismiss="modal"></button>
+      </div>
+      <div class="modal-body background-light border-0">
+        <p>{% trans "frontend.manager_panel.confirm_delete_user_text" %}</p>
+      </div>
+      <div class="modal-footer background-light border-0">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "frontend.manager_panel.cancel" %}</button>
+        <button type="button" class="btn btn-danger" onclick="deleteUser()">{% trans "frontend.manager_panel.confirm" %}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Token Modal -->
+<div class="modal fade" id="deleteTokenModal" tabindex="-1" role="dialog" aria-labelledby="deleteTokenModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-white">
+      <div class="modal-header background-light border-0">
+        <h5 class="modal-title">{% trans "frontend.manager_panel.confirm_delete_title" %}</h5>
+        <button type="button" class="btn-close" data-dismiss="modal"></button>
+      </div>
+      <div class="modal-body background-light border-0">
+        <p class="text-truncate mb-0">{% trans "frontend.manager_panel.confirm_delete_token_text" %}</p>
+      </div>
+      <div class="modal-footer background-light border-0">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "frontend.manager_panel.cancel" %}</button>
+        <button type="button" class="btn btn-danger" onclick="deleteToken()">{% trans "frontend.manager_panel.confirm" %}</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function editPermissions(userId, username) {
+    $('#modalUserId').val(userId);
+    $('#modalUsername').text(username);
+    $('#permissionsList').html('');
+    fetch("{% url 'get_user_permissions' 0 %}".replace('0', userId))
+        .then(res => res.json())
+        .then(data => {
+            data.permissions.forEach(p => {
+                $('#permissionsList').append(`
+                  <div class="form-check py-1 d-flex align-items-center hover-highlight">
+                      <input class="form-check-input me-2" type="checkbox" value="${p.id}" id="perm_${p.id}" ${p.has ? 'checked' : ''}>
+                      <label class="form-check-label w-100 cursor-pointer" for="perm_${p.id}">
+                          ${p.name} (${p.codename})
+                      </label>
+                  </div>
+                `);
+            });
+            $('#permissionModal').modal('show');
+        });
+}
+
+function submitPermissions() {
+    const userId = document.getElementById('modalUserId').value;
+    const checked = Array.from(document.querySelectorAll('#permissionsList input:checked'))
+                         .map(input => input.value);
+
+    fetch("{% url 'update_user_permissions' 0 %}".replace('0', userId), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: new URLSearchParams({
+            permissions: checked,
+        })
+    })
+    .then(res => res.json())
+    .then(() => {
+        $('#permissionModal').modal('hide');
+    })
+    .catch(err => console.error(err));
+}
+
+let deleteUserId = null;
+
+function confirmDeleteUser(userId, username) {
+    deleteUserId = userId;
+    document.getElementById('deleteUsername').textContent = username;
+    $('#deleteUserModal').modal('show');
+}
+
+function deleteUser() {
+    fetch("{% url 'delete_user' 0 %}".replace('0', deleteUserId), {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    })
+    .then(res => {
+        if (res.ok) {
+            location.reload();
+        } else {
+            alert('Failed to delete user.');
+        }
+    })
+    .catch(err => console.error(err));
+}
+let deleteTokenId = null;
+
+function confirmDeleteToken(TokenId, token) {
+    deleteTokenId = TokenId;
+    const tokenName = document.getElementById('deleteTokenname')
+    tokenName.style.overflow = "elipsis";
+    tokenName.textContent = token;
+    $('#deleteTokenModal').modal('show');
+}
+
+function deleteToken() {
+    fetch("{% url 'delete_token' 0 %}".replace('0', deleteTokenId), {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    })
+    .then(res => {
+        if (res.ok) {
+            location.reload();
+        } else {
+            alert('Failed to delete token.');
+        }
+    })
+    .catch(err => console.error(err));
+}
+
+function copyToken(token) {
+    navigator.clipboard.writeText(token)
+        .then(() => {
+            alert(`Copied token: ${token}`);
+        })
+        .catch(err => {
+            alert('Failed to copy token');
+            console.error('Copy failed:', err);
+        });
+}
+
+function copyTokenURL(token) {
+    navigator.clipboard.writeText(`{{ request|get_full_uri:'register' }}?token=${token}`)
+        .then(() => {
+            alert(`Copied token with url: {{ request|get_full_uri:'register' }}?token=${token}`);
+        })
+        .catch(err => {
+            alert('Failed to copy token');
+            console.error('Copy failed:', err);
+        });
+}
+</script>
+{% endblock %}
