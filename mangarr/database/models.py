@@ -12,6 +12,7 @@ class UserProfile(models.Model):
             ('can_restart', _('permission.can_restart')),
             ('can_change_settings', _('permission.can_change_settings')),
             ('can_invite', _('permission.can_invite')),
+            ('can_manage_plugins', _('permission.can_manage_plugins')),
         ]
 
 

@@ -6,6 +6,7 @@ from server.functions import superuser_or_staff_required, superuser_required
 from database.models import UserProfile, RegisterToken
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.decorators import permission_required
 
 # Create your views here.
 @superuser_or_staff_required
@@ -74,3 +75,9 @@ def delete_token(request, token_id):
         token.delete()
         return JsonResponse({'success': True})
     return JsonResponse({"error": "Forbidden"}, status=400)
+
+@permission_required("database.can_manage_plugins")
+def toggle_pause_downloads(request):
+    from server.settings import toggle_download_pause, is_download_paused
+    toggle_download_pause()
+    return JsonResponse({'success': True, 'paused': is_download_paused()})

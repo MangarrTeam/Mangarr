@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "plugins.manager.plugin_manager" %}{% endblock %}
+
+{% block content %}
+<div class="d-flex mb-4">
+    <h1 class="my-auto text-white">{% trans "plugins.manager.plugin_manager" %}</h1>
+    
+    <form id="download-toggle-form" class="my-auto ml-auto">
+        <button type="button" id="toggle-downloads" class="btn btn-sm p-2 {% if download_paused %}btn-warning{% else %}btn-success{% endif %}" data-paused="{{ download_paused|yesno:'true,false' }}">
+            {% if download_paused %}
+            {% trans "plugins.manager.resume_downloads" %}
+            {% else %}
+            {% trans "plugins.manager.pause_downloads" %}
+            {% endif %}
+        </button>
+    </form>
+</div>
+    
+{# Core Plugins #}
+<h3 class="text-white">{% trans "plugins.manager.core_plugins" %}</h3>
+<table class="table table-hover text-center">
+    <thead class="background-middle text-white">
+        <tr>
+            <th class="border-0">{% trans "plugins.manager.domain" %}</th>
+            <th class="border-0">{% trans "plugins.manager.name" %}</th>
+            <th class="border-0">{% trans "plugins.manager.version" %}</th>
+            <th class="border-0">{% trans "plugins.manager.status" %}</th>
+            <th class="border-0 col-3">{% trans "plugins.manager.action" %}</th>
+        </tr>
+    </thead>
+    <tbody class="background-light text-white">
+        {% for plugin in core_plugins %}
+            <tr>
+                <td class="align-middle text-truncate" style="max-width: 15vw;">{{ plugin.domain }}</td>
+                <td class="align-middle text-truncate" style="max-width: 20vw;">{{ plugin.name }}</td>
+                <td class="align-middle flex">
+                    {{ plugin.version }}
+                    {% if plugin.downloaded_version %}
+                        <br><small class="text-muted">{% trans "plugins.manager.installed" %}: {{ plugin.downloaded_version }}</small>
+                        {% if plugin.has_update %}
+                        <br><span class="badge badge-warning ms-2">{% trans "plugins.manager.update_available" %}</span>
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td class="align-middle">
+                    {% if plugin.downloaded_version %}
+                        <span class="badge badge-success p-2">{% trans "plugins.manager.downloaded" %}</span>
+                    {% else %}
+                        <span class="badge badge-secondary p-2">{% trans "plugins.manager.not_downloaded" %}</span>
+                    {% endif %}
+                </td>
+                <td class="align-middle">
+                    <div class="d-flex flex-column">
+                        {% if plugin.downloaded_version %}
+                        <form action="{% url 'plugin_download' plugin.domain %}" method="post" class="my-1">
+                            {% csrf_token %}
+                            {% if plugin.has_update %}
+                                <button type="submit" class="btn btn-sm btn-primary w-100">{% trans "plugins.manager.update" %}</button>
+                            {% else %}
+                                <button type="submit" class="btn btn-sm btn-warning w-100">{% trans "plugins.manager.redownload" %}</button>
+                            {% endif %}
+                        </form>
+                        <form action="{% url 'plugin_delete' plugin.domain %}" method="post" class="my-1">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-danger w-100">{% trans "plugins.manager.delete" %}</button>
+                        </form>
+                        {% else %}
+                        <form action="{% url 'plugin_download' plugin.domain %}" method="post" class="my-1">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-success w-100">{% trans "plugins.manager.download" %}</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="text-center">{% trans "plugins.manager.no_plugins_found" %}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{# Community Plugins #}
+<h3 class="text-white mt-5">{% trans "plugins.manager.community_plugins" %}</h3>
+<table class="table table-hover text-center">
+    <thead class="background-middle text-white">
+        <tr>
+            <th class="border-0">{% trans "plugins.manager.domain" %}</th>
+            <th class="border-0">{% trans "plugins.manager.name" %}</th>
+            <th class="border-0">{% trans "plugins.manager.version" %}</th>
+            <th class="border-0">{% trans "plugins.manager.status" %}</th>
+            <th class="border-0 col-3">{% trans "plugins.manager.action" %}</th>
+        </tr>
+    </thead>
+    <tbody class="background-light text-white">
+        {% for plugin in community_plugins %}
+            <tr>
+                <td class="align-middle text-truncate" style="max-width: 15vw;">{{ plugin.domain }}</td>
+                <td class="align-middle text-truncate" style="max-width: 20vw;">{{ plugin.name }}</td>
+                <td class="align-middle">{{ plugin.version }}</td>
+                <td class="align-middle">
+                    {% if plugin.downloaded_version %}
+                        <span class="badge badge-success">{% trans "plugins.manager.downloaded" %}</span>
+                    {% else %}
+                        <span class="badge badge-secondary">{% trans "plugins.manager.not_downloaded" %}</span>
+                    {% endif %}
+                </td>
+                <td class="align-middle">
+                    <div class="d-flex flex-column">
+                        {% if plugin.downloaded_version %}
+                        <form action="{% url 'plugin_download' plugin.domain %}" method="post" class="my-1">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-warning w-100">{% trans "plugins.manager.redownload" %}</button>
+                        </form>
+                        <form action="{% url 'plugin_delete' plugin.domain %}" method="post" class="my-1">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-danger w-100">{% trans "plugins.manager.delete" %}</button>
+                        </form>
+                        {% else %}
+                        <form action="{% url 'plugin_download' plugin.domain %}" method="post" class="my-1">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-success w-100">{% trans "plugins.manager.download" %}</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="text-center">{% trans "plugins.manager.no_plugins_found" %}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById("toggle-downloads").addEventListener("click", function () {
+        const button = this;
+        const paused = button.dataset.paused === "true";
+
+        fetch("{% url 'download_toggle' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ current_state: paused })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                button.dataset.paused = data.paused.toString();
+                button.classList.remove(data.paused ? "btn-success" : "btn-warning");
+                button.classList.add(data.paused ? "btn-warning" : "btn-success");
+                button.innerHTML = data.paused ? "{{ _('plugins.manager.resume_downloads') }}" : "{{ _('plugins.manager.pause_downloads') }}";
+            } else {
+                alert("Failed to toggle download state.");
+            }
+        });
+    });
+</script>
+{% endblock %}

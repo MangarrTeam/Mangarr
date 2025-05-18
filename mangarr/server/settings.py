@@ -1,6 +1,9 @@
 from pathlib import Path
 import os
 
+
+from .settingz.flags import *
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from .settingz.paths import *
 

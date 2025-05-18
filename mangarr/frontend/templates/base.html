@@ -5,7 +5,7 @@
 
 {% block base %}
 <header>
-    <nav class="navbar navbar-expand-lg secondary-color background-light px-0 pb-0 fixed-top" >
+    <nav class="navbar navbar-expand-lg secondary-color background-light px-0 py-0 fixed-top" >
         <a class="navbar-brand accent-color pl-2" href="{% url 'index' %}"><h2 class="my-auto text-white"><img src="{% static 'imgs/logo.svg' %}" width="60" height="60" alt="Mangarr"><span class="d-none d-md-inline">Mangarr</span></h2></a>
 
         <button class="btn bg-transparent d-lg-none mr-2 text-white" id="sidebarToggle" aria-label="Toggle sidebar">
@@ -69,6 +69,11 @@
                     <i class="fa fa-server text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.server_settings" %}</p>
                 </a>
                 {% endif %}
+                {% if user|has_permition:'database.can_manage_plugins' %}
+                <a href="{% url 'plugin_manager' %}" class="nav-link text-white d-flex flex-row my-auto">
+                    <i class="fa fa-plug text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.plugin_manager" %}</p>
+                </a>
+                {% endif %}
                 {% if user.is_superuser or user.is_staff %}
                 <a href="{% url 'manager_user_list' %}" class="nav-link text-white d-flex flex-row my-auto">
                     <i class="fa fa-users my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.users" %}</p>
@@ -76,7 +81,7 @@
                 {% endif %}
                 
                 {% if user|has_permition:'database.can_restart' %}
-                <div class="nav-link text-danger d-flex flex-row my-auto" id="restart">
+                <div class="nav-link text-danger d-flex flex-row my-auto" id="restart" style="cursor: pointer;">
                     <i class="fa fa-undo my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.restart" %}</p>
                 </div>
                 {% endif %}
@@ -85,7 +90,7 @@
     </ul>
 </aside>
 
-<main id="content" class="px-4 pb-4 background-dark">
+<main id="content" class="px-4 my-3 background-dark">
   {% block content %}{% endblock %}
 </main>
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-18 01:54+0200\n"
+"POT-Creation-Date: 2025-05-18 18:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,6 +29,10 @@ msgstr "Can change settings"
 #: .\database\models.py:14
 msgid "permission.can_invite"
 msgstr "Can invite"
+
+#: .\database\models.py:15
+msgid "permission.can_manage_plugins"
+msgstr "Can manage plugins"
 
 #: .\frontend\templates\base.html:16
 msgid "frontend.base.search"
@@ -51,125 +55,130 @@ msgid "frontend.base.server_settings"
 msgstr "Server settings"
 
 #: .\frontend\templates\base.html:74
+msgid "frontend.base.plugin_manager"
+msgstr "Plugin manager"
+
+#: .\frontend\templates\base.html:79
 msgid "frontend.base.users"
 msgstr "Users"
 
-#: .\frontend\templates\base.html:80
+#: .\frontend\templates\base.html:85
 msgid "frontend.base.restart"
 msgstr "Restart"
 
-#: .\frontend\templates\manager\user_list.html:6
+#: .\frontend\templates\manager\user_list.html:8
 msgid "frontend.manager_panel.manager_panel"
 msgstr "Manager panel"
 
-#: .\frontend\templates\manager\user_list.html:13
+#: .\frontend\templates\manager\user_list.html:15
 msgid "frontend.manager_panel.user_management"
 msgstr "User management"
 
-#: .\frontend\templates\manager\user_list.html:18
+#: .\frontend\templates\manager\user_list.html:21
 msgid "frontend.manager_panel.username"
 msgstr "Username"
 
-#: .\frontend\templates\manager\user_list.html:19
+#: .\frontend\templates\manager\user_list.html:22
 msgid "frontend.manager_panel.email"
 msgstr "Email"
 
-#: .\frontend\templates\manager\user_list.html:20
+#: .\frontend\templates\manager\user_list.html:23
 msgid "frontend.manager_panel.is_manager"
 msgstr "Is manager"
 
-#: .\frontend\templates\manager\user_list.html:21
-#: .\frontend\templates\manager\user_list.html:77
+#: .\frontend\templates\manager\user_list.html:24
+#: .\frontend\templates\manager\user_list.html:93
 msgid "frontend.manager_panel.actions"
 msgstr "Actions"
 
-#: .\frontend\templates\manager\user_list.html:29
+#: .\frontend\templates\manager\user_list.html:38
 msgid "frontend.manager_panel.is_manager_yes"
 msgstr "Yes"
 
-#: .\frontend\templates\manager\user_list.html:29
+#: .\frontend\templates\manager\user_list.html:40
 msgid "frontend.manager_panel.is_manager_no"
 msgstr "No"
 
-#: .\frontend\templates\manager\user_list.html:34
+#: .\frontend\templates\manager\user_list.html:47
 msgid "frontend.manager_panel.edit_permissions"
 msgstr "Edit permissions"
 
-#: .\frontend\templates\manager\user_list.html:42
+#: .\frontend\templates\manager\user_list.html:55
 msgid "frontend.manager_panel.add_staff"
 msgstr "Add staff"
 
-#: .\frontend\templates\manager\user_list.html:45
+#: .\frontend\templates\manager\user_list.html:59
 msgid "frontend.manager_panel.remove_staff"
 msgstr "Remove staff"
 
-#: .\frontend\templates\manager\user_list.html:51
-#: .\frontend\templates\manager\user_list.html:93
+#: .\frontend\templates\manager\user_list.html:65
+#: .\frontend\templates\manager\user_list.html:109
 msgid "frontend.manager_panel.delete"
 msgstr "Delete"
 
-#: .\frontend\templates\manager\user_list.html:54
+#: .\frontend\templates\manager\user_list.html:68
 msgid "frontend.manager_panel.superuser"
 msgstr "Superuser"
 
-#: .\frontend\templates\manager\user_list.html:64
+#: .\frontend\templates\manager\user_list.html:80
 msgid "frontend.manager_panel.register_tokens_management"
 msgstr "Register token management"
 
-#: .\frontend\templates\manager\user_list.html:68
+#: .\frontend\templates\manager\user_list.html:84
 msgid "frontend.manager_panel.register_token_add"
 msgstr "<i class='fa fa-plus'></i> Add"
 
-#: .\frontend\templates\manager\user_list.html:76
+#: .\frontend\templates\manager\user_list.html:92
 msgid "frontend.manager_panel.token"
 msgstr "Token"
 
-#: .\frontend\templates\manager\user_list.html:87
+#: .\frontend\templates\manager\user_list.html:103
 msgid "frontend.manager_panel.copy_token"
 msgstr "Copy token"
 
-#: .\frontend\templates\manager\user_list.html:90
+#: .\frontend\templates\manager\user_list.html:106
 msgid "frontend.manager_panel.copy_token_url"
 msgstr "Copy token with URL"
 
-#: .\frontend\templates\manager\user_list.html:101
+#: .\frontend\templates\manager\user_list.html:117
 msgid "frontend.manager_panel.no_register_tokens_found"
-msgstr ""
+msgstr "No register tokens found"
 
-#: .\frontend\templates\manager\user_list.html:113
+#: .\frontend\templates\manager\user_list.html:129
 msgid "frontend.manager_panel.edit_permissions_for"
 msgstr "Edit permissions for <span id='modalUsername'></span>"
 
-#: .\frontend\templates\manager\user_list.html:126
+#: .\frontend\templates\manager\user_list.html:142
 msgid "frontend.manager_panel.close"
 msgstr "Close"
 
-#: .\frontend\templates\manager\user_list.html:127
+#: .\frontend\templates\manager\user_list.html:143
 msgid "frontend.manager_panel.save_changes"
 msgstr "Save changes"
 
-#: .\frontend\templates\manager\user_list.html:138
-#: .\frontend\templates\manager\user_list.html:157
+#: .\frontend\templates\manager\user_list.html:154
+#: .\frontend\templates\manager\user_list.html:173
 msgid "frontend.manager_panel.confirm_delete_title"
 msgstr "Confirm delete"
 
-#: .\frontend\templates\manager\user_list.html:142
+#: .\frontend\templates\manager\user_list.html:158
 msgid "frontend.manager_panel.confirm_delete_user_text"
 msgstr "Are you sure you want to delete <strong id='deleteUsername'></strong>?"
 
-#: .\frontend\templates\manager\user_list.html:145
-#: .\frontend\templates\manager\user_list.html:164
+#: .\frontend\templates\manager\user_list.html:161
+#: .\frontend\templates\manager\user_list.html:180
 msgid "frontend.manager_panel.cancel"
 msgstr "Cancel"
 
-#: .\frontend\templates\manager\user_list.html:146
-#: .\frontend\templates\manager\user_list.html:165
+#: .\frontend\templates\manager\user_list.html:162
+#: .\frontend\templates\manager\user_list.html:181
 msgid "frontend.manager_panel.confirm"
 msgstr "Confirm"
 
-#: .\frontend\templates\manager\user_list.html:161
+#: .\frontend\templates\manager\user_list.html:177
 msgid "frontend.manager_panel.confirm_delete_token_text"
-msgstr "Are you sure you want to delete <strong id='deleteTokenname'></strong>?"
+msgstr ""
+"Are you sure you want to delete <strong id='deleteTokenname'></strong>?"
 
 #: .\frontend\templates\profile.html:5 .\frontend\templates\profile.html:8
 msgid "frontend.profile.profile"
@@ -266,6 +275,96 @@ msgstr "Localization"
 #: .\frontend\views.py:138
 msgid "frontend.settings.locale"
 msgstr "Locale"
+
+#: .\plugins\templates\plugins\manager.html:5
+#: .\plugins\templates\plugins\manager.html:8
+msgid "plugins.manager.plugin_manager"
+msgstr "Plugin manager"
+
+#: .\plugins\templates\plugins\manager.html:13
+#: .\plugins\templates\plugins\manager.html:157
+msgid "plugins.manager.resume_downloads"
+msgstr "<i class='fa fa-play'></i> Resume downloads"
+
+#: .\plugins\templates\plugins\manager.html:15
+#: .\plugins\templates\plugins\manager.html:157
+msgid "plugins.manager.pause_downloads"
+msgstr "<i class='fa fa-pause'></i> Pause downloads"
+
+#: .\plugins\templates\plugins\manager.html:21
+msgid "plugins.manager.core_plugins"
+msgstr "Core plugins"
+
+#: .\plugins\templates\plugins\manager.html:25
+#: .\plugins\templates\plugins\manager.html:90
+msgid "plugins.manager.domain"
+msgstr "Domain"
+
+#: .\plugins\templates\plugins\manager.html:26
+#: .\plugins\templates\plugins\manager.html:91
+msgid "plugins.manager.name"
+msgstr "Name"
+
+#: .\plugins\templates\plugins\manager.html:27
+#: .\plugins\templates\plugins\manager.html:92
+msgid "plugins.manager.version"
+msgstr "Version"
+
+#: .\plugins\templates\plugins\manager.html:28
+#: .\plugins\templates\plugins\manager.html:93
+msgid "plugins.manager.status"
+msgstr "Status"
+
+#: .\plugins\templates\plugins\manager.html:29
+#: .\plugins\templates\plugins\manager.html:94
+msgid "plugins.manager.action"
+msgstr "Action"
+
+#: .\plugins\templates\plugins\manager.html:40
+msgid "plugins.manager.installed"
+msgstr "Installed"
+
+#: .\plugins\templates\plugins\manager.html:42
+msgid "plugins.manager.update_available"
+msgstr "Update available"
+
+#: .\plugins\templates\plugins\manager.html:48
+#: .\plugins\templates\plugins\manager.html:105
+msgid "plugins.manager.downloaded"
+msgstr "Downloaded"
+
+#: .\plugins\templates\plugins\manager.html:50
+#: .\plugins\templates\plugins\manager.html:107
+msgid "plugins.manager.not_downloaded"
+msgstr "Not downloaded"
+
+#: .\plugins\templates\plugins\manager.html:59
+msgid "plugins.manager.update"
+msgstr "Update"
+
+#: .\plugins\templates\plugins\manager.html:61
+#: .\plugins\templates\plugins\manager.html:115
+msgid "plugins.manager.redownload"
+msgstr "Redownload"
+
+#: .\plugins\templates\plugins\manager.html:66
+#: .\plugins\templates\plugins\manager.html:119
+msgid "plugins.manager.delete"
+msgstr "Delete"
+
+#: .\plugins\templates\plugins\manager.html:71
+#: .\plugins\templates\plugins\manager.html:124
+msgid "plugins.manager.download"
+msgstr "Download"
+
+#: .\plugins\templates\plugins\manager.html:79
+#: .\plugins\templates\plugins\manager.html:132
+msgid "plugins.manager.no_plugins_found"
+msgstr "No plugins foud"
+
+#: .\plugins\templates\plugins\manager.html:86
+msgid "plugins.manager.community_plugins"
+msgstr "Community plugins"
 
 #: .\server\settingz\localization.py:14
 msgid "langs.english"

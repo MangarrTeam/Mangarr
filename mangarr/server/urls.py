@@ -27,5 +27,6 @@ urlpatterns = [
 
 urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
+    path("plugins/", include("plugins.urls")),
     path('', include('frontend.urls')),
 )
