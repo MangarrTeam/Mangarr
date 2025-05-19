@@ -100,28 +100,30 @@
 {% block base_scripts %}
 <script src="{% static 'js/base.js' %}"></script>
 <script>
-document.getElementById("restart").addEventListener("click", function () {
-    fetch("{% url 'restart' %}", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer {{ user.profile.token }}"
-        }
-    })
-    .then(response => {
-        if (!response.ok) throw new Error("Request failed");
-        return response.json();
-    })
-    .then(data => {
-        console.log("Success:", data);
-        setTimeout(function() {
-            location.reload();
-        }, 5000)
-    })
-    .catch(error => {
-        console.error("Error:", error);
+document.querySelectorAll("#restart").forEach((e,k) => {
+    e.addEventListener("click", function () {
+        fetch("{% url 'restart' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer {{ user.profile.token }}"
+            }
+        })
+        .then(response => {
+            if (!response.ok) throw new Error("Request failed");
+            return response.json();
+        })
+        .then(data => {
+            console.log("Success:", data);
+            setTimeout(function() {
+                location.reload();
+            }, 5000)
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
     });
-});
+})
 window.addEventListener("load",function() {
     //alert(`Height: ${window.innerHeight}, Width: ${window.innerWidth}`);
 })

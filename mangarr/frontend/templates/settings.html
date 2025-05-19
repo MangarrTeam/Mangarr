@@ -75,7 +75,7 @@
 <div class="text-start pb-2">
     <button type="submit" class="btn btn-primary" form="setting-form">{% trans "frontend.settings.save_settings" %}</button>
     {% if config_changed %}
-        <button type="button" id="restartButton" class="btn btn-danger">{% trans "frontend.settings.restart" %}</button>
+        <button type="button" id="restart" class="btn btn-danger">{% trans "frontend.settings.restart" %}</button>
     {% endif %}
 </div>
 {% endblock %}
@@ -113,32 +113,5 @@
         const entry = button.closest('.allowed-host-entry');
         entry.remove();
     }
-
-    {% if config_changed %}
-        document.getElementById("restartButton").addEventListener("click", function () {
-            fetch("{% url 'restart' %}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer {{ user.profile.token }}"
-                }
-            })
-            .then(response => {
-                if (!response.ok) throw new Error("Request failed");
-                return response.json();
-            })
-            .then(data => {
-                console.log("Success:", data);
-                setTimeout(function() {
-                    location.reload();
-                }, 5000)
-                // Optional: show success message or redirect
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                // Optional: show error to user
-            });
-        });
-    {% endif %}
 </script>
 {% endblock %}
