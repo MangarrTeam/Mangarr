@@ -3,6 +3,7 @@ import os
 
 
 from .settingz.flags import *
+from .settingz.lazy_registries import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from .settingz.paths import *
