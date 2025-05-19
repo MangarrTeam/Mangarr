@@ -1,4 +1,4 @@
-Django==4.2.19
+Django==5.2.1
 djangorestframework
 whitenoise
 requests
@@ -6,3 +6,4 @@ Pillow
 gunicorn
 flask
 pytz
+packaging
