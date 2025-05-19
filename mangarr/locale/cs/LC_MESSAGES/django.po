@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-19 03:27+0200\n"
+"POT-Creation-Date: 2025-05-19 21:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,11 +35,27 @@ msgstr "Může pozvat"
 msgid "permission.can_manage_plugins"
 msgstr "Může spravovat pluginy"
 
+#: .\database\models.py:16
+msgid "permission.can_search"
+msgstr "Může hledat"
+
+#: .\database\models.py:17
+msgid "permission.can_request"
+msgstr "Může važádat"
+
+#: .\database\models.py:18
+msgid "permission.can_manage_requests"
+msgstr "Může spravovat žádosti"
+
+#: .\database\models.py:19
+msgid "permission.can_download"
+msgstr "Může stahovat"
+
 #: .\frontend\templates\base.html:16
 msgid "frontend.base.search"
 msgstr "Hledat..."
 
-#: .\frontend\templates\base.html:34 .\frontend\templates\base.html:65
+#: .\frontend\templates\base.html:34 .\frontend\templates\base.html:83
 msgid "frontend.base.profile"
 msgstr "Profil"
 
@@ -47,25 +63,37 @@ msgstr "Profil"
 msgid "frontend.base.logout"
 msgstr "Odhlásit"
 
-#: .\frontend\templates\base.html:50 .\frontend\templates\base.html:60
+#: .\frontend\templates\base.html:50 .\frontend\templates\base.html:78
 msgid "frontend.base.settings"
 msgstr "Nastavení"
 
-#: .\frontend\templates\base.html:69
+#: .\frontend\templates\base.html:60
+msgid "frontend.base.manga"
+msgstr "Manga"
+
+#: .\frontend\templates\base.html:66
+msgid "frontend.base.manga_search"
+msgstr "Vyhledat mangu"
+
+#: .\frontend\templates\base.html:87
 msgid "frontend.base.server_settings"
 msgstr "Nastavení serveru"
 
-#: .\frontend\templates\base.html:74
+#: .\frontend\templates\base.html:92
 msgid "frontend.base.plugin_manager"
 msgstr "Správce pluginů"
 
-#: .\frontend\templates\base.html:79
+#: .\frontend\templates\base.html:97
 msgid "frontend.base.users"
 msgstr "Uživatelé"
 
-#: .\frontend\templates\base.html:85
+#: .\frontend\templates\base.html:103
 msgid "frontend.base.restart"
 msgstr "Restartovat"
+
+#: .\frontend\templates\index.html:5
+msgid "frontend.index.index"
+msgstr "Index"
 
 #: .\frontend\templates\manager\user_list.html:8
 msgid "frontend.manager_panel.manager_panel"
@@ -180,6 +208,40 @@ msgstr "Potvrdit"
 msgid "frontend.manager_panel.confirm_delete_token_text"
 msgstr "Jste si jisti že chcete smazat <strong id='deleteTokenname'></strong>?"
 
+#: .\frontend\templates\manga\search.html:6
+#: .\frontend\templates\manga\search.html:64
+msgid "frontend.search.search"
+msgstr "Hledat"
+
+#: .\frontend\templates\manga\search.html:21
+msgid "frontend.search.search_manga"
+msgstr "Vyhledávání..."
+
+#: .\frontend\templates\manga\search.html:34
+msgid "frontend.search.select_plugin"
+msgstr "Vybrat plugin"
+
+#: .\frontend\templates\manga\search.html:55
+#: .\frontend\templates\manga\search.html:232
+msgid "frontend.search.select_language"
+msgstr "Vyberte jazyk"
+
+#: .\frontend\templates\manga\search.html:144
+msgid "frontend.search.request"
+msgstr "Vyžádat"
+
+#: .\frontend\templates\manga\search.html:162
+msgid "frontend.search.monitor"
+msgstr "Monitorovat"
+
+#: .\frontend\templates\manga\search.html:179
+msgid "frontend.search.view"
+msgstr "Otevřít na stránce"
+
+#: .\frontend\templates\manga\search.html:247
+msgid "frontend.search.no_language"
+msgstr ""
+
 #: .\frontend\templates\profile.html:5 .\frontend\templates\profile.html:8
 msgid "frontend.profile.profile"
 msgstr "Profil"
@@ -287,85 +349,89 @@ msgid "plugins.manager.core_plugins"
 msgstr "Hlavní pluginy"
 
 #: .\plugins\templates\plugins\manager.html:23
-#: .\plugins\templates\plugins\manager.html:92
+#: .\plugins\templates\plugins\manager.html:94
 msgid "plugins.manager.domain"
 msgstr "Doména"
 
 #: .\plugins\templates\plugins\manager.html:24
-#: .\plugins\templates\plugins\manager.html:93
+#: .\plugins\templates\plugins\manager.html:95
 msgid "plugins.manager.name"
 msgstr "Název"
 
 #: .\plugins\templates\plugins\manager.html:25
-#: .\plugins\templates\plugins\manager.html:94
+#: .\plugins\templates\plugins\manager.html:96
 msgid "plugins.manager.version"
 msgstr "Verze"
 
 #: .\plugins\templates\plugins\manager.html:26
-#: .\plugins\templates\plugins\manager.html:95
+#: .\plugins\templates\plugins\manager.html:97
 msgid "plugins.manager.status"
 msgstr "Status"
 
 #: .\plugins\templates\plugins\manager.html:27
-#: .\plugins\templates\plugins\manager.html:96
+#: .\plugins\templates\plugins\manager.html:98
 msgid "plugins.manager.action"
 msgstr "Akce"
 
 #: .\plugins\templates\plugins\manager.html:38
+#: .\plugins\templates\plugins\manager.html:109
 msgid "plugins.manager.installed"
 msgstr "Instalováno"
 
 #: .\plugins\templates\plugins\manager.html:40
+#: .\plugins\templates\plugins\manager.html:111
 msgid "plugins.manager.update_available"
 msgstr "Dostupná aktualizace"
 
 #: .\plugins\templates\plugins\manager.html:46
-#: .\plugins\templates\plugins\manager.html:107
-msgid "plugins.manager.downloaded"
-msgstr "Staženo"
-
-#: .\plugins\templates\plugins\manager.html:48
-#: .\plugins\templates\plugins\manager.html:111
-msgid "plugins.manager.not_downloaded"
-msgstr "Nestaženo"
-
-#: .\plugins\templates\plugins\manager.html:58
-msgid "plugins.manager.update"
-msgstr "Aktualizovat"
-
-#: .\plugins\templates\plugins\manager.html:60
-#: .\plugins\templates\plugins\manager.html:119
-msgid "plugins.manager.redownload"
-msgstr "Stáhnout znovu"
-
-#: .\plugins\templates\plugins\manager.html:66
-#: .\plugins\templates\plugins\manager.html:123
-msgid "plugins.manager.delete"
-msgstr "Smazat"
-
-#: .\plugins\templates\plugins\manager.html:71
-#: .\plugins\templates\plugins\manager.html:128
-msgid "plugins.manager.download"
-msgstr "Stáhnout"
-
-#: .\plugins\templates\plugins\manager.html:79
-#: .\plugins\templates\plugins\manager.html:136
-msgid "plugins.manager.no_plugins_found"
-msgstr "Nebyly nalezeny žádné pluginy"
-
-#: .\plugins\templates\plugins\manager.html:87
-msgid "plugins.manager.community_plugins"
-msgstr "Komunitní pluginy"
-
-#: .\plugins\templates\plugins\manager.html:109
+#: .\plugins\templates\plugins\manager.html:117
 msgid "plugins.manager.local_only"
 msgstr "Pouze lokální"
 
-#: .\plugins\templates\plugins\manager.html:164
+#: .\plugins\templates\plugins\manager.html:48
+#: .\plugins\templates\plugins\manager.html:119
+msgid "plugins.manager.downloaded"
+msgstr "Staženo"
+
+#: .\plugins\templates\plugins\manager.html:50
+#: .\plugins\templates\plugins\manager.html:121
+msgid "plugins.manager.not_downloaded"
+msgstr "Nestaženo"
+
+#: .\plugins\templates\plugins\manager.html:60
+#: .\plugins\templates\plugins\manager.html:131
+msgid "plugins.manager.update"
+msgstr "Aktualizovat"
+
+#: .\plugins\templates\plugins\manager.html:62
+#: .\plugins\templates\plugins\manager.html:133
+msgid "plugins.manager.redownload"
+msgstr "Stáhnout znovu"
+
+#: .\plugins\templates\plugins\manager.html:68
+#: .\plugins\templates\plugins\manager.html:139
+msgid "plugins.manager.delete"
+msgstr "Smazat"
+
+#: .\plugins\templates\plugins\manager.html:73
+#: .\plugins\templates\plugins\manager.html:144
+msgid "plugins.manager.download"
+msgstr "Stáhnout"
+
+#: .\plugins\templates\plugins\manager.html:81
+#: .\plugins\templates\plugins\manager.html:152
+msgid "plugins.manager.no_plugins_found"
+msgstr "Nebyly nalezeny žádné pluginy"
+
+#: .\plugins\templates\plugins\manager.html:89
+msgid "plugins.manager.community_plugins"
+msgstr "Komunitní pluginy"
+
+#: .\plugins\templates\plugins\manager.html:180
 msgid "plugins.manager.resume_downloads"
 msgstr "<i class='fa fa-play'></i> Pustit stahování"
 
-#: .\plugins\templates\plugins\manager.html:164
+#: .\plugins\templates\plugins\manager.html:180
 msgid "plugins.manager.pause_downloads"
 msgstr "<i class='fa fa-pause'></i> Pozastavit stahování"
 
