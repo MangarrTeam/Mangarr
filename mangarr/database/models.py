@@ -13,6 +13,10 @@ class UserProfile(models.Model):
             ('can_change_settings', _('permission.can_change_settings')),
             ('can_invite', _('permission.can_invite')),
             ('can_manage_plugins', _('permission.can_manage_plugins')),
+            ('can_search', _('permission.can_search')),
+            ('can_request', _('permission.can_request')),
+            ('can_manage_requests', _('permission.can_manage_requests')),
+            ('can_download', _('permission.can_download')),
         ]
 
 
