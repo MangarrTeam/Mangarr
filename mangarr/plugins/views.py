@@ -6,7 +6,7 @@ from django.contrib import messages
 from plugins.downloader import download_plugin
 from server.settings import PLUGINS_DIR, plugin_change_state, plugin_changed
 from .manager import update_downloaded_metadata
-from .functions import load_metadata, get_plugin
+from .functions import load_metadata
 
 def get_plugin_by_domain(domain):
     return next((p for p in load_metadata() if p["domain"] == domain), None)
@@ -19,12 +19,7 @@ def plugin_manager(request):
         "community_plugins": [p for p in plugins if p["category"] == "community"],
         "plugin_changed": plugin_change_state()
     }
-    try:
-        plugin = get_plugin("core", "mangarr-test-plugin")()
-        manga = plugin.get_manga()
-        print(manga)
-    except:
-        print("Can't print manga")
+
     return custom_render(request, "plugins/manager.html", context)
 
 @permission_required("database.can_manage_plugins")

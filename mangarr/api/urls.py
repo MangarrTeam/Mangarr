@@ -10,4 +10,9 @@ urlpatterns = [
     path('manager/users/delete/<int:user_id>/', views.delete_user, name='delete_user'),
     path('manager/tokens/register/delete/<int:token_id>/', views.delete_token, name='delete_token'),
     path('manager/downloads/toggle/', views.toggle_pause_downloads, name='download_toggle'),
+
+
+    path("manga/search", views.search_manga, name="api_search_manga"),
+    path("manga/request", views.request_manga, name="api_request_manga"),
+    path("manga/monitor", views.monitor_manga, name="api_monitor_manga"),
 ]

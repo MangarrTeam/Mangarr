@@ -1,0 +1,31 @@
+.multi-line-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.9rem;
+    line-height: 1.2em;
+    max-height: 3.6em;
+}
+
+.hover-buttons button {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.checkmark-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 3rem;
+    height: 3rem;
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+    z-index: 10;
+}
+
+.checkmark-badge i {
+    position: relative;
+    top: -0.5rem;
+    right: -0.5rem;
+}

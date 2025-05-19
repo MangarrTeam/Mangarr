@@ -206,3 +206,9 @@ def manager_user_list(request):
 def create_register_token(request):
     RegisterToken().save()
     return redirect('manager_user_list')
+
+from plugins.functions import get_plugins
+
+@permission_required("database.can_search")
+def manga_search(request):
+    return custom_render(request, "manga/search.html", {"plugins": get_plugins()})
