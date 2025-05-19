@@ -1,13 +1,13 @@
 import importlib.util
 import inspect
 from .base import MangaPluginBase
-from .functions import load_metadata
 from server.settings import PLUGINS_DIR
 
 class PluginNotAvailable(Exception): pass
 class PluginMissingMethods(Exception): pass
 
 """
+from .loader import load_plugin
 plugin = load_plugin("core", "mangarr-test-plugin")
 manga = plugin.get_manga()
 print(manga)
@@ -39,4 +39,4 @@ def load_plugin(category: str, domain: str) -> MangaPluginBase:
     if not plugin_classes:
         raise PluginMissingMethods(f"No class inheriting MangaPluginBase found in plugin '{category}.{domain}'")
 
-    return plugin_classes[0]()
+    return plugin_classes[0]
