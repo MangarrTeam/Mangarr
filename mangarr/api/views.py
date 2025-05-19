@@ -111,7 +111,7 @@ def search_manga(request):
         if domain not in get_plugins_domains(category):
             return JsonResponse({"error": "Domain does not exist"}, status=403)
         try:
-            plugin = get_plugin("community", "mangadex")()
+            plugin = get_plugin(category, domain)()
             manga = plugin.search_manga(query, data.get("language"))
             monitored_manga = ["https://mangadex.org/title/ffe69cc2-3f9e-4eab-a7f7-c963cea9ec25"]
             return JsonResponse([{**m, "monitored": manga_is_monitored(m), "requested": manga_is_requested(m)} for m in manga], safe=False)
