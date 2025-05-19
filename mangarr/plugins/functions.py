@@ -24,7 +24,7 @@ def get_plugin(category: str, domain: str) -> type[MangaPluginBase]:
     if key in PLUGIN_REGISTRY:
         return PLUGIN_REGISTRY[key]
     
-    logger.error(f"Can't fint plugin with key {key}")
+    logger.error(f"Can't find plugin with key {key}")
     return MangaPluginBase
 
 def get_plugins_domains(category: str) -> list:
