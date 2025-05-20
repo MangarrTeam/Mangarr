@@ -20,8 +20,8 @@
     <table class="table table-hover text-center">
         <thead class="background-middle text-white">
             <tr>
-                <th class="border-0">{% trans "plugins.manager.domain" %}</th>
                 <th class="border-0">{% trans "plugins.manager.name" %}</th>
+                <th class="border-0">{% trans "plugins.manager.domain" %}</th>
                 <th class="border-0">{% trans "plugins.manager.version" %}</th>
                 <th class="border-0">{% trans "plugins.manager.status" %}</th>
                 <th class="border-0 col-3 text-nowrap">{% trans "plugins.manager.action" %}</th>
@@ -30,8 +30,8 @@
         <tbody class="background-light text-white">
             {% for plugin in core_plugins %}
                 <tr>
-                    <td class="align-middle text-truncate" style="max-width: 15vw;">{{ plugin.domain }}</td>
                     <td class="align-middle text-truncate" style="max-width: 20vw;">{{ plugin.name }}</td>
+                    <td class="align-middle text-truncate" style="max-width: 15vw;">{{ plugin.domain }}</td>
                     <td class="align-middle flex">
                         {{ plugin.version }}
                         {% if plugin.downloaded_version %}
@@ -91,8 +91,8 @@
     <table class="table table-hover text-center">
         <thead class="background-middle text-white">
             <tr>
-                <th class="border-0">{% trans "plugins.manager.domain" %}</th>
                 <th class="border-0">{% trans "plugins.manager.name" %}</th>
+                <th class="border-0">{% trans "plugins.manager.domain" %}</th>
                 <th class="border-0">{% trans "plugins.manager.version" %}</th>
                 <th class="border-0">{% trans "plugins.manager.status" %}</th>
                 <th class="border-0 col-3 text-nowrap">{% trans "plugins.manager.action" %}</th>
@@ -101,8 +101,8 @@
         <tbody class="background-light text-white">
             {% for plugin in community_plugins %}
                 <tr>
-                    <td class="align-middle text-truncate" style="max-width: 15vw;">{{ plugin.domain }}</td>
                     <td class="align-middle text-truncate" style="max-width: 20vw;">{{ plugin.name }}</td>
+                    <td class="align-middle text-truncate" style="max-width: 15vw;">{{ plugin.domain }}</td>
                     <td class="align-middle flex">
                         {{ plugin.version }}
                         {% if plugin.downloaded_version %}
