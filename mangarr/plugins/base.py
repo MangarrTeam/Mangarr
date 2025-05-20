@@ -5,6 +5,8 @@ import requests
 import logging
 logger = logging.getLogger(__name__)
 
+NO_THUMBNAIL_URL = "/uploads/static/no_thumbnail.png"
+
 class Formats(Enum):
     NORMAL = 1
     SPECIAL = 2
