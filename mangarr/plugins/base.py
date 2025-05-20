@@ -72,7 +72,7 @@ class MangaPluginBase(ABC):
         }
     
     @abstractmethod
-    def search_manga(self, query:str, language:str) -> list[dict]:
+    def search_manga(self, query:str, nsfw:bool, language:str) -> list[dict]:
         """
         Gets list of mangas parsed from query
 

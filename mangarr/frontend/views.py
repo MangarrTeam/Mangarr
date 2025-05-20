@@ -110,6 +110,14 @@ def settings_view(request):
                 'choices': [{'key': tzs, 'value': tzs } for tzs in pytz.common_timezones]
             }
         },
+        'Plugins': {
+            'nsfw_allowed': {
+                'section_name': _('frontend.settings.plugins'),
+                'item_name': _('frontend.settings.nsfw_allowed'),
+                'value': CONFIG.get('Plugins', 'nsfw_allowed'),
+                'type': 'bool'
+            }
+        },
         'Networking': {
             'allowed_hosts': {
                 'section_name': _('frontend.settings.networking'),

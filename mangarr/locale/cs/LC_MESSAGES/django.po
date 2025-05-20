@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-20 19:00+0200\n"
+"POT-Creation-Date: 2025-05-20 22:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -229,19 +229,20 @@ msgstr "Jste si jisti že chcete smazat <strong id='deleteTokenname'></strong>?"
 msgid "frontend.manga_requests.requested_manga"
 msgstr "Vyžádané mangy"
 
-#: .\frontend\templates\manga\requests.html:33
+#: .\frontend\templates\manga\requests.html:30
 msgid "frontend.manga_requests.approve"
 msgstr "Schválit"
 
-#: .\frontend\templates\manga\requests.html:34
+#: .\frontend\templates\manga\requests.html:31
 msgid "frontend.manga_requests.deny"
 msgstr "Zamítnout"
 
-#: .\frontend\templates\manga\requests.html:36
+#: .\frontend\templates\manga\requests.html:33
 msgid "frontend.manga_requests.view"
 msgstr "Otevřít na stránce"
 
-#: .\frontend\templates\manga\requests.html:45
+#: .\frontend\templates\manga\requests.html:44
+#: .\frontend\templates\manga\requests.html:48
 msgid "frontend.manga_requests.none_found"
 msgstr "Žádné žádosti"
 
@@ -354,31 +355,39 @@ msgstr "Debug"
 msgid "frontend.settings.tz"
 msgstr "TZ"
 
-#: .\frontend\views.py:115 .\frontend\views.py:121
+#: .\frontend\views.py:115
+msgid "frontend.settings.plugins"
+msgstr "Pluginy"
+
+#: .\frontend\views.py:116
+msgid "frontend.settings.nsfw_allowed"
+msgstr "NSFW povoleno"
+
+#: .\frontend\views.py:123 .\frontend\views.py:129
 msgid "frontend.settings.networking"
 msgstr "Síť"
 
-#: .\frontend\views.py:116
+#: .\frontend\views.py:124
 msgid "frontend.settings.allowed_hosts"
 msgstr "Povolení hostitelé"
 
-#: .\frontend\views.py:122
+#: .\frontend\views.py:130
 msgid "frontend.settings.csrf_trusted_origins"
 msgstr "Důvěryhodné zdroje CSRF"
 
-#: .\frontend\views.py:129
+#: .\frontend\views.py:137
 msgid "frontend.settings.other"
 msgstr "Jiné"
 
-#: .\frontend\views.py:130
+#: .\frontend\views.py:138
 msgid "frontend.settings.instance_name"
 msgstr "Jméno instance"
 
-#: .\frontend\views.py:137
+#: .\frontend\views.py:145
 msgid "frontend.settings.localization"
 msgstr "Lokalizace"
 
-#: .\frontend\views.py:138
+#: .\frontend\views.py:146
 msgid "frontend.settings.locale"
 msgstr "Lokalita"
 
@@ -393,13 +402,13 @@ msgstr "Hlavní pluginy"
 
 #: .\plugins\templates\plugins\manager.html:23
 #: .\plugins\templates\plugins\manager.html:94
-msgid "plugins.manager.domain"
-msgstr "Doména"
+msgid "plugins.manager.name"
+msgstr "Název"
 
 #: .\plugins\templates\plugins\manager.html:24
 #: .\plugins\templates\plugins\manager.html:95
-msgid "plugins.manager.name"
-msgstr "Název"
+msgid "plugins.manager.domain"
+msgstr "Doména"
 
 #: .\plugins\templates\plugins\manager.html:25
 #: .\plugins\templates\plugins\manager.html:96

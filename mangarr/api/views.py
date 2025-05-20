@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import permission_required
 from django.views.decorators.http import require_POST
 import json
 from .functions import manga_is_monitored, manga_is_requested
+from server.settings import NSFW_ALLOWED
 import logging
 logger = logging.getLogger(__name__)
 
@@ -114,9 +115,9 @@ def search_manga(request):
             plugin = get_plugin(category, domain)()
             language = data.get("language")
             if language is not None and language in plugin.get_languages():
-                manga = plugin.search_manga(query, language)
+                manga = plugin.search_manga(query, NSFW_ALLOWED, language)
             else:
-                manga = plugin.search_manga(query)
+                manga = plugin.search_manga(query, NSFW_ALLOWED)
             monitored_manga = ["https://mangadex.org/title/ffe69cc2-3f9e-4eab-a7f7-c963cea9ec25"]
             return JsonResponse([{**m, "monitored": manga_is_monitored(m), "requested": manga_is_requested(m)} for m in manga], safe=False)
         except Exception as e:

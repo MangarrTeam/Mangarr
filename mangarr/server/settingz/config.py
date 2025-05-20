@@ -16,3 +16,5 @@ TIME_ZONE = CONFIG.get('Django', 'tz', 'UTC', description='Django Timezone')
 INSTANCE_NAME = CONFIG.get('Other', 'instance_name', 'Mangarr', description='Name of this instance. Displayed in tab.')
 
 LANGUAGE_CODE = CONFIG.get('Localization', 'locale', 'en', description='Default language.', choices=LANGUAGES_KEYS)
+
+NSFW_ALLOWED = CONFIG.getboolean('Plugins', 'nsfw_allowed', fallback=False, description='Allows NSFW content and plugins')

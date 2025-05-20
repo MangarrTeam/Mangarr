@@ -3,6 +3,7 @@ from plugins.plugin_sources import SOURCE_LISTS
 from plugins.utils import fetch_repo_manifest, fetch_json_list
 import logging
 from server.settings import PLUGINS_DIR, PLUGINS_METADATA_PATH
+from .manifest_requirements import MANIFEST_KEYS
 from packaging.version import Version
 from django.core.cache import cache
 
@@ -17,14 +18,14 @@ def update_metadata():
         repos = fetch_json_list(source_url)
         for repo in repos:
             manifest = fetch_repo_manifest(repo)
-            if manifest:
+            if manifest and all([k_name in list(manifest.keys()) and type(manifest[k_name]) == k_type for k_name, k_type in MANIFEST_KEYS]):
                 key = f"{category}:{manifest['domain']}"
                 known_keys.add(key)
                 version = Version(manifest["version"])
                 downloaded = get_downloaded_version(category, manifest["domain"])
                 downloaded_version = f"{Version(downloaded)}" if downloaded is not None else downloaded
                 plugin_data.append({
-                    **manifest,
+                    **{key:value for key, value in manifest.items() if (key, type(value)) in MANIFEST_KEYS},
                     "version": f'{version}',
                     "source": repo,
                     "category": category,
@@ -48,22 +49,18 @@ def update_metadata():
                 continue
 
             try:
-                manifest = get_downloaded_manifest(category, domain) or {}
-                version = manifest.get("version", "0.0.0")
-
-                plugin_data.append({
-                    "domain": domain,
-                    "name": manifest.get("name", domain),
-                    "codeowner": manifest.get("codeowner", []),
-                    "documentation": manifest.get("documentation"),
-                    "issue_tracker": manifest.get("issue_tracker"),
-                    "version": version,
-                    "source": None,
-                    "category": category,
-                    "downloaded_version": version,
-                    "has_update": False,
-                    "local_only": True,
-                })
+                manifest = get_downloaded_manifest(category, domain)
+                if manifest and all([k_name in list(manifest.keys()) and type(manifest[k_name]) == k_type for k_name, k_type in MANIFEST_KEYS]):
+                    version = Version(manifest["version"])
+                    plugin_data.append({
+                        **{key:value for key, value in manifest.items() if (key, type(value)) in MANIFEST_KEYS},
+                        "version": f'{version}',
+                        "source": None,
+                        "category": category,
+                        "downloaded_version": f'{version}',
+                        "has_update": False,
+                        "local_only": True,
+                    })
             except Exception as e:
                 logger.warning(f"Could not load local plugin {category}/{domain}: {e}")
 
