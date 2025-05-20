@@ -83,11 +83,8 @@ def login_view(request):
     return custom_render(request, "login.html", {"form": form})
 
 import pytz
-@login_required
+@permission_required("database.can_change_settings")
 def settings_view(request):
-    if not request.user.has_perm("database.can_change_settings"):
-        logger.debug(f'User "{request.user}" tried to access settings but does not have the neccessary permissions.')
-        return redirect("index")
     settings_dict = {
         'Django': {
             'secret_key': {
