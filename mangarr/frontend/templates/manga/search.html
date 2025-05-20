@@ -99,9 +99,41 @@ document.getElementById('search-form').addEventListener('submit', async (e) => {
         body: JSON.stringify(payload)
     });
 
-    const data = await response.json();
+    const data = Array.from(await response.json());
     const grid = document.getElementById('manga-grid');
     grid.innerHTML = '';
+
+    if(data.length == 0) {
+        const col = document.createElement("div");
+        col.className = "col-6 col-sm-4 col-md-3 col-lg-2 mb-4";
+
+        const card = document.createElement("div");
+        card.className = "card bg-dark text-white border-0 overflow-hidden position-relative hover-buttons-container";
+        card.style.aspectRatio = "2 / 3";
+
+
+        const img = document.createElement("img");
+        img.className = "card-img";
+        img.src = "/uploads/static/no_thumbnail.png";
+        img.alt = '{% trans "frontend.manga_search.no_manga_found" %}';
+        img.style.objectFit = "cover";
+        img.style.height = "100%";
+
+        const overlay = document.createElement("div");
+        overlay.className = "card-img-overlay d-flex flex-column justify-content-end p-2";
+        overlay.style.backgroundImage = "linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0))";
+
+        const title = document.createElement("h6");
+        title.className = "card-title mb-1 w-100 multi-line-title";
+        title.title = '{% trans "frontend.manga_search.no_manga_found" %}';
+        title.textContent = '{% trans "frontend.manga_search.no_manga_found" %}';
+
+        card.appendChild(img);
+        overlay.appendChild(title);
+        card.appendChild(overlay);
+        col.appendChild(card);
+        grid.appendChild(col);
+    }
 
     data.forEach(manga => {
         const col = document.createElement("div");
@@ -121,7 +153,7 @@ document.getElementById('search-form').addEventListener('submit', async (e) => {
 
         const img = document.createElement("img");
         img.className = "card-img";
-        img.src = manga.cover + ".256.jpg";
+        img.src = manga.cover;
         img.alt = manga.name;
         img.style.objectFit = "cover";
         img.style.height = "100%";
