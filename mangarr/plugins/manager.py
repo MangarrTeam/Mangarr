@@ -65,7 +65,7 @@ def update_metadata():
                     "local_only": True,
                 })
             except Exception as e:
-                print(f"[Warning] Could not load local plugin {category}/{domain}: {e}")
+                logger.warning(f"Could not load local plugin {category}/{domain}: {e}")
 
     with open(PLUGINS_METADATA_PATH, "w") as f:
         json.dump(plugin_data, f, indent=2)
@@ -75,6 +75,9 @@ def update_downloaded_metadata(domain, version=None):
         with open(PLUGINS_METADATA_PATH, "r", encoding="utf-8") as f:
             metadata = json.load(f)
     except FileNotFoundError as e:
+        logger.error(f'Error while reading {PLUGINS_METADATA_PATH} - {e}')
+        metadata = []
+    except Exception as e:
         logger.error(f'Error while reading {PLUGINS_METADATA_PATH} - {e}')
         metadata = []
 
