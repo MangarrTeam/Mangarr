@@ -1,7 +1,6 @@
 # Generated
 *__pycache__
 *db.sqlite3
-*migrations/
 *project_root/
 *django.mo
 *mangarr/static/
