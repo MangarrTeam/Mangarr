@@ -148,6 +148,7 @@ def request_manga(request):
             manga_request = MangaRequest()
             manga_request.choose_plugin(category, domain)
             manga_request.variables = data.get("manga")
+            manga_request.user = request.user
 
             if manga_request.variables is None or manga_request.variables.get("url") is None:
                 return JsonResponse({"error": f"Request needs at least 'url' in variables ('manga')"}, status=500)

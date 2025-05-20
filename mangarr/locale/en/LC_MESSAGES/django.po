@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-20 22:11+0200\n"
+"POT-Creation-Date: 2025-05-20 23:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -229,20 +229,25 @@ msgstr ""
 msgid "frontend.manga_requests.requested_manga"
 msgstr "Requested manga"
 
-#: .\frontend\templates\manga\requests.html:30
+#: .\frontend\templates\manga\requests.html:29
+#, python-format
+msgid "frontend.manga_requests.requested_by %(name)s"
+msgstr "Requested by: %(name)s"
+
+#: .\frontend\templates\manga\requests.html:33
 msgid "frontend.manga_requests.approve"
 msgstr "Approve"
 
-#: .\frontend\templates\manga\requests.html:31
+#: .\frontend\templates\manga\requests.html:34
 msgid "frontend.manga_requests.deny"
 msgstr "Deny"
 
-#: .\frontend\templates\manga\requests.html:33
+#: .\frontend\templates\manga\requests.html:36
 msgid "frontend.manga_requests.view"
 msgstr "View"
 
-#: .\frontend\templates\manga\requests.html:44
-#: .\frontend\templates\manga\requests.html:48
+#: .\frontend\templates\manga\requests.html:47
+#: .\frontend\templates\manga\requests.html:51
 msgid "frontend.manga_requests.none_found"
 msgstr "None found"
 
@@ -390,6 +395,10 @@ msgstr "Localization"
 #: .\frontend\views.py:146
 msgid "frontend.settings.locale"
 msgstr "Locale"
+
+#: .\frontend\views.py:228
+msgid "frontend.request_manga.user_unknown"
+msgstr "Unknow"
 
 #: .\plugins\templates\plugins\manager.html:6
 #: .\plugins\templates\plugins\manager.html:10

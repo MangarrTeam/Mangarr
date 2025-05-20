@@ -225,4 +225,4 @@ from database.models import MangaRequest
 
 @permission_required("database.can_manage_requests")
 def manga_requests(request):
-    return custom_render(request, "manga/requests.html", {"manga_requests": [{"plugin": r.plugin, "manga": r.variables, "pk": r.pk} for r in MangaRequest.objects.all()]})
+    return custom_render(request, "manga/requests.html", {"manga_requests": [{"plugin": r.plugin, "manga": r.variables, "pk": r.pk, "user": r.user or _("frontend.request_manga.user_unknown")} for r in MangaRequest.objects.all()]})
