@@ -23,6 +23,9 @@ def load_downloaded_plugins():
     except FileNotFoundError as e:
         logger.error(f'Error while reading {PLUGINS_METADATA_PATH} - {e}')
         metadatas = []
+    except Exception as e:
+        logger.error(f'Error while reading {PLUGINS_METADATA_PATH} - {e}')
+        metadata = []
 
     for metadata in metadatas:
         if metadata["downloaded_version"] is not None:

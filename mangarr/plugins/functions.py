@@ -6,8 +6,15 @@ logger = logging.getLogger(__name__)
 
 
 def load_metadata():
-    with open(PLUGINS_METADATA_PATH) as f:
-        return json.load(f)
+    try:
+        with open(PLUGINS_METADATA_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError as e:
+        logger.error(f'Error while reading {PLUGINS_METADATA_PATH} - {e}')
+        return []
+    except Exception as e:
+        logger.error(f'Error while reading {PLUGINS_METADATA_PATH} - {e}')
+        return []
     
 def get_plugin_name(category: str, domain: str) -> str:
     metadatas = load_metadata()
