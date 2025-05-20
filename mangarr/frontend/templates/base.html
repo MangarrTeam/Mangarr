@@ -66,6 +66,11 @@
                     <i class="fa fa-search text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.manga_search" %}</p>
                 </a>
                 {% endif %}
+                {% if user|has_permition:'database.can_manage_requests' %}
+                <a href="{% url 'manga_requests' %}" class="nav-link text-white d-flex flex-row my-auto">
+                    <i class="fa fa-inbox text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.manga_requests" %}</p>
+                </a>
+                {% endif %}
             </div>
         </li>
 

@@ -15,19 +15,3 @@
     font-size: 0.75rem;
     padding: 0.25rem 0.5rem;
 }
-
-.checkmark-badge {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 3rem;
-    height: 3rem;
-    clip-path: polygon(100% 0, 0 0, 100% 100%);
-    z-index: 10;
-}
-
-.checkmark-badge i {
-    position: relative;
-    top: -0.5rem;
-    right: -0.5rem;
-}

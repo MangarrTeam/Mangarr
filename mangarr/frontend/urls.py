@@ -19,4 +19,5 @@ urlpatterns = [
 
 
     path("manga/search", views.manga_search, name="manga_search"),
+    path("manga/requests", views.manga_requests, name="manga_requests"),
 ]

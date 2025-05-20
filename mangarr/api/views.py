@@ -112,7 +112,11 @@ def search_manga(request):
             return JsonResponse({"error": "Domain does not exist"}, status=403)
         try:
             plugin = get_plugin(category, domain)()
-            manga = plugin.search_manga(query, data.get("language"))
+            language = data.get("language")
+            if language is not None and language in plugin.get_languages():
+                manga = plugin.search_manga(query, language)
+            else:
+                manga = plugin.search_manga(query)
             monitored_manga = ["https://mangadex.org/title/ffe69cc2-3f9e-4eab-a7f7-c963cea9ec25"]
             return JsonResponse([{**m, "monitored": manga_is_monitored(m), "requested": manga_is_requested(m)} for m in manga], safe=False)
         except Exception as e:
@@ -121,17 +125,46 @@ def search_manga(request):
     return JsonResponse({"error": "Error"}, status=500)
     
 
+from database.models import MangaRequest
+
 @permission_required("database.can_request")
 @require_POST
 def request_manga(request):
-    if request.method == "POST":
-        try:
-            data = json.loads(request.body)
-            print(data)
-        except Exception as e:
-            return JsonResponse({"error": f"Error - {e}"}, status=500)
-    logger.info("Tried to request manga TBD")
-    return JsonResponse({"error": "Temp success"}, status=200)
+    try:
+        data = json.loads(request.body)
+        category = data.get("category")
+        if category is None:
+            return JsonResponse({"error": "Missing parameter 'category'"}, status=400)
+        if category not in ["core", "community"]:
+            return JsonResponse({"error": "Category needs to be 'core' or 'cummunity'"}, status=400)
+        domain = data.get("domain")
+        if domain is None:
+            return JsonResponse({"error": "Missing parameter 'domain'"}, status=400)
+        if domain not in get_plugins_domains(category):
+            return JsonResponse({"error": "Domain does not exist"}, status=403)
+        
+        if MangaRequest.has_plugin(category, domain):
+            manga_request = MangaRequest()
+            manga_request.choose_plugin(category, domain)
+            manga_request.variables = data.get("manga")
+
+            if manga_request.variables is None or manga_request.variables.get("url") is None:
+                return JsonResponse({"error": f"Request needs at least 'url' in variables ('manga')"}, status=500)
+            
+            if MangaRequest.request_exist(manga_request.variables.get("url")):
+                return JsonResponse({"error": "The request for this item already exists"}, status=409)
+
+            try:
+                manga_request.save()
+            except Exception as e:
+                return JsonResponse({"error": f"Error - {e}"}, status=500)
+
+            return JsonResponse({"success": True}, status=200)
+
+
+        return JsonResponse({"error": f"There is no plugin with these category: {category} and domain: {domain}"}, status=500)
+    except Exception as e:
+        return JsonResponse({"error": f"Error - {e}"}, status=500)
     
 
 @permission_required("database.can_monitor")
@@ -145,3 +178,36 @@ def monitor_manga(request):
             return JsonResponse({"error": f"Error - {e}"}, status=500)
     logger.info("Tried to monitor manga TBD")
     return JsonResponse({"error": "Temp success"}, status=200)
+
+
+@permission_required("database.can_manage_requests")
+@require_POST
+def approve_manga_request(request):
+    pk = request.headers.get("pk")
+    if pk is None:
+        return JsonResponse({"error": "PK needs to be difined"}, status=400)
+    
+    try:
+        manga_request = MangaRequest.objects.get(pk=pk)
+        logger.info("Needs to do approve.")
+        #manga_request.delete()
+    except Exception as e:    
+        return JsonResponse({"error": f"Error - {e}"}, status=500)
+
+    return JsonResponse({"success": True}, status=200)
+
+
+@permission_required("database.can_manage_requests")
+@require_POST
+def deny_manga_request(request):
+    pk = request.headers.get("pk")
+    if pk is None:
+        return JsonResponse({"error": "PK needs to be difined"}, status=400)
+    
+    try:
+        manga_request = MangaRequest.objects.get(pk=pk)
+        manga_request.delete()
+    except Exception as e:    
+        return JsonResponse({"error": f"Error - {e}"}, status=500)
+
+    return JsonResponse({"success": True}, status=200)

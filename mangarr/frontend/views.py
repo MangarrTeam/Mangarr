@@ -212,3 +212,9 @@ from plugins.functions import get_plugins
 @permission_required("database.can_search")
 def manga_search(request):
     return custom_render(request, "manga/search.html", {"plugins": get_plugins()})
+
+from database.models import MangaRequest
+
+@permission_required("database.can_manage_requests")
+def manga_requests(request):
+    return custom_render(request, "manga/requests.html", {"manga_requests": [{"plugin": r.plugin, "manga": r.variables, "pk": r.pk} for r in MangaRequest.objects.all()]})
