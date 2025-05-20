@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-19 21:59+0200\n"
+"POT-Creation-Date: 2025-05-20 19:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,43 +19,55 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n "
 "<= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
 
-#: .\database\models.py:12
+#: .\database\models.py:13
 msgid "permission.can_restart"
 msgstr "Může restartovat"
 
-#: .\database\models.py:13
+#: .\database\models.py:14
 msgid "permission.can_change_settings"
 msgstr "Může měnit nastavení"
 
-#: .\database\models.py:14
+#: .\database\models.py:15
 msgid "permission.can_invite"
 msgstr "Může pozvat"
 
-#: .\database\models.py:15
+#: .\database\models.py:16
 msgid "permission.can_manage_plugins"
 msgstr "Může spravovat pluginy"
 
-#: .\database\models.py:16
+#: .\database\models.py:17
 msgid "permission.can_search"
 msgstr "Může hledat"
 
-#: .\database\models.py:17
+#: .\database\models.py:18
 msgid "permission.can_request"
 msgstr "Může važádat"
 
-#: .\database\models.py:18
+#: .\database\models.py:19
 msgid "permission.can_manage_requests"
 msgstr "Může spravovat žádosti"
 
-#: .\database\models.py:19
+#: .\database\models.py:20
 msgid "permission.can_download"
 msgstr "Může stahovat"
+
+#: .\database\models.py:60
+msgid "database.models.manga_request.plugin"
+msgstr "Plugin"
+
+#: .\database\models.py:61
+msgid "database.models.manga_request.requested_by"
+msgstr "Vyžádané..."
+
+#: .\database\models.py:62
+msgid "database.models.manga_request.variables"
+msgstr "Proměnné"
 
 #: .\frontend\templates\base.html:16
 msgid "frontend.base.search"
 msgstr "Hledat..."
 
-#: .\frontend\templates\base.html:34 .\frontend\templates\base.html:83
+#: .\frontend\templates\base.html:34 .\frontend\templates\base.html:88
 msgid "frontend.base.profile"
 msgstr "Profil"
 
@@ -63,7 +75,7 @@ msgstr "Profil"
 msgid "frontend.base.logout"
 msgstr "Odhlásit"
 
-#: .\frontend\templates\base.html:50 .\frontend\templates\base.html:78
+#: .\frontend\templates\base.html:50 .\frontend\templates\base.html:83
 msgid "frontend.base.settings"
 msgstr "Nastavení"
 
@@ -75,19 +87,23 @@ msgstr "Manga"
 msgid "frontend.base.manga_search"
 msgstr "Vyhledat mangu"
 
-#: .\frontend\templates\base.html:87
+#: .\frontend\templates\base.html:71
+msgid "frontend.base.manga_requests"
+msgstr "Vyžádané mangy"
+
+#: .\frontend\templates\base.html:92
 msgid "frontend.base.server_settings"
 msgstr "Nastavení serveru"
 
-#: .\frontend\templates\base.html:92
+#: .\frontend\templates\base.html:97
 msgid "frontend.base.plugin_manager"
 msgstr "Správce pluginů"
 
-#: .\frontend\templates\base.html:97
+#: .\frontend\templates\base.html:102
 msgid "frontend.base.users"
 msgstr "Uživatelé"
 
-#: .\frontend\templates\base.html:103
+#: .\frontend\templates\base.html:108
 msgid "frontend.base.restart"
 msgstr "Restartovat"
 
@@ -208,8 +224,29 @@ msgstr "Potvrdit"
 msgid "frontend.manager_panel.confirm_delete_token_text"
 msgstr "Jste si jisti že chcete smazat <strong id='deleteTokenname'></strong>?"
 
+#: .\frontend\templates\manga\requests.html:6
+#: .\frontend\templates\manga\requests.html:14
+msgid "frontend.manga_requests.requested_manga"
+msgstr "Vyžádané mangy"
+
+#: .\frontend\templates\manga\requests.html:33
+msgid "frontend.manga_requests.approve"
+msgstr "Schválit"
+
+#: .\frontend\templates\manga\requests.html:34
+msgid "frontend.manga_requests.deny"
+msgstr "Zamítnout"
+
+#: .\frontend\templates\manga\requests.html:36
+msgid "frontend.manga_requests.view"
+msgstr "Otevřít na stránce"
+
+#: .\frontend\templates\manga\requests.html:45
+msgid "frontend.manga_requests.none_found"
+msgstr "Žádné žádosti"
+
 #: .\frontend\templates\manga\search.html:6
-#: .\frontend\templates\manga\search.html:64
+#: .\frontend\templates\manga\search.html:65
 msgid "frontend.search.search"
 msgstr "Hledat"
 
@@ -221,26 +258,32 @@ msgstr "Vyhledávání..."
 msgid "frontend.search.select_plugin"
 msgstr "Vybrat plugin"
 
-#: .\frontend\templates\manga\search.html:55
-#: .\frontend\templates\manga\search.html:232
+#: .\frontend\templates\manga\search.html:56
+#: .\frontend\templates\manga\search.html:356
 msgid "frontend.search.select_language"
 msgstr "Vyberte jazyk"
 
-#: .\frontend\templates\manga\search.html:144
+#: .\frontend\templates\manga\search.html:118
+#: .\frontend\templates\manga\search.html:128
+#: .\frontend\templates\manga\search.html:129
+msgid "frontend.manga_search.no_manga_found"
+msgstr "Nenalezena žádná manga"
+
+#: .\frontend\templates\manga\search.html:182
 msgid "frontend.search.request"
 msgstr "Vyžádat"
 
-#: .\frontend\templates\manga\search.html:162
+#: .\frontend\templates\manga\search.html:241
 msgid "frontend.search.monitor"
 msgstr "Monitorovat"
 
-#: .\frontend\templates\manga\search.html:179
+#: .\frontend\templates\manga\search.html:305
 msgid "frontend.search.view"
 msgstr "Otevřít na stránce"
 
-#: .\frontend\templates\manga\search.html:247
+#: .\frontend\templates\manga\search.html:372
 msgid "frontend.search.no_language"
-msgstr ""
+msgstr "Žádný jazyk"
 
 #: .\frontend\templates\profile.html:5 .\frontend\templates\profile.html:8
 msgid "frontend.profile.profile"
