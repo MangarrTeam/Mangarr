@@ -1,15 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required, permission_required
-from .functions import custom_render
+from .functions import custom_render, model_field_to_dict
 from django.contrib.auth.models import User
 from .forms import RegisterForm, LoginForm
 from django.contrib.auth import login
-from database.models import RegisterToken
 import logging
+from plugins.base import NO_THUMBNAIL_URL
 from server.settings import CONFIG, LANGUAGE_CODE
 from server.settings import LANGUAGES, LANGUAGES_KEYS
-from database.models import User, UserProfile
+from database.users.models import User, UserProfile, RegisterToken
 from django.utils.translation import gettext_lazy as _
 
 logger = logging.getLogger(__name__)
@@ -218,8 +218,20 @@ from plugins.functions import get_plugins
 def manga_search(request):
     return custom_render(request, "manga/search.html", {"plugins": get_plugins()})
 
-from database.models import MangaRequest
+from database.manga.models import MangaRequest, Manga
 
 @permission_required("database.can_manage_requests")
 def manga_requests(request):
     return custom_render(request, "manga/requests.html", {"manga_requests": [{"plugin": r.plugin, "manga": r.variables, "pk": r.pk, "user": r.user or _("frontend.request_manga.user_unknown")} for r in MangaRequest.objects.all()]})
+
+@login_required
+def manga_monitored(request):
+    return custom_render(request, "manga/monitored.html", {"mangas": [{"name": m.name.value, "url": m.arguments.get("url"), "cover": m.arguments.get("cover", NO_THUMBNAIL_URL), "pk": m.pk} for m in Manga.objects.all()]})
+
+@login_required
+def manga_view(request, pk):
+    if not Manga.objects.filter(pk=pk).exists():
+        return redirect("monitored_mangas")
+    manga = Manga.objects.get(pk=pk)
+    volumes = sorted([{"chapters": sorted([{**model_field_to_dict(ch), "chapter": ch.chapter} for ch in v.chapters.all()], key=lambda a: a.get("chapter")), "volume": v.volume, "pages": {"downloaded": len(v.chapters.filter(downloaded=True)), "of": len(v.chapters.all())}} for v in manga.volumes.all()], key=lambda a: a.get("volume"))
+    return custom_render(request, "manga/view.html", {"manga": {**model_field_to_dict(manga), "cover": manga.arguments.get("cover", NO_THUMBNAIL_URL)}, "volumes": volumes})

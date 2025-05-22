@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-20 23:21+0200\n"
+"POT-Creation-Date: 2025-05-22 22:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,55 +18,202 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\database\models.py:13
-msgid "permission.can_restart"
-msgstr "Can restart"
+#: .\database\data_types\models.py:25 .\database\data_types\models.py:69
+#: .\database\data_types\models.py:114 .\database\data_types\models.py:159
+#: .\database\data_types\models.py:203 .\database\data_types\models.py:256
+#: .\database\data_types\models.py:300 .\database\data_types\models.py:344
+msgid "database.data_types_models.data"
+msgstr "Data"
 
-#: .\database\models.py:14
-msgid "permission.can_change_settings"
-msgstr "Can change settings"
-
-#: .\database\models.py:15
-msgid "permission.can_invite"
-msgstr "Can invite"
-
-#: .\database\models.py:16
-msgid "permission.can_manage_plugins"
-msgstr "Can manage plugins"
-
-#: .\database\models.py:17
-msgid "permission.can_search"
-msgstr "Can search"
-
-#: .\database\models.py:18
-msgid "permission.can_request"
-msgstr "Can request"
-
-#: .\database\models.py:19
-msgid "permission.can_manage_requests"
-msgstr "Can manage requests"
-
-#: .\database\models.py:20
-msgid "permission.can_download"
-msgstr "Can download"
-
-#: .\database\models.py:60
+#: .\database\manga\models.py:27 .\database\manga\models.py:68
 msgid "database.models.manga_request.plugin"
 msgstr "Plugin"
 
-#: .\database\models.py:61
+#: .\database\manga\models.py:28
 msgid "database.models.manga_request.requested_by"
 msgstr "Requested by"
 
-#: .\database\models.py:62
+#: .\database\manga\models.py:29
 msgid "database.models.manga_request.variables"
 msgstr "Variables"
+
+#: .\database\manga\models.py:69
+msgid "database.models.manga.name"
+msgstr "Name"
+
+#: .\database\manga\models.py:70
+msgid "database.models.manga.localized_name"
+msgstr "Localized name"
+
+#: .\database\manga\models.py:71
+msgid "database.models.manga.description"
+msgstr "Description"
+
+#: .\database\manga\models.py:72
+msgid "database.models.manga.genres"
+msgstr "Genres"
+
+#: .\database\manga\models.py:73
+msgid "database.models.manga.tags"
+msgstr "Tags"
+
+#: .\database\manga\models.py:77
+msgid "database.models.manga.url"
+msgstr "URL"
+
+#: .\database\manga\models.py:78 .\database\manga\models.py:224
+msgid "processes.models.manga.arguments"
+msgstr "Arguments"
+
+#: .\database\manga\models.py:149
+msgid "database.models.manga.alternative_names"
+msgstr "Alternative names"
+
+#: .\database\manga\models.py:153
+msgid "database.models.volume.name"
+msgstr "Name"
+
+#: .\database\manga\models.py:154
+msgid "database.models.volume.description"
+msgstr "Description"
+
+#: .\database\manga\models.py:155
+msgid "database.models.volume.number"
+msgstr "Number"
+
+#: .\database\manga\models.py:157
+msgid "processes.models.volume.arguments"
+msgstr "Arguments"
+
+#: .\database\manga\models.py:200
+msgid "database.models.chapter.name"
+msgstr "Name"
+
+#: .\database\manga\models.py:201
+msgid "database.models.chapter.description"
+msgstr "Description"
+
+#: .\database\manga\models.py:202
+msgid "database.models.chapter.localization"
+msgstr "Localization"
+
+#: .\database\manga\models.py:203
+msgid "database.models.chapter.publisher"
+msgstr "Publisher"
+
+#: .\database\manga\models.py:204
+msgid "database.models.chapter.imprint"
+msgstr "Imprint"
+
+#: .\database\manga\models.py:205
+msgid "database.models.chapter.release_date"
+msgstr "Release date"
+
+#: .\database\manga\models.py:206
+msgid "database.models.chapter.writer"
+msgstr "Writer"
+
+#: .\database\manga\models.py:207
+msgid "database.models.chapter.penciller"
+msgstr "Penciller"
+
+#: .\database\manga\models.py:208
+msgid "database.models.chapter.inker"
+msgstr "Inker"
+
+#: .\database\manga\models.py:209
+msgid "database.models.chapter.colorist"
+msgstr "Colorist"
+
+#: .\database\manga\models.py:210
+msgid "database.models.chapter.letterer"
+msgstr "Letterer"
+
+#: .\database\manga\models.py:211
+msgid "database.models.chapter.cover_artist"
+msgstr "Cover artist"
+
+#: .\database\manga\models.py:212
+msgid "database.models.chapter.editor"
+msgstr "Editor"
+
+#: .\database\manga\models.py:213
+msgid "database.models.chapter.translator"
+msgstr "Translator"
+
+#: .\database\manga\models.py:214
+msgid "database.models.chapter.page_count"
+msgstr "Page count"
+
+#: .\database\manga\models.py:215
+msgid "database.models.chapter.format"
+msgstr "Format"
+
+#: .\database\manga\models.py:216
+msgid "database.models.chapter.age_rating"
+msgstr "Age rating"
+
+#: .\database\manga\models.py:217
+msgid "database.models.chapter.isbn"
+msgstr "ISBN"
+
+#: .\database\manga\models.py:218
+msgid "database.models.chapter.number"
+msgstr "Number"
+
+#: .\database\manga\models.py:220
+msgid "database.models.chapter.file_path"
+msgstr "File path"
+
+#: .\database\manga\models.py:221
+msgid "database.models.chapter.url"
+msgstr "URL"
+
+#: .\database\manga\models.py:222
+msgid "database.models.chapter.source_url"
+msgstr "Source URL"
+
+#: .\database\manga\models.py:223
+msgid "database.models.chapter.downloaded"
+msgstr "Downloaded"
+
+#: .\database\users\models.py:12
+msgid "permission.can_restart"
+msgstr "Can restart"
+
+#: .\database\users\models.py:13
+msgid "permission.can_change_settings"
+msgstr "Can change settings"
+
+#: .\database\users\models.py:14
+msgid "permission.can_invite"
+msgstr "Can invite"
+
+#: .\database\users\models.py:15
+msgid "permission.can_manage_plugins"
+msgstr "Can manage plugins"
+
+#: .\database\users\models.py:16
+msgid "permission.can_search"
+msgstr "Can search"
+
+#: .\database\users\models.py:17
+msgid "permission.can_request"
+msgstr "Can request"
+
+#: .\database\users\models.py:18
+msgid "permission.can_manage_requests"
+msgstr "Can manage requests"
+
+#: .\database\users\models.py:19
+msgid "permission.can_download"
+msgstr "Can download"
 
 #: .\frontend\templates\base.html:16
 msgid "frontend.base.search"
 msgstr "Search..."
 
-#: .\frontend\templates\base.html:34 .\frontend\templates\base.html:88
+#: .\frontend\templates\base.html:34 .\frontend\templates\base.html:91
 msgid "frontend.base.profile"
 msgstr "Profile"
 
@@ -74,7 +221,7 @@ msgstr "Profile"
 msgid "frontend.base.logout"
 msgstr "Logout"
 
-#: .\frontend\templates\base.html:50 .\frontend\templates\base.html:83
+#: .\frontend\templates\base.html:50 .\frontend\templates\base.html:86
 msgid "frontend.base.settings"
 msgstr "Settings"
 
@@ -82,27 +229,31 @@ msgstr "Settings"
 msgid "frontend.base.manga"
 msgstr "Manga"
 
-#: .\frontend\templates\base.html:66
+#: .\frontend\templates\base.html:65
+msgid "frontend.base.monitored_manga"
+msgstr "Monitored manga"
+
+#: .\frontend\templates\base.html:69
 msgid "frontend.base.manga_search"
 msgstr "Manga search"
 
-#: .\frontend\templates\base.html:71
+#: .\frontend\templates\base.html:74
 msgid "frontend.base.manga_requests"
 msgstr "Requests"
 
-#: .\frontend\templates\base.html:92
+#: .\frontend\templates\base.html:95
 msgid "frontend.base.server_settings"
 msgstr "Server settings"
 
-#: .\frontend\templates\base.html:97
+#: .\frontend\templates\base.html:100
 msgid "frontend.base.plugin_manager"
 msgstr "Plugin manager"
 
-#: .\frontend\templates\base.html:102
+#: .\frontend\templates\base.html:105
 msgid "frontend.base.users"
 msgstr "Users"
 
-#: .\frontend\templates\base.html:108
+#: .\frontend\templates\base.html:111
 msgid "frontend.base.restart"
 msgstr "Restart"
 
@@ -224,6 +375,23 @@ msgid "frontend.manager_panel.confirm_delete_token_text"
 msgstr ""
 "Are you sure you want to delete <strong id='deleteTokenname'></strong>?"
 
+#: .\frontend\templates\manga\monitored.html:5
+msgid "frontend.manga_monitored.monitored_mangas"
+msgstr "Monitored mangas"
+
+#: .\frontend\templates\manga\monitored.html:27
+msgid "frontend.manga_monitored.view"
+msgstr "View"
+
+#: .\frontend\templates\manga\monitored.html:30
+msgid "frontend.manga_monitored.view_original"
+msgstr "View original"
+
+#: .\frontend\templates\manga\monitored.html:43
+#: .\frontend\templates\manga\monitored.html:47
+msgid "frontend.manga_monitored.none_found"
+msgstr "None found"
+
 #: .\frontend\templates\manga\requests.html:6
 #: .\frontend\templates\manga\requests.html:14
 msgid "frontend.manga_requests.requested_manga"
@@ -291,6 +459,56 @@ msgstr "View"
 msgid "frontend.search.no_language"
 msgstr "No language"
 
+#: .\frontend\templates\manga\view.html:68
+msgid "frontend.manga_view.genres"
+msgstr "Genres"
+
+#: .\frontend\templates\manga\view.html:71
+msgid "frontend.manga_view.tags"
+msgstr "Tags"
+
+#: .\frontend\templates\manga\view.html:79
+#: .\frontend\templates\manga\view.html:174
+msgid "frontend.manga_view.show_more"
+msgstr "Show more"
+
+#: .\frontend\templates\manga\view.html:96
+#, python-format
+msgid "%(pages)s/%(of_pages)s frontend.manga_view.volume %(volume)s"
+msgstr "%(pages)s/%(of_pages)s Volume %(volume)s"
+
+#: .\frontend\templates\manga\view.html:107
+msgid "frontend.manga_view.number"
+msgstr "Number"
+
+#: .\frontend\templates\manga\view.html:108
+msgid "frontend.manga_view.title"
+msgstr "Title"
+
+#: .\frontend\templates\manga\view.html:109
+msgid "frontend.manga_view.isbn"
+msgstr "ISBN"
+
+#: .\frontend\templates\manga\view.html:110
+msgid "frontend.manga_view.localization"
+msgstr "Localization"
+
+#: .\frontend\templates\manga\view.html:111
+msgid "frontend.manga_view.page_count"
+msgstr "Page count"
+
+#: .\frontend\templates\manga\view.html:112
+msgid "frontend.manga_view.downloaded"
+msgstr "Downloaded"
+
+#: .\frontend\templates\manga\view.html:133
+msgid "frontend.manga_view.no_chapters_available"
+msgstr "No chapters available"
+
+#: .\frontend\templates\manga\view.html:176
+msgid "frontend.manga_view.show_less"
+msgstr "Show less"
+
 #: .\frontend\templates\profile.html:5 .\frontend\templates\profile.html:8
 msgid "frontend.profile.profile"
 msgstr "Profile"
@@ -344,59 +562,59 @@ msgstr "Save settings"
 msgid "frontend.settings.restart"
 msgstr "Restart"
 
-#: .\frontend\views.py:94 .\frontend\views.py:100 .\frontend\views.py:106
+#: .\frontend\views.py:91 .\frontend\views.py:97 .\frontend\views.py:103
 msgid "frontend.settings.django"
 msgstr "Django"
 
-#: .\frontend\views.py:95
+#: .\frontend\views.py:92
 msgid "frontend.settings.secret_key"
 msgstr "Secret key"
 
-#: .\frontend\views.py:101
+#: .\frontend\views.py:98
 msgid "frontend.settings.debug"
 msgstr "Debug"
 
-#: .\frontend\views.py:107
+#: .\frontend\views.py:104
 msgid "frontend.settings.tz"
 msgstr "TZ"
 
-#: .\frontend\views.py:115
+#: .\frontend\views.py:112
 msgid "frontend.settings.plugins"
 msgstr "Plugins"
 
-#: .\frontend\views.py:116
+#: .\frontend\views.py:113
 msgid "frontend.settings.nsfw_allowed"
 msgstr "NSFW allowed"
 
-#: .\frontend\views.py:123 .\frontend\views.py:129
+#: .\frontend\views.py:120 .\frontend\views.py:126
 msgid "frontend.settings.networking"
 msgstr "Networking"
 
-#: .\frontend\views.py:124
+#: .\frontend\views.py:121
 msgid "frontend.settings.allowed_hosts"
 msgstr "Allowed hosts"
 
-#: .\frontend\views.py:130
+#: .\frontend\views.py:127
 msgid "frontend.settings.csrf_trusted_origins"
 msgstr "CSRF trusted origins"
 
-#: .\frontend\views.py:137
+#: .\frontend\views.py:134
 msgid "frontend.settings.other"
 msgstr "Other"
 
-#: .\frontend\views.py:138
+#: .\frontend\views.py:135
 msgid "frontend.settings.instance_name"
 msgstr "Instance name"
 
-#: .\frontend\views.py:145
+#: .\frontend\views.py:142
 msgid "frontend.settings.localization"
 msgstr "Localization"
 
-#: .\frontend\views.py:146
+#: .\frontend\views.py:143
 msgid "frontend.settings.locale"
 msgstr "Locale"
 
-#: .\frontend\views.py:228
+#: .\frontend\views.py:225
 msgid "frontend.request_manga.user_unknown"
 msgstr "Unknow"
 
@@ -496,6 +714,26 @@ msgstr "<i class='fa fa-play'></i> Resume downloads"
 msgid "plugins.manager.pause_downloads"
 msgstr "<i class='fa fa-pause'></i> Pause downloads"
 
+#: .\processes\models.py:34
+msgid "processes.models.process_base.plugin"
+msgstr "Plugin"
+
+#: .\processes\models.py:35
+msgid "processes.models.process_base.url"
+msgstr "URL"
+
+#: .\processes\models.py:36
+msgid "processes.models.process_base.last_run"
+msgstr "Last run"
+
+#: .\processes\models.py:37
+msgid "processes.models.process_base.arguments"
+msgstr "Arguments"
+
+#: .\processes\models.py:90
+msgid "processes.models.monitor_chapter.manga"
+msgstr "Manga"
+
 #: .\server\settingz\localization.py:14
 msgid "langs.english"
 msgstr "English"
@@ -503,3 +741,9 @@ msgstr "English"
 #: .\server\settingz\localization.py:15
 msgid "langs.czech"
 msgstr "Czech"
+
+#~ msgid "frontend.manga_view.chapters"
+#~ msgstr "Chapters"
+
+#~ msgid "frontend.manga_view.volume"
+#~ msgstr "Volume"

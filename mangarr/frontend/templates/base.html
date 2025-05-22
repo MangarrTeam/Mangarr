@@ -61,6 +61,9 @@
             </button>
             
             <div class="collapse pl-4 pt-2" id="dropdownManga">
+                <a href="{% url 'monitored_mangas' %}" class="nav-link text-white d-flex flex-row my-auto">
+                    <i class="fa fa-eye text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.monitored_manga" %}</p>
+                </a>
                 {% if user|has_permition:'database.can_search' %}
                 <a href="{% url 'manga_search' %}" class="nav-link text-white d-flex flex-row my-auto">
                     <i class="fa fa-search text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.manga_search" %}</p>

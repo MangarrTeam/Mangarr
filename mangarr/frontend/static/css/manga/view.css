@@ -1,0 +1,78 @@
+.manga-view-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: "Segoe UI", sans-serif;
+    color: #e5e5e5;
+    background-color: #1e1e2f;
+}
+
+.manga-header {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.poster img {
+    width: 250px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+.details {
+    flex: 1;
+}
+
+.title {
+    font-size: 2rem;
+    margin-bottom: 0.2rem;
+}
+
+.original-title {
+    font-size: 1.2rem;
+    color: #bbb;
+    margin-bottom: 1rem;
+}
+
+.meta > div {
+    margin: 0.3rem 0;
+}
+
+.description {
+    margin-top: 1rem;
+    line-height: 1.5;
+    color: #ccc;
+}
+
+.chapters-section {
+    margin-top: 3rem;
+}
+
+.chapter-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.chapter-table thead {
+    background-color: #3e3e4e;
+}
+
+.chapter-table th,
+.chapter-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+}
+
+.chapter-table tr:nth-child(even) {
+    background-color: rgba(1, 1, 1, 0.2);
+}
+
+.chapter-table a {
+    text-decoration: none;
+}
+
+.chapter-table a:hover {
+    text-decoration: underline;
+}

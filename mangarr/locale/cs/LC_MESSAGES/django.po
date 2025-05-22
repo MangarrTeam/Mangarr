@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-20 23:21+0200\n"
+"POT-Creation-Date: 2025-05-22 22:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,55 +19,202 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n "
 "<= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
 
-#: .\database\models.py:13
-msgid "permission.can_restart"
-msgstr "Může restartovat"
+#: .\database\data_types\models.py:25 .\database\data_types\models.py:69
+#: .\database\data_types\models.py:114 .\database\data_types\models.py:159
+#: .\database\data_types\models.py:203 .\database\data_types\models.py:256
+#: .\database\data_types\models.py:300 .\database\data_types\models.py:344
+msgid "database.data_types_models.data"
+msgstr "Data"
 
-#: .\database\models.py:14
-msgid "permission.can_change_settings"
-msgstr "Může měnit nastavení"
-
-#: .\database\models.py:15
-msgid "permission.can_invite"
-msgstr "Může pozvat"
-
-#: .\database\models.py:16
-msgid "permission.can_manage_plugins"
-msgstr "Může spravovat pluginy"
-
-#: .\database\models.py:17
-msgid "permission.can_search"
-msgstr "Může hledat"
-
-#: .\database\models.py:18
-msgid "permission.can_request"
-msgstr "Může važádat"
-
-#: .\database\models.py:19
-msgid "permission.can_manage_requests"
-msgstr "Může spravovat žádosti"
-
-#: .\database\models.py:20
-msgid "permission.can_download"
-msgstr "Může stahovat"
-
-#: .\database\models.py:60
+#: .\database\manga\models.py:27 .\database\manga\models.py:68
 msgid "database.models.manga_request.plugin"
 msgstr "Plugin"
 
-#: .\database\models.py:61
+#: .\database\manga\models.py:28
 msgid "database.models.manga_request.requested_by"
 msgstr "Vyžádané..."
 
-#: .\database\models.py:62
+#: .\database\manga\models.py:29
 msgid "database.models.manga_request.variables"
 msgstr "Proměnné"
+
+#: .\database\manga\models.py:69
+msgid "database.models.manga.name"
+msgstr "Název"
+
+#: .\database\manga\models.py:70
+msgid "database.models.manga.localized_name"
+msgstr "Lokální název"
+
+#: .\database\manga\models.py:71
+msgid "database.models.manga.description"
+msgstr "Popis"
+
+#: .\database\manga\models.py:72
+msgid "database.models.manga.genres"
+msgstr "Žánry"
+
+#: .\database\manga\models.py:73
+msgid "database.models.manga.tags"
+msgstr "Tagy"
+
+#: .\database\manga\models.py:77
+msgid "database.models.manga.url"
+msgstr "URL"
+
+#: .\database\manga\models.py:78 .\database\manga\models.py:224
+msgid "processes.models.manga.arguments"
+msgstr "Argumenty"
+
+#: .\database\manga\models.py:149
+msgid "database.models.manga.alternative_names"
+msgstr "Alternativní názvy"
+
+#: .\database\manga\models.py:153
+msgid "database.models.volume.name"
+msgstr "Název"
+
+#: .\database\manga\models.py:154
+msgid "database.models.volume.description"
+msgstr "Popis"
+
+#: .\database\manga\models.py:155
+msgid "database.models.volume.number"
+msgstr "Číslo"
+
+#: .\database\manga\models.py:157
+msgid "processes.models.volume.arguments"
+msgstr "Argumenty"
+
+#: .\database\manga\models.py:200
+msgid "database.models.chapter.name"
+msgstr "Název"
+
+#: .\database\manga\models.py:201
+msgid "database.models.chapter.description"
+msgstr "Popis"
+
+#: .\database\manga\models.py:202
+msgid "database.models.chapter.localization"
+msgstr "Lokalizace"
+
+#: .\database\manga\models.py:203
+msgid "database.models.chapter.publisher"
+msgstr "Vydavatel"
+
+#: .\database\manga\models.py:204
+msgid "database.models.chapter.imprint"
+msgstr "Otisk"
+
+#: .\database\manga\models.py:205
+msgid "database.models.chapter.release_date"
+msgstr "Datum vydání"
+
+#: .\database\manga\models.py:206
+msgid "database.models.chapter.writer"
+msgstr "Autor"
+
+#: .\database\manga\models.py:207
+msgid "database.models.chapter.penciller"
+msgstr "Autor kreseb"
+
+#: .\database\manga\models.py:208
+msgid "database.models.chapter.inker"
+msgstr "Autor kreseb"
+
+#: .\database\manga\models.py:209
+msgid "database.models.chapter.colorist"
+msgstr "Autor barev"
+
+#: .\database\manga\models.py:210
+msgid "database.models.chapter.letterer"
+msgstr "Autor písma"
+
+#: .\database\manga\models.py:211
+msgid "database.models.chapter.cover_artist"
+msgstr "Autor náhledu"
+
+#: .\database\manga\models.py:212
+msgid "database.models.chapter.editor"
+msgstr "Editor"
+
+#: .\database\manga\models.py:213
+msgid "database.models.chapter.translator"
+msgstr "Překladatel"
+
+#: .\database\manga\models.py:214
+msgid "database.models.chapter.page_count"
+msgstr "Počet stran"
+
+#: .\database\manga\models.py:215
+msgid "database.models.chapter.format"
+msgstr "Formát"
+
+#: .\database\manga\models.py:216
+msgid "database.models.chapter.age_rating"
+msgstr "Věkové ohodnocení"
+
+#: .\database\manga\models.py:217
+msgid "database.models.chapter.isbn"
+msgstr "ISBN"
+
+#: .\database\manga\models.py:218
+msgid "database.models.chapter.number"
+msgstr "Číslo"
+
+#: .\database\manga\models.py:220
+msgid "database.models.chapter.file_path"
+msgstr "Cesta souboru"
+
+#: .\database\manga\models.py:221
+msgid "database.models.chapter.url"
+msgstr "URL"
+
+#: .\database\manga\models.py:222
+msgid "database.models.chapter.source_url"
+msgstr "Zdrojová URL"
+
+#: .\database\manga\models.py:223
+msgid "database.models.chapter.downloaded"
+msgstr "Stáhnuto"
+
+#: .\database\users\models.py:12
+msgid "permission.can_restart"
+msgstr "Může restartovat"
+
+#: .\database\users\models.py:13
+msgid "permission.can_change_settings"
+msgstr "Může měnit nastavení"
+
+#: .\database\users\models.py:14
+msgid "permission.can_invite"
+msgstr "Může pozvat"
+
+#: .\database\users\models.py:15
+msgid "permission.can_manage_plugins"
+msgstr "Může spravovat pluginy"
+
+#: .\database\users\models.py:16
+msgid "permission.can_search"
+msgstr "Může hledat"
+
+#: .\database\users\models.py:17
+msgid "permission.can_request"
+msgstr "Může važádat"
+
+#: .\database\users\models.py:18
+msgid "permission.can_manage_requests"
+msgstr "Může spravovat žádosti"
+
+#: .\database\users\models.py:19
+msgid "permission.can_download"
+msgstr "Může stahovat"
 
 #: .\frontend\templates\base.html:16
 msgid "frontend.base.search"
 msgstr "Hledat..."
 
-#: .\frontend\templates\base.html:34 .\frontend\templates\base.html:88
+#: .\frontend\templates\base.html:34 .\frontend\templates\base.html:91
 msgid "frontend.base.profile"
 msgstr "Profil"
 
@@ -75,7 +222,7 @@ msgstr "Profil"
 msgid "frontend.base.logout"
 msgstr "Odhlásit"
 
-#: .\frontend\templates\base.html:50 .\frontend\templates\base.html:83
+#: .\frontend\templates\base.html:50 .\frontend\templates\base.html:86
 msgid "frontend.base.settings"
 msgstr "Nastavení"
 
@@ -83,27 +230,31 @@ msgstr "Nastavení"
 msgid "frontend.base.manga"
 msgstr "Manga"
 
-#: .\frontend\templates\base.html:66
+#: .\frontend\templates\base.html:65
+msgid "frontend.base.monitored_manga"
+msgstr "Sledovaná manga"
+
+#: .\frontend\templates\base.html:69
 msgid "frontend.base.manga_search"
 msgstr "Vyhledat mangu"
 
-#: .\frontend\templates\base.html:71
+#: .\frontend\templates\base.html:74
 msgid "frontend.base.manga_requests"
 msgstr "Vyžádané mangy"
 
-#: .\frontend\templates\base.html:92
+#: .\frontend\templates\base.html:95
 msgid "frontend.base.server_settings"
 msgstr "Nastavení serveru"
 
-#: .\frontend\templates\base.html:97
+#: .\frontend\templates\base.html:100
 msgid "frontend.base.plugin_manager"
 msgstr "Správce pluginů"
 
-#: .\frontend\templates\base.html:102
+#: .\frontend\templates\base.html:105
 msgid "frontend.base.users"
 msgstr "Uživatelé"
 
-#: .\frontend\templates\base.html:108
+#: .\frontend\templates\base.html:111
 msgid "frontend.base.restart"
 msgstr "Restartovat"
 
@@ -224,6 +375,23 @@ msgstr "Potvrdit"
 msgid "frontend.manager_panel.confirm_delete_token_text"
 msgstr "Jste si jisti že chcete smazat <strong id='deleteTokenname'></strong>?"
 
+#: .\frontend\templates\manga\monitored.html:5
+msgid "frontend.manga_monitored.monitored_mangas"
+msgstr "Monitorované mangy"
+
+#: .\frontend\templates\manga\monitored.html:27
+msgid "frontend.manga_monitored.view"
+msgstr "Zobrazit"
+
+#: .\frontend\templates\manga\monitored.html:30
+msgid "frontend.manga_monitored.view_original"
+msgstr "Zobrazit originál"
+
+#: .\frontend\templates\manga\monitored.html:43
+#: .\frontend\templates\manga\monitored.html:47
+msgid "frontend.manga_monitored.none_found"
+msgstr "Žádné mangy"
+
 #: .\frontend\templates\manga\requests.html:6
 #: .\frontend\templates\manga\requests.html:14
 msgid "frontend.manga_requests.requested_manga"
@@ -291,6 +459,56 @@ msgstr "Otevřít na stránce"
 msgid "frontend.search.no_language"
 msgstr "Žádný jazyk"
 
+#: .\frontend\templates\manga\view.html:68
+msgid "frontend.manga_view.genres"
+msgstr "Žánry"
+
+#: .\frontend\templates\manga\view.html:71
+msgid "frontend.manga_view.tags"
+msgstr "Tagy"
+
+#: .\frontend\templates\manga\view.html:79
+#: .\frontend\templates\manga\view.html:174
+msgid "frontend.manga_view.show_more"
+msgstr "Zobrazit více"
+
+#: .\frontend\templates\manga\view.html:96
+#, python-format
+msgid "%(pages)s/%(of_pages)s frontend.manga_view.volume %(volume)s"
+msgstr "%(pages)s/%(of_pages)s Svazek %(volume)s"
+
+#: .\frontend\templates\manga\view.html:107
+msgid "frontend.manga_view.number"
+msgstr "Číslo"
+
+#: .\frontend\templates\manga\view.html:108
+msgid "frontend.manga_view.title"
+msgstr "Název"
+
+#: .\frontend\templates\manga\view.html:109
+msgid "frontend.manga_view.isbn"
+msgstr "ISBN"
+
+#: .\frontend\templates\manga\view.html:110
+msgid "frontend.manga_view.localization"
+msgstr "Lokalizace"
+
+#: .\frontend\templates\manga\view.html:111
+msgid "frontend.manga_view.page_count"
+msgstr "Počet stran"
+
+#: .\frontend\templates\manga\view.html:112
+msgid "frontend.manga_view.downloaded"
+msgstr "Staženo"
+
+#: .\frontend\templates\manga\view.html:133
+msgid "frontend.manga_view.no_chapters_available"
+msgstr "Žádné kapitoly"
+
+#: .\frontend\templates\manga\view.html:176
+msgid "frontend.manga_view.show_less"
+msgstr "Zobrazit méně"
+
 #: .\frontend\templates\profile.html:5 .\frontend\templates\profile.html:8
 msgid "frontend.profile.profile"
 msgstr "Profil"
@@ -344,59 +562,59 @@ msgstr "Uložit nastavení"
 msgid "frontend.settings.restart"
 msgstr "Restartovat"
 
-#: .\frontend\views.py:94 .\frontend\views.py:100 .\frontend\views.py:106
+#: .\frontend\views.py:91 .\frontend\views.py:97 .\frontend\views.py:103
 msgid "frontend.settings.django"
 msgstr "Django"
 
-#: .\frontend\views.py:95
+#: .\frontend\views.py:92
 msgid "frontend.settings.secret_key"
 msgstr "Soukromý klíč"
 
-#: .\frontend\views.py:101
+#: .\frontend\views.py:98
 msgid "frontend.settings.debug"
 msgstr "Debug"
 
-#: .\frontend\views.py:107
+#: .\frontend\views.py:104
 msgid "frontend.settings.tz"
 msgstr "TZ"
 
-#: .\frontend\views.py:115
+#: .\frontend\views.py:112
 msgid "frontend.settings.plugins"
 msgstr "Pluginy"
 
-#: .\frontend\views.py:116
+#: .\frontend\views.py:113
 msgid "frontend.settings.nsfw_allowed"
 msgstr "NSFW povoleno"
 
-#: .\frontend\views.py:123 .\frontend\views.py:129
+#: .\frontend\views.py:120 .\frontend\views.py:126
 msgid "frontend.settings.networking"
 msgstr "Síť"
 
-#: .\frontend\views.py:124
+#: .\frontend\views.py:121
 msgid "frontend.settings.allowed_hosts"
 msgstr "Povolení hostitelé"
 
-#: .\frontend\views.py:130
+#: .\frontend\views.py:127
 msgid "frontend.settings.csrf_trusted_origins"
 msgstr "Důvěryhodné zdroje CSRF"
 
-#: .\frontend\views.py:137
+#: .\frontend\views.py:134
 msgid "frontend.settings.other"
 msgstr "Jiné"
 
-#: .\frontend\views.py:138
+#: .\frontend\views.py:135
 msgid "frontend.settings.instance_name"
 msgstr "Jméno instance"
 
-#: .\frontend\views.py:145
+#: .\frontend\views.py:142
 msgid "frontend.settings.localization"
 msgstr "Lokalizace"
 
-#: .\frontend\views.py:146
+#: .\frontend\views.py:143
 msgid "frontend.settings.locale"
 msgstr "Lokalita"
 
-#: .\frontend\views.py:228
+#: .\frontend\views.py:225
 msgid "frontend.request_manga.user_unknown"
 msgstr "Neznámý uživatel"
 
@@ -496,6 +714,26 @@ msgstr "<i class='fa fa-play'></i> Pustit stahování"
 msgid "plugins.manager.pause_downloads"
 msgstr "<i class='fa fa-pause'></i> Pozastavit stahování"
 
+#: .\processes\models.py:34
+msgid "processes.models.process_base.plugin"
+msgstr "Plugin"
+
+#: .\processes\models.py:35
+msgid "processes.models.process_base.url"
+msgstr "URL"
+
+#: .\processes\models.py:36
+msgid "processes.models.process_base.last_run"
+msgstr "Naposledy spuštěno"
+
+#: .\processes\models.py:37
+msgid "processes.models.process_base.arguments"
+msgstr "Argumenty"
+
+#: .\processes\models.py:90
+msgid "processes.models.monitor_chapter.manga"
+msgstr "Manga"
+
 #: .\server\settingz\localization.py:14
 msgid "langs.english"
 msgstr "Angličtina"
@@ -503,3 +741,9 @@ msgstr "Angličtina"
 #: .\server\settingz\localization.py:15
 msgid "langs.czech"
 msgstr "Čeština"
+
+#~ msgid "frontend.manga_view.chapters"
+#~ msgstr "Kapitoly"
+
+#~ msgid "frontend.manga_view.volume"
+#~ msgstr "Svazek"

@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from server.functions import restart_app
-from database.models import UserProfile
+from database.users.models import UserProfile
 from django.contrib.auth.models import User
 
 def get_user_by_token(auth_header: str) -> User:

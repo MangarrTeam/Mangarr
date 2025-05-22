@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "frontend.manga_monitored.monitored_mangas" %}{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/manga/monitored.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="text-white text-truncate">
+    <div id="manga-grid" class="row">
+        {% for manga in mangas %}
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
+            <div class="card bg-dark text-white border-0 overflow-hidden position-relative hover-buttons-container" style="aspect-ratio: 2 / 3;">
+                <img class="card-img"
+                    src="{{ manga.cover }}"
+                    alt="{{ manga.name }}"
+                    style="object-fit: cover; height: 100%;">
+                <div class="card-img-overlay d-flex flex-column justify-content-end p-2"
+                    style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));">
+                    <h6 class="card-title mb-1 w-100 multi-line-title"
+                        title="{{ manga.name }}">{{ manga.name }}</h6>
+                    <div class="hover-buttons d-none">
+                        <a href="{% url 'manga_view' manga.pk %}">
+                            <button class="btn btn-sm btn-success mr-2 w-100 text-truncate">{% trans "frontend.manga_monitored.view" %}</button>
+                        </a>
+                        <a href="{{ manga.url }}" target="_blank">
+                            <button class="btn btn-sm btn-outline-light mt-2 w-100 text-truncate">{% trans "frontend.manga_monitored.view_original" %}</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% empty %}
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
+            <div class="card bg-dark text-white border-0 overflow-hidden position-relative hover-buttons-container"
+                style="aspect-ratio: 2 / 3;">
+                <img class="card-img"
+                    src="/uploads/static/no_thumbnail.png"
+                    alt="{% trans 'frontend.manga_monitored.none_found' %}"
+                    style="object-fit: cover; height: 100%;">
+                <div class="card-img-overlay d-flex flex-column justify-content-end p-2"
+                    style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));">
+                    <h6 class="card-title mb-1 w-100 multi-line-title" title="{% trans 'frontend.manga_monitored.none_found' %}">{% trans 'frontend.manga_monitored.none_found' %}</h6>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.querySelectorAll(".card").forEach((e) => {
+        const buttonsContainer = e.querySelector(".hover-buttons");
+        if(buttonsContainer) {
+            e.addEventListener("mouseenter", () => {
+                buttonsContainer.classList.remove("d-none");
+                buttonsContainer.classList.add("d-flex", "flex-column");
+            });
+            e.addEventListener("mouseleave", () => {
+                buttonsContainer.classList.add("d-none");
+                buttonsContainer.classList.remove("d-flex", "flex-column");
+            });
+        }
+    })
+</script>
+{% endblock %}

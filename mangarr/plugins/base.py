@@ -1,58 +1,118 @@
 from abc import ABC, abstractmethod
 from io import BytesIO
-from enum import Enum
+from enum import Enum, unique
 import requests
 import logging
 logger = logging.getLogger(__name__)
 
 NO_THUMBNAIL_URL = "/uploads/static/no_thumbnail.png"
 
-class Formats(Enum):
-    NORMAL = 1
-    SPECIAL = 2
-    REFERENCE = 3
-    DIRECTORS_CUT = 4
-    BOX_SET = 5
-    BOX__SET = 6
-    ANNUAL = 7
-    ANTHOLOGY = 8
-    EPILOGUE = 9
-    ONE_SHOT = 10
-    ONE__SHOT = 11
-    PROLOGUE = 12
-    TPB = 13
-    TRADE_PAPER_BACK = 14
-    OMNIBUS = 15
-    COMPENDIUM = 16
-    ABSOLUTE = 17
-    GRAPHIC_NOVEL = 18
-    GN = 19
-    FCBD = 20
+def enforce_structure(required_keys):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            result = func(*args, **kwargs)
+            def apply_defaults(d):
+                return {**required_keys, **d}
+            if isinstance(result, dict):
+                return apply_defaults(result)
+            elif isinstance(result, list):
+                return [apply_defaults(item) if isinstance(item, list) else item for item in result]
+            else:
+                raise TypeError("Return must be dicct or list of dicts")
+        wrapper._enforced_structure = required_keys
+        return wrapper
+    return decorator
 
-class AgeRating(Enum):
+def final(method):
+    method.__is_final__ = True
+    return method
+
+class EnforceStructureMeta(type(ABC)):
+    def __init__(cls, name, bases, namespace):
+        for base in bases:
+            for attr_name, attr_value in base.__dict__.items():
+                if getattr(attr_value, '__is_final__', False):
+                    if attr_name in namespace and namespace[attr_name] != attr_value:
+                        raise TypeError(f"Cannot override final method '{attr_name}' in class '{namespace.get("__module__")}'")
+        super().__init__(name, bases, namespace)
+
+    def __new__(mcs, name, bases, namespace):
+        for attr_name, attr in namespace.items():
+            for base in bases:
+                base_method = getattr(base, attr_name, None)
+                if (base_method and
+                    hasattr(base_method, '_enforced_structure') and
+                    callable(attr) and
+                    not hasattr(attr, '_enforces_structure')):
+
+                    namespace[attr_name] = enforce_structure(base_method._enforced_structure)(attr)
+        return super().__new__(mcs, name, bases, namespace)
+    
+@unique
+class BaseEnum(int, Enum):
+    @staticmethod
+    def get_members(enum:Enum) -> list:
+        return list(map(lambda x: (x.value, x.name), enum._member_map_.values()))
+
+class Formats(BaseEnum):
+    NORMAL:int = 1
+    SPECIAL:int = 2
+    REFERENCE:int = 3
+    DIRECTORS_CUT:int = 4
+    BOX_SET:int = 5
+    BOX__SET:int = 6
+    ANNUAL:int = 7
+    ANTHOLOGY:int = 8
+    EPILOGUE:int = 9
+    ONE_SHOT:int = 10
+    ONE__SHOT:int = 11
+    PROLOGUE:int = 12
+    TPB:int = 13
+    TRADE_PAPER_BACK:int = 14
+    OMNIBUS:int = 15
+    COMPENDIUM:int = 16
+    ABSOLUTE:int = 17
+    GRAPHIC_NOVEL:int = 18
+    GN:int = 19
+    FCBD:int = 20
+
+class AgeRating(BaseEnum):
+    UNKNOWN:int = 1
+    RATING_PENDING:int = 2
+    EARLY_CHILDHOOD:int = 3
+    EVERYONE:int = 4
+    G:int = 5
+    EVERYONE_10_PLUS:int = 6
+    PG:int = 7
+    KIDS_TO_ADULTS:int = 8
+    TEEN:int = 9
+    MA_15_PLUS:int = 10
+    MATURE_17_PLUS:int = 11
+    M:int = 12
+    R18_PLUS:int = 13
+    ADULTS_ONLY_18_PLUS:int = 14
+    X_18_PLUS:int = 15
+
+class Status(BaseEnum):
     UNKNOWN = 1
-    RATING_PENDING = 2
-    EARLY_CHILDHOOD = 3
-    EVERYONE = 4
-    G = 5
-    EVERYONE_10_PLUS = 6
-    PG = 7
-    KIDS_TO_ADULTS = 8
-    TEEN = 9
-    MA_15_PLUS = 10
-    MATURE_17_PLUS = 11
-    M = 12
-    R18_PLUS = 13
-    ADULTS_ONLY_18_PLUS = 14
-    X_18_PLUS = 15
+    ONGOING = 2
+    COMPLETED = 3
+    HIATUS = 4
+    CANCELLED = 5
 
-class MangaPluginBase(ABC):
+class MangaPluginBase(ABC, metaclass=EnforceStructureMeta):
     languages = []
 
+    def __init__(self, nsfw_allowed = False, *args, **kwargs):
+        self.nsfw_allowed = nsfw_allowed
+        super().__init__(*args, **kwargs)
+
+    @final
     @classmethod
     def get_languages(self) -> list[str]:
         return self.languages
     
+    @final
     @staticmethod
     def search_manga_dict() -> dict:
         """
@@ -63,14 +123,12 @@ class MangaPluginBase(ABC):
         """
         return {
             "name": "",
-            "description": "",
-            "genres": [],
-            "tags": [],
             "complete": False,
             "cover": None,
             "url": None,
         }
     
+    @enforce_structure(search_manga_dict())
     @abstractmethod
     def search_manga(self, query:str, nsfw:bool, language:str) -> list[dict]:
         """
@@ -83,7 +141,8 @@ class MangaPluginBase(ABC):
             list[dict]: List of found mangas
         """
         pass
-
+        	
+    @final
     @staticmethod
     def get_manga_dict() -> dict:
         """
@@ -94,13 +153,16 @@ class MangaPluginBase(ABC):
         """
         return {
             "name": "",
+            "alt_names": [],
             "description": "",
+            "original_language": "",
             "genres": [],
             "tags": [],
             "complete": False,
             "url": None,
         }
 
+    @enforce_structure(get_manga_dict())
     @abstractmethod
     def get_manga(self, arguments:dict) -> dict:
         """
@@ -114,22 +176,28 @@ class MangaPluginBase(ABC):
         """
         pass
 
+    """
+    @final
     @staticmethod
-    def get_volumes_dict() -> dict:
-        """
-        Gets predefined volumes dictionary (for list of volumes)
+    def get_volume_dict() -> dict:
+        \"""
+        Gets predefined volume dictionary
 
         Returns:
-            dict: Predefined volumes dictionary
-        """
+            dict: Predefined volume dictionary
+        \"""
         return {
+            "name": "",
+            "description": "",
+            "number": 1.0,
+            "arguments": {},
             "url": None,
-            "arguments": {}
         }
 
+    @enforce_structure(get_volume_dict())
     @abstractmethod
     def get_volumes(self, arguments:dict) -> list[dict]:
-        """
+        \"""
         Gets list of volumes urls and other neccessary parameters
 
         Args:
@@ -137,63 +205,12 @@ class MangaPluginBase(ABC):
 
         Returns:
             list[dict]: List of volumes urls and other neccessary parameters
-        """
+        \"""
         pass
-    
-    @staticmethod
-    def get_volume_dict() -> dict:
-        """
-        Gets predefined volume dictionary
+    """
 
-        Returns:
-            dict: Predefined volume dictionary
-        """
-        return {
-            "name": "",
-            "description": "",
-            "number": 1.0,
-            "url": None,
-        }
 
-    @abstractmethod
-    def get_volume(self, arguments:dict) -> dict:
-        """
-        Gets volume metadata
-
-        Args:
-            arguments (dict): Dictionary of arguments
-
-        Returns:
-            dict: Dictionary of volume metadata like name, description etc.
-        """
-        pass
-
-    @staticmethod
-    def get_chapters_dict() -> dict:
-        """
-        Gets predefined chapters dictionary (for list of chapters)
-
-        Returns:
-            dict: Predefined chapters dictionary
-        """
-        return {
-            "url": None,
-            "arguments": {}
-        }
-
-    @abstractmethod
-    def get_chapters(self, arguments:dict) -> list[dict]:
-        """
-        Gets list of chapters urls and other neccessary parameters
-
-        Args:
-            arguments (dict): Dictionary of arguments
-
-        Returns:
-            list[dict]: List of chapters urls and other neccessary parameters
-        """
-        pass
-    
+    @final
     @staticmethod
     def get_chapter_dict() -> dict:
         """
@@ -221,25 +238,30 @@ class MangaPluginBase(ABC):
             "format": Formats.NORMAL,
             "age_rating": AgeRating.UNKNOWN,
             "isbn": "",
-            "number": 1.0,
+            "chapter_number": 1.0,
+            "volume_number": 1.0,
+            "arguments": {},
             "url": None,
+            "source_url": None,
         }
 
+    @enforce_structure(get_chapter_dict())
     @abstractmethod
-    def get_chapter(self, arguments:dict) -> dict:
+    def get_chapters(self, arguments:dict) -> list[dict]:
         """
-        Gets chapter metadata
+        Gets list of chapters urls and other neccessary parameters
 
         Args:
             arguments (dict): Dictionary of arguments
 
         Returns:
-            dict: Dictionary of chapter metadata like name, description etc.
+            list[dict]: List of chapters urls and other neccessary parameters
         """
         pass
 
+    @final
     @staticmethod
-    def get_pages_dict(self) -> dict:
+    def get_page_dict() -> dict:
         """
         Gets predefined pages dictionary (for list of pages)
 
@@ -251,6 +273,7 @@ class MangaPluginBase(ABC):
             "arguments": {}
         }
 
+    @enforce_structure(get_page_dict())
     @abstractmethod
     def get_pages(self, arguments:dict) -> list[dict]:
         """
@@ -264,6 +287,7 @@ class MangaPluginBase(ABC):
         """
         pass
 
+    @final
     @staticmethod
     def download_page(url:str, arguments:dict) -> BytesIO:
         """

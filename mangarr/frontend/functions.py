@@ -11,3 +11,7 @@ def custom_render(request, template_name, context={}):
 
     context.update(default_context)
     return render(request, template_name, context)
+
+
+def model_field_to_dict(model) -> dict:
+    return {f.name: getattr(model, f.name) for f in model._meta.fields}

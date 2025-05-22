@@ -2,13 +2,13 @@ from django.apps import AppConfig
 from django.utils.translation import gettext as _
 import re
 
-class DatabaseConfig(AppConfig):
+
+class DataTypesConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'database'
+    name = 'database.data_types'
+    label = 'database_data_types'
 
     def ready(self):
-        from . import signals
-
         from django.contrib.auth.models import Permission
 
         def custom_str(self):

@@ -20,4 +20,6 @@ urlpatterns = [
 
     path("manga/search", views.manga_search, name="manga_search"),
     path("manga/requests", views.manga_requests, name="manga_requests"),
+    path("manga/<int:pk>", views.manga_view, name="manga_view"),
+    path("manga", views.manga_monitored, name="monitored_mangas"),
 ]

@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load int_or_float %}
+
+{% block title %}{{ manga.localized_name.value|default:manga.name.value }}{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/manga/view.css' %}">
+<style>
+    /* prevent unbreakable strings from overflowing */
+.description.collapsed {
+  max-height: 5.5em;
+  overflow: hidden;
+  position: relative;
+}
+
+/* optional fade-out gradient at bottom */
+.description.collapsed::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 1.5em;
+  background: linear-gradient(rgba(24,24,24,0), rgba(24,24,24,1));
+}
+
+/* scale down the display-4 title on very small devices */
+@media (max-width: 575.98px) {
+  .manga-header h1.display-4 {
+    font-size: 1.75rem;  /* roughly equivalent to display-3 on XS */
+    line-height: 1.2;
+  }
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="manga-header row mb-4">
+  <!-- Cover image -->
+  <div class="poster col-12 col-md-2 text-center mb-3 mb-md-0">
+    <img
+      src="{{ manga.cover }}"
+      alt="{{ manga.name.value }} cover"
+      class="img-fluid rounded shadow-lg"
+    >
+  </div>
+
+  <!-- Details -->
+  <div class="details col-12 col-md-10 text-light">
+    <div class="d-flex align-items-start">
+      <h1 class="flex-grow-1 mb-2 mb-md-0 display-4">
+        {{ manga.localized_name.value|default:manga.name.value }}
+      </h1>
+      <a href="{{ manga.url }}" target="_blank" class="text-white ml-2 h3">
+        <i class="fa fa-external-link-alt fa-lg"></i>
+      </a>
+    </div>
+
+    {% if manga.localized_name.value and manga.localized_name.value != manga.name.value %}
+    <h3 class="h5 text-muted mb-2">
+      ({{ manga.name.value }})
+    </h3>
+    {% endif %}
+
+    <div class="meta mb-3 small text-muted">
+      {% if manga.genres.value %}
+        <div><strong>{% trans "frontend.manga_view.genres" %}:</strong> {{ manga.genres.value }}</div>
+      {% endif %}
+      {% if manga.tags.value %}
+        <div><strong>{% trans "frontend.manga_view.tags" %}:</strong> {{ manga.tags.value }}</div>
+      {% endif %}
+    </div>
+
+  <p id="manga-desc-{{ manga.id }}" class="description collapsed text-justify">
+    {{ manga.description.value }}
+  </p>
+  <button class="read-more btn btn-sm btn-outline-light mt-2 w-100 text-truncate" data-target="#manga-desc-{{ manga.id }}">
+          {% trans "frontend.manga_view.show_more" %}
+    </button>
+  </div>
+</div>
+
+
+<div class="chapters-section text-white">
+  {% for volume in volumes %}
+  <div class="mb-3 border-0 rounded">
+    <!-- Toggle Header -->
+    <div class="p-3 background-lightest text-white d-flex justify-content-between align-items-center rounded"
+         data-toggle="collapse"
+         data-target="#volume-{{ forloop.counter }}"
+         aria-expanded="false"
+         aria-controls="volume-{{ forloop.counter }}"
+         style="cursor: pointer;">
+      <h5 class="mb-0 text-truncate" style="max-width: 90%;">
+        {% blocktrans with volume=volume.volume pages=volume.pages.downloaded of_pages=volume.pages.of %}{{pages}}/{{of_pages}} frontend.manga_view.volume {{ volume }}{% endblocktrans %}
+      </h5>
+      <i class="fas fa-chevron-down transition"></i>
+    </div>
+
+    <!-- Collapsible Table with responsive wrapper -->
+    <div id="volume-{{ forloop.counter }}" class="collapse">
+      <div class="table-responsive">
+        <table class="table background-dark table-sm mb-0">
+          <thead class="background-light">
+            <tr>
+              <th class="text-center border-0 py-2">{% trans "frontend.manga_view.number" %}</th>
+              <th class="border-0 py-2">{% trans "frontend.manga_view.title" %}</th>
+              <th class="text-center border-0 py-2">{% trans "frontend.manga_view.isbn" %}</th>
+              <th class="text-center border-0 py-2">{% trans "frontend.manga_view.localization" %}</th>
+              <th class="text-center border-0 py-2">{% trans "frontend.manga_view.page_count" %}</th>
+              <th class="text-center border-0 py-2">{% trans "frontend.manga_view.downloaded" %}</th>
+            </tr>
+          </thead>
+          <tbody class="chapter-table background-dark">
+            {% for chapter in volume.chapters %}
+            <tr class="pt-2 light-hover">
+              <td class="text-center border-0 py-2">{{ chapter.number.value|int_or_float }}</td>
+              <td class="border-0 py-2">
+                <a href="{{ chapter.source_url }}" target="_blank" class="text-white text-truncate d-block" style="max-width: 200px;">
+                  {{ chapter.name.value }}
+                </a>
+              </td>
+              <td class="text-center border-0 py-2">{{ chapter.isbn.value|default:"?" }}</td>
+              <td class="text-center border-0 py-2">{{ chapter.localization.value }}</td>
+              <td class="text-center border-0 py-2">{{ chapter.page_count.value }}</td>
+              <td class="text-center border-0 py-2">
+                <i class="fa {% if chapter.downloaded %}fa-check{% else %}fa-times{% endif %}"></i>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6" class="text-center">{% trans "frontend.manga_view.no_chapters_available" %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        $('.collapse').on('show.bs.collapse', function () {
+            $(this).prev().find('i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+        });
+        $('.collapse').on('hide.bs.collapse', function () {
+            $(this).prev().find('i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+        });
+    });
+    $(function(){
+  $('.read-more').each(function(){
+    var $link = $(this),
+        $p    = $($link.data('target'));
+
+    // only show toggle link if text actually overflows the collapsed height
+    if ($p[0].scrollHeight <= $p.innerHeight()) {
+      $link.hide();
+    }
+  });
+
+  $('.read-more').click(function(e){
+    e.preventDefault();
+    var $link = $(this),
+        $p    = $($link.data('target'));
+
+    $p.toggleClass('collapsed');
+    if ($p.hasClass('collapsed')) {
+      $link.text('{% trans "frontend.manga_view.show_more" %}');
+    } else {
+      $link.text('{% trans "frontend.manga_view.show_less" %}');
+    }
+  });
+});
+</script>
+{% endblock %}

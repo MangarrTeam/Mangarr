@@ -1,5 +1,5 @@
 import json
-from server.settings import PLUGINS_METADATA_PATH, PLUGIN_REGISTRY
+from server.settings import PLUGINS_METADATA_PATH, PLUGIN_REGISTRY, NSFW_ALLOWED
 from .base import MangaPluginBase
 import logging
 logger = logging.getLogger(__name__)
@@ -25,14 +25,16 @@ def get_plugin_name(category: str, domain: str) -> str:
             name = metadata.get("name")
             return name if name is not None else d
     return domain
-    
-def get_plugin(category: str, domain: str) -> type[MangaPluginBase]:
-    key = f"{category}_{domain}"
+
+def get_plugin_by_key(key:str) -> MangaPluginBase:
     if key in PLUGIN_REGISTRY:
-        return PLUGIN_REGISTRY[key]
+        return PLUGIN_REGISTRY[key](NSFW_ALLOWED)
     
     logger.error(f"Can't find plugin with key {key}")
-    return MangaPluginBase
+    return MangaPluginBase(NSFW_ALLOWED)
+    
+def get_plugin(category: str, domain: str) -> type[MangaPluginBase]:
+    return get_plugin_by_key(f'{category}_{domain}')
 
 def get_plugins_domains(category: str) -> list:
     output = set()
