@@ -33,10 +33,14 @@ LOCALE_PATHS = [
 ]
 
 
-FILE_PATH_ROOT = Path(os.path.join(BASE_DIR.parent, 'manga_files'))
+
+MANGA_ROOT = Path(os.path.join(BASE_DIR.parent, 'manga'))
+MANGA_ROOT.mkdir(exist_ok=True)
+
+FILE_PATH_ROOT = Path(os.path.join(MANGA_ROOT, 'media'))
 FILE_PATH_ROOT.mkdir(exist_ok=True)
 
-CACHE_FILE_PATH_ROOT = Path(os.path.join(BASE_DIR.parent, 'manga_cache'))
+CACHE_FILE_PATH_ROOT = Path(os.path.join(MANGA_ROOT, 'cache'))
 CACHE_FILE_PATH_ROOT.mkdir(exist_ok=True)
 
 

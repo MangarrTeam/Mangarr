@@ -36,5 +36,8 @@ COPY ./static /uploads/static/
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
+RUN mkdir -p /manga/cache
+RUN mkdir -p /manga/media
+
 # Entry point to run migrations and start Django server with custom configurations
 CMD ["/app/entrypoint.sh"]
