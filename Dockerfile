@@ -13,6 +13,7 @@ RUN apt-get update && \
     sqlite3 \
     nginx \
     gettext \
+    supervisor \
     && rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip
@@ -27,6 +28,8 @@ COPY ./mangarr /app/
 
 # Expose the port the app will run on
 EXPOSE 80
+
+COPY supervisord.conf /etc/supervisord.conf
 
 # Copy Nginx configuration file
 COPY nginx.conf /etc/nginx/nginx.conf

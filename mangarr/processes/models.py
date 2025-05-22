@@ -116,7 +116,6 @@ class MonitorChapter(ProcessBase):
 
             chapter_pages = plugin.get_pages(self.arguments)
 
-
             with zipfile.ZipFile(chapter_cache_file_path_name, 'w', zipfile.ZIP_DEFLATED) as cbz:
                 width = len(str(len(chapter_pages)))
                 for i, page in enumerate(chapter_pages):

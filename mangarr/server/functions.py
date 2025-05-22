@@ -1,4 +1,5 @@
 import pathlib
+import subprocess
 import os
 from django.conf import settings
 import secrets
@@ -10,8 +11,11 @@ from django.contrib.auth.decorators import user_passes_test
 logger = logging.getLogger(__name__)
 
 def restart_app() -> None:
-    pathlib.Path(os.path.join(settings.BASE_DIR, "server", "settings.py")).touch()
-    logger.info("Restart triggered")
+    try:
+        subprocess.run(["supervisorctl", "restart", "gunicorn"], check=True)
+        logger.info("Gunicorn restart triggered via supervisorctl")
+    except subprocess.CalledProcessError as e:
+        logger.error("Failed to restart Gunicorn: %s", e)
 
 def generate_unique_token(model:models.Model):
     while True:
