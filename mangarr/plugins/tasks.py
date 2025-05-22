@@ -5,8 +5,10 @@ from server.settings import PLUGIN_REGISTRY
 import logging
 logger = logging.getLogger(__name__)
 
+stop_event = None
+
 def background_update():
-    while True:
+    while not stop_event.is_set():
         logger.info("Updating plugin metadata...")
         update_metadata()
         time.sleep(86400)  # 24h

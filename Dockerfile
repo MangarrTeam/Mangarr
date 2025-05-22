@@ -39,6 +39,9 @@ COPY ./static /uploads/static/
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
+COPY monitor_gunicorn.sh /app/monitor_gunicorn.sh
+RUN chmod +x /app/monitor_gunicorn.sh
+
 RUN mkdir -p /manga/cache
 RUN mkdir -p /manga/media
 

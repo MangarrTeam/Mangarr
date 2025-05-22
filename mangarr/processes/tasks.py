@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 monitoring_trigger = threading.Event()
+stop_event = None
 
 def trigger_monitor():
     monitoring_trigger.set()
@@ -29,13 +30,15 @@ def clear_cache():
     logger.debug("Cache folder cleared")
 
 def monitoring():
-    while True:
+    while not stop_event.is_set():
         try:
             logger.debug("Monitoring check...")
             clear_cache()
             threshold = timezone.now() - timedelta(hours=24)
 
             for manga in Manga.objects.filter(last_update__lt=threshold):
+                if stop_event.is_set():
+                    break
                 try:
                     manga = MonitorManga.objects.get_or_create(plugin=manga.plugin, url=manga.url, arguments=manga.arguments)
                 except Manga.DoesNotExist as e:
@@ -43,7 +46,13 @@ def monitoring():
                 except Exception as e:
                     logger.error(f"Error - {e}")
 
+            
+            if stop_event.is_set():
+                break
+
             for manga_monitor in MonitorManga.objects.all():
+                if stop_event.is_set():
+                    break
                 try:
                     manga_monitor.update()
                 except MonitorManga.DoesNotExist as e:
@@ -52,16 +61,27 @@ def monitoring():
                     logger.error(f"Error - {e}")
             
             for chapter_monitor in MonitorChapter.objects.all():
+                if stop_event.is_set():
+                    break
                 try:
                     chapter_monitor.update()
                 except MonitorChapter.DoesNotExist as e:
                     logger.warning(f"Chapter monitor missing - {e}")
                 except Exception as e:
                     logger.error(f"Error - {e}")
+            
+            if stop_event.is_set():
+                break
 
             triggered = monitoring_trigger.wait(3600)
+
+            if stop_event.is_set():
+                break
+
             if triggered:
                 monitoring_trigger.clear()
+            
+            
         except OperationalError as e:
             logger.debug(f"Error - {e}")
         #time.sleep(3600)

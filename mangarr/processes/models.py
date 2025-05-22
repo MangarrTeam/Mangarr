@@ -85,6 +85,9 @@ class MonitorManga(ProcessBase):
             self.last_run = timezone.now()
             self.save()
             logger.error(f"Error - {e}")
+
+class PageWasNone(Exception):
+    pass
    
 class MonitorChapter(ProcessBase):
     manga = models.ForeignKey(Manga, on_delete=models.CASCADE, verbose_name=_("processes.models.monitor_chapter.manga"))
@@ -120,6 +123,8 @@ class MonitorChapter(ProcessBase):
                 width = len(str(len(chapter_pages)))
                 for i, page in enumerate(chapter_pages):
                     page_stream = plugin.download_page(page['url'], page.get('arguments', {}))
+                    if page_stream is None:
+                        raise PageWasNone(f"Page {i} was None, skipping chapter will retry later")
                     filename = f"{i+1:0{width}}.png"
                     cbz.writestr(filename, page_stream.getvalue())
 
