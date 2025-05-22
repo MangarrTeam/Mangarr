@@ -218,7 +218,7 @@ class Chapter(models.Model):
     number = models.OneToOneField(FloatType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.chapter.number"), related_name="chapter_number")
     volume = models.ForeignKey(Volume, on_delete=models.CASCADE, related_name="chapters")
     file = models.CharField(max_length=512, default=FILE_PATH_ROOT, verbose_name=_("database.models.chapter.file_path"))
-    url = models.URLField(verbose_name=_("database.models.chapter.url"))
+    url = models.URLField(verbose_name=_("database.models.chapter.url"), unique=True)
     source_url = models.URLField(verbose_name=_("database.models.chapter.source_url"))
     downloaded = models.BooleanField(default=False, verbose_name=_("database.models.chapter.downloaded"))
     arguments = models.JSONField(default=dict, verbose_name=_("processes.models.manga.arguments"), blank=True)

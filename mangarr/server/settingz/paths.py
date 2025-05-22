@@ -24,6 +24,7 @@ COMMUNITY_PLUGINS_DIR.mkdir(exist_ok=True)
 PLUGINS_CACHE_DIR = Path(os.path.join(PLUGINS_DIR, 'cache'))
 PLUGINS_CACHE_DIR.mkdir(exist_ok=True)
 PLUGINS_METADATA_PATH = Path(os.path.join(PLUGINS_DIR, 'plugins_metadata.json'))
+PLUGINS_METADATA_PATH.touch(exist_ok=True)
 
 LOCALE_PATH = Path(os.path.join(BASE_DIR, 'locale'))
 LOCALE_PATH.mkdir(exist_ok=True)

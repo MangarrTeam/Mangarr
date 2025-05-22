@@ -1,3 +1,4 @@
+from django.db.utils import OperationalError
 import time
 from django.utils import timezone
 from datetime import timedelta
@@ -29,36 +30,38 @@ def clear_cache():
 
 def monitoring():
     while True:
-        logger.debug("Monitoring check...")
-        clear_cache()
-        threshold = timezone.now() - timedelta(hours=24)
+        try:
+            logger.debug("Monitoring check...")
+            clear_cache()
+            threshold = timezone.now() - timedelta(hours=24)
 
-        for manga in Manga.objects.filter(last_update__lt=threshold):
-            try:
-                manga = MonitorManga.objects.get_or_create(plugin=manga.plugin, url=manga.url, arguments=manga.arguments)
-            except Manga.DoesNotExist as e:
-                logger.warning(f"Manga missing - {e}")
-            except Exception as e:
-                logger.error(f"Error - {e}")
+            for manga in Manga.objects.filter(last_update__lt=threshold):
+                try:
+                    manga = MonitorManga.objects.get_or_create(plugin=manga.plugin, url=manga.url, arguments=manga.arguments)
+                except Manga.DoesNotExist as e:
+                    logger.warning(f"Manga missing - {e}")
+                except Exception as e:
+                    logger.error(f"Error - {e}")
 
-        for manga_monitor in MonitorManga.objects.all():
-            try:
-                manga_monitor.update()
-            except MonitorManga.DoesNotExist as e:
-                logger.warning(f"Manga monitor missing - {e}")
-            except Exception as e:
-                logger.error(f"Error - {e}")
-        
-        for chapter_monitor in MonitorChapter.objects.all():
-            try:
-                chapter_monitor.update()
-            except MonitorChapter.DoesNotExist as e:
-                logger.warning(f"Chapter monitor missing - {e}")
-            except Exception as e:
-                logger.error(f"Error - {e}")
+            for manga_monitor in MonitorManga.objects.all():
+                try:
+                    manga_monitor.update()
+                except MonitorManga.DoesNotExist as e:
+                    logger.warning(f"Manga monitor missing - {e}")
+                except Exception as e:
+                    logger.error(f"Error - {e}")
+            
+            for chapter_monitor in MonitorChapter.objects.all():
+                try:
+                    chapter_monitor.update()
+                except MonitorChapter.DoesNotExist as e:
+                    logger.warning(f"Chapter monitor missing - {e}")
+                except Exception as e:
+                    logger.error(f"Error - {e}")
 
-        triggered = monitoring_trigger.wait(3600)
-        if triggered:
-            monitoring_trigger.clear()
-
+            triggered = monitoring_trigger.wait(3600)
+            if triggered:
+                monitoring_trigger.clear()
+        except OperationalError as e:
+            logger.debug(f"Error - {e}")
         #time.sleep(3600)
