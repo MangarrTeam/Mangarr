@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mangarr - Maintenance</title>
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.6/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+    crossorigin="anonymous"
+  />
+  <style>
+    body {
+      background-color: #222;
+      color: #eee;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .logo img {
+      width: 72px;
+      height: 72px;
+      margin-bottom: 1rem;
+    }
+    .countdown {
+      font-weight: 600;
+      font-size: 1.25rem;
+      color: #4caf50;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo" aria-label="Mangarr logo">
+    <img src="/static/imgs/logo.png" alt="Mangarr logo" />
+  </div>
+  <h1 class="display-4 text-success">Mangarr</h1>
+  <p class="lead text-muted">
+    Our service is currently undergoing maintenance.<br />
+    Please try again shortly.<br />
+    This page reloads automatically every 30 seconds.
+  </p>
+  <div class="spinner-border text-success" role="status" aria-label="Loading">
+    <span class="sr-only">Loading...</span>
+  </div>
+  <div id="countdown" class="countdown" aria-live="polite">Reloading in 30 seconds...</div>
+
+  <script>
+    let timeLeft = 30;
+    const countdownEl = document.getElementById('countdown');
+
+    const timer = setInterval(() => {
+      timeLeft--;
+      countdownEl.textContent = `Reloading in ${timeLeft} second${timeLeft !== 1 ? 's' : ''}...`;
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    setTimeout(() => location.reload(), 30000);
+  </script>
+</body>
+</html>
