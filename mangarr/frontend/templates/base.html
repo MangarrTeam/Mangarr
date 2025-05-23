@@ -3,6 +3,12 @@
 {% load i18n %}
 {% load has_permition %}
 
+{% block styles %}
+<style>
+
+</style>
+{% endblock %}
+
 {% block base %}
 <header>
     <nav class="navbar navbar-expand-lg secondary-color background-light px-0 py-0 fixed-top" >
@@ -12,8 +18,13 @@
             <i class="fa fa-bars text-white"></i>
         </button>
         
-        <div class="nav-item d-flex flex-grow-1 search-bar">
+        <div class="nav-item d-flex flex-grow-1 search-bar position-relative">
             <input type="text" id="tableFilter" class="form-control my-2 py-2 border-top-0 border-left-0 border-right-0 rounded-0 bg-transparent text-white w-100" placeholder="{% trans 'frontend.base.search' %}">
+            
+            <!-- Results container -->
+            <div id="searchResults" class="position-absolute background-middle text-white border-0 rounded-bottom mx-2 mb-2" style="display: none; min-width: 200px; max-width: 100vw; max-height: 50vh;">
+                <!-- Dynamically injected search results will go here -->
+            </div>
         </div>
         <div class="btn-group ml-auto pr-2">
             <button type="button" class="btn bg-transparent dropdown-toggle {% if user.is_superuser %}text-orange{% elif user.is_staff %}text-yellow{% else %}text-white{% endif %}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -44,13 +55,13 @@
 
 <aside id="sidebar" class="bottom-0 sidebar">
     <ul class="nav flex-column">
-        <!--
+        {% comment %}
         <li class="nav-item">
             <a href="{% url 'settings' %}" class="nav-link text-white">
                 <i class="fa fa-cogs text-white"></i> {% trans "frontend.base.settings" %}
             </a>
         </li>
-        -->
+        {% endcomment %}
         
         <!-- Collapsible Dropdown -->
         <li class="nav-item">
@@ -150,6 +161,85 @@ document.querySelectorAll("#restart").forEach((e,k) => {
         });
     });
 })
+
+
+
+document.getElementById('tableFilter').addEventListener('input', function(e) {
+    const query = e.target.value.trim();
+    const resultsContainer = document.getElementById('searchResults');
+
+    if (query.length < 2) {
+        resultsContainer.style.display = 'none';
+        return;
+    }
+
+    fetch(`{% url 'api_search' %}?token={{ user.profile.token }}&query=` + encodeURIComponent(query))
+        .then(response => response.json())
+        .then(data => {
+            let html = '';
+
+            if (data.mangas.length > 0) {
+                html += '<strong class="background-lightest px-2 pt-2 d-block">{% trans "frontend.base.mangas" %}</strong>';
+                data.mangas.forEach(manga => {
+                    const url = "{% url 'manga_view' 0 %}".replace("0", manga.id);
+                    const cover = manga.cover;
+                    html += `
+                        <a href="${url}" class="highlighted dropdown-item d-flex align-items-center gap-2 py-2">
+                            <img src="${cover}" alt="cover" class="result-cover">
+                            <span class="result-text text-white pl-2">${manga.localized_name || manga.name}</span>
+                        </a>
+                    `;
+                });
+            }
+
+            if (data.volumes.length > 0) {
+                html += '<strong class="background-lightest px-2 pt-2 d-block">{% trans "frontend.base.volumes" %}</strong>';
+                data.volumes.forEach(volume => {
+                    const url = "{% url 'manga_view' 0 %}".replace("0", volume.manga_id);
+                    const cover = volume.cover;
+                    html += `
+                        <a href="${url}" class="highlighted dropdown-item d-flex align-items-center gap-2 py-2">
+                            <img src="${cover}" alt="cover" class="result-cover">
+                            <span class="result-text text-white pl-2">${volume.localized_name || volume.name}</span>
+                        </a>
+                    `;
+                });
+            }
+
+            if (data.chapters.length > 0) {
+                html += '<strong class="background-lightest px-2 pt-2 d-block">{% trans "frontend.base.chapters" %}</strong>';
+                data.chapters.forEach(chapter => {
+                    const url = "{% url 'manga_view' 0 %}".replace("0", chapter.manga_id);
+                    const cover = chapter.cover;
+                    html += `
+                        <a href="${url}" class="highlighted dropdown-item d-flex align-items-center gap-2 py-2">
+                            <img src="${cover}" alt="cover" class="result-cover">
+                            <span class="result-text text-white pl-2">${chapter.localized_name || chapter.name}</span>
+                        </a>
+                    `;
+                });
+            }
+
+            resultsContainer.innerHTML = html;
+            resultsContainer.style.display = 'block';
+        });
+});
+
+document.addEventListener('click', function (event) {
+    const searchBox = document.getElementById('tableFilter');
+    const resultsBox = document.getElementById('searchResults');
+    if (!searchBox.contains(event.target) && !resultsBox.contains(event.target)) {
+        resultsBox.style.display = 'none';
+    } else {
+        resultsBox.style.display = 'block';
+    }
+});
+
+
+
+
+
+
 window.addEventListener("load",function() {
     //alert(`Height: ${window.innerHeight}, Width: ${window.innerWidth}`);
 })

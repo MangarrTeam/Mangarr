@@ -11,6 +11,7 @@ import os
 from django.utils import timezone
 import datetime
 from database.manga.functions import make_valid_filename
+from .functions import convert_datetime
 import logging
 logger = logging.getLogger(__name__)
 
@@ -62,23 +63,52 @@ class MonitorManga(ProcessBase):
             plugin = self.get_plugin()
             manga_data = plugin.get_manga(self.arguments)
 
-            manga, created = Manga.objects.get_or_create(url=manga_data.get("url"))
+            manga, manga_created = Manga.objects.get_or_create(url=manga_data.get("url"))
+
+            if manga_created:
+                manga.choose_plugin(self.plugin)
+
 
             manga.update_fields({
                 **self.arguments,
                 **manga_data
             })
 
-            for found_chapter in plugin.get_chapters(manga_data):
-                url = found_chapter.get("url")
-                if url is None:
+            seen_urls = set()
+            unique_chapters = []
+
+            for ch_data in sorted(plugin.get_chapters(manga_data), key=lambda x: (float(x.get("volume_number")), float(x.get("chapter_number")))):
+                url = ch_data.get("url")
+                if not url or url in seen_urls:
                     continue
-                monitor_chapter, created = MonitorChapter.objects.get_or_create(url=url, manga=manga)
-                if not created:
+                seen_urls.add(url)
+                unique_chapters.append(ch_data)
+
+            # Step 2: Get existing MonitorChapter URLs from DB
+            existing_urls = set(
+                MonitorChapter.objects
+                .filter(url__in=seen_urls, manga=manga)
+                .values_list("url", flat=True)
+            )
+
+            # Step 3: Filter out existing and prepare new instances
+            new_chapters = []
+
+            for ch_data in unique_chapters:
+                url = ch_data["url"]
+                if url in existing_urls:
                     continue
-                monitor_chapter.plugin = self.plugin
-                monitor_chapter.arguments = found_chapter
-                monitor_chapter.save()
+
+                chapter = MonitorChapter(
+                    url=url,
+                    manga=manga,
+                    plugin=self.plugin,
+                    arguments=convert_datetime(ch_data)
+                )
+                new_chapters.append(chapter)
+
+
+            MonitorChapter.objects.bulk_create(new_chapters, batch_size=100)
 
             self.delete()
         except Exception as e:

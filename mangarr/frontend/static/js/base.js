@@ -16,6 +16,9 @@
     
     const navHeight = navbar.offsetHeight;
     main.style.paddingTop = navHeight + 'px';
+    const resultsBox = document.getElementById('searchResults');
+    if (!resultsBox) return;
+    resultsBox.style.top = `calc(${navHeight}px - 0.5rem)`;
   }
 
   window.addEventListener('load', updateSidebarHeight);

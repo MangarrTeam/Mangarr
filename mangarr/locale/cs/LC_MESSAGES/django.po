@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-22 22:23+0200\n"
+"POT-Creation-Date: 2025-05-23 18:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,162 +19,162 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n "
 "<= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
 
-#: .\database\data_types\models.py:25 .\database\data_types\models.py:69
-#: .\database\data_types\models.py:114 .\database\data_types\models.py:159
-#: .\database\data_types\models.py:203 .\database\data_types\models.py:256
-#: .\database\data_types\models.py:300 .\database\data_types\models.py:344
+#: .\database\data_types\models.py:41 .\database\data_types\models.py:85
+#: .\database\data_types\models.py:130 .\database\data_types\models.py:175
+#: .\database\data_types\models.py:219 .\database\data_types\models.py:276
+#: .\database\data_types\models.py:320 .\database\data_types\models.py:364
 msgid "database.data_types_models.data"
 msgstr "Data"
 
-#: .\database\manga\models.py:27 .\database\manga\models.py:68
+#: .\database\manga\models.py:28 .\database\manga\models.py:70
 msgid "database.models.manga_request.plugin"
 msgstr "Plugin"
 
-#: .\database\manga\models.py:28
+#: .\database\manga\models.py:29
 msgid "database.models.manga_request.requested_by"
 msgstr "Vyžádané..."
 
-#: .\database\manga\models.py:29
+#: .\database\manga\models.py:30
 msgid "database.models.manga_request.variables"
 msgstr "Proměnné"
 
-#: .\database\manga\models.py:69
+#: .\database\manga\models.py:71
 msgid "database.models.manga.name"
 msgstr "Název"
 
-#: .\database\manga\models.py:70
+#: .\database\manga\models.py:72
 msgid "database.models.manga.localized_name"
 msgstr "Lokální název"
 
-#: .\database\manga\models.py:71
+#: .\database\manga\models.py:73
 msgid "database.models.manga.description"
 msgstr "Popis"
 
-#: .\database\manga\models.py:72
+#: .\database\manga\models.py:74
 msgid "database.models.manga.genres"
 msgstr "Žánry"
 
-#: .\database\manga\models.py:73
+#: .\database\manga\models.py:75
 msgid "database.models.manga.tags"
 msgstr "Tagy"
 
-#: .\database\manga\models.py:77
+#: .\database\manga\models.py:79
 msgid "database.models.manga.url"
 msgstr "URL"
 
-#: .\database\manga\models.py:78 .\database\manga\models.py:224
+#: .\database\manga\models.py:80 .\database\manga\models.py:263
 msgid "processes.models.manga.arguments"
 msgstr "Argumenty"
 
-#: .\database\manga\models.py:149
+#: .\database\manga\models.py:171
 msgid "database.models.manga.alternative_names"
 msgstr "Alternativní názvy"
 
-#: .\database\manga\models.py:153
+#: .\database\manga\models.py:177
 msgid "database.models.volume.name"
 msgstr "Název"
 
-#: .\database\manga\models.py:154
+#: .\database\manga\models.py:178
 msgid "database.models.volume.description"
 msgstr "Popis"
 
-#: .\database\manga\models.py:155
+#: .\database\manga\models.py:179
 msgid "database.models.volume.number"
 msgstr "Číslo"
 
-#: .\database\manga\models.py:157
+#: .\database\manga\models.py:181
 msgid "processes.models.volume.arguments"
 msgstr "Argumenty"
 
-#: .\database\manga\models.py:200
+#: .\database\manga\models.py:239
 msgid "database.models.chapter.name"
 msgstr "Název"
 
-#: .\database\manga\models.py:201
+#: .\database\manga\models.py:240
 msgid "database.models.chapter.description"
 msgstr "Popis"
 
-#: .\database\manga\models.py:202
+#: .\database\manga\models.py:241
 msgid "database.models.chapter.localization"
 msgstr "Lokalizace"
 
-#: .\database\manga\models.py:203
+#: .\database\manga\models.py:242
 msgid "database.models.chapter.publisher"
 msgstr "Vydavatel"
 
-#: .\database\manga\models.py:204
+#: .\database\manga\models.py:243
 msgid "database.models.chapter.imprint"
 msgstr "Otisk"
 
-#: .\database\manga\models.py:205
+#: .\database\manga\models.py:244
 msgid "database.models.chapter.release_date"
 msgstr "Datum vydání"
 
-#: .\database\manga\models.py:206
+#: .\database\manga\models.py:245
 msgid "database.models.chapter.writer"
 msgstr "Autor"
 
-#: .\database\manga\models.py:207
+#: .\database\manga\models.py:246
 msgid "database.models.chapter.penciller"
 msgstr "Autor kreseb"
 
-#: .\database\manga\models.py:208
+#: .\database\manga\models.py:247
 msgid "database.models.chapter.inker"
 msgstr "Autor kreseb"
 
-#: .\database\manga\models.py:209
+#: .\database\manga\models.py:248
 msgid "database.models.chapter.colorist"
 msgstr "Autor barev"
 
-#: .\database\manga\models.py:210
+#: .\database\manga\models.py:249
 msgid "database.models.chapter.letterer"
 msgstr "Autor písma"
 
-#: .\database\manga\models.py:211
+#: .\database\manga\models.py:250
 msgid "database.models.chapter.cover_artist"
 msgstr "Autor náhledu"
 
-#: .\database\manga\models.py:212
+#: .\database\manga\models.py:251
 msgid "database.models.chapter.editor"
 msgstr "Editor"
 
-#: .\database\manga\models.py:213
+#: .\database\manga\models.py:252
 msgid "database.models.chapter.translator"
 msgstr "Překladatel"
 
-#: .\database\manga\models.py:214
+#: .\database\manga\models.py:253
 msgid "database.models.chapter.page_count"
 msgstr "Počet stran"
 
-#: .\database\manga\models.py:215
+#: .\database\manga\models.py:254
 msgid "database.models.chapter.format"
 msgstr "Formát"
 
-#: .\database\manga\models.py:216
+#: .\database\manga\models.py:255
 msgid "database.models.chapter.age_rating"
 msgstr "Věkové ohodnocení"
 
-#: .\database\manga\models.py:217
+#: .\database\manga\models.py:256
 msgid "database.models.chapter.isbn"
 msgstr "ISBN"
 
-#: .\database\manga\models.py:218
+#: .\database\manga\models.py:257
 msgid "database.models.chapter.number"
 msgstr "Číslo"
 
-#: .\database\manga\models.py:220
+#: .\database\manga\models.py:259
 msgid "database.models.chapter.file_path"
 msgstr "Cesta souboru"
 
-#: .\database\manga\models.py:221
+#: .\database\manga\models.py:260
 msgid "database.models.chapter.url"
 msgstr "URL"
 
-#: .\database\manga\models.py:222
+#: .\database\manga\models.py:261
 msgid "database.models.chapter.source_url"
 msgstr "Zdrojová URL"
 
-#: .\database\manga\models.py:223
+#: .\database\manga\models.py:262
 msgid "database.models.chapter.downloaded"
 msgstr "Stáhnuto"
 
@@ -210,53 +210,65 @@ msgstr "Může spravovat žádosti"
 msgid "permission.can_download"
 msgstr "Může stahovat"
 
-#: .\frontend\templates\base.html:16
+#: .\frontend\templates\base.html:22
 msgid "frontend.base.search"
 msgstr "Hledat..."
 
-#: .\frontend\templates\base.html:34 .\frontend\templates\base.html:91
+#: .\frontend\templates\base.html:45 .\frontend\templates\base.html:103
 msgid "frontend.base.profile"
 msgstr "Profil"
 
-#: .\frontend\templates\base.html:37
+#: .\frontend\templates\base.html:48
 msgid "frontend.base.logout"
 msgstr "Odhlásit"
 
-#: .\frontend\templates\base.html:50 .\frontend\templates\base.html:86
-msgid "frontend.base.settings"
-msgstr "Nastavení"
-
-#: .\frontend\templates\base.html:60
+#: .\frontend\templates\base.html:72
 msgid "frontend.base.manga"
 msgstr "Manga"
 
-#: .\frontend\templates\base.html:65
+#: .\frontend\templates\base.html:77
 msgid "frontend.base.monitored_manga"
 msgstr "Sledovaná manga"
 
-#: .\frontend\templates\base.html:69
+#: .\frontend\templates\base.html:81
 msgid "frontend.base.manga_search"
 msgstr "Vyhledat mangu"
 
-#: .\frontend\templates\base.html:74
+#: .\frontend\templates\base.html:86
 msgid "frontend.base.manga_requests"
 msgstr "Vyžádané mangy"
 
-#: .\frontend\templates\base.html:95
+#: .\frontend\templates\base.html:98
+msgid "frontend.base.settings"
+msgstr "Nastavení"
+
+#: .\frontend\templates\base.html:107
 msgid "frontend.base.server_settings"
 msgstr "Nastavení serveru"
 
-#: .\frontend\templates\base.html:100
+#: .\frontend\templates\base.html:112
 msgid "frontend.base.plugin_manager"
 msgstr "Správce pluginů"
 
-#: .\frontend\templates\base.html:105
+#: .\frontend\templates\base.html:117
 msgid "frontend.base.users"
 msgstr "Uživatelé"
 
-#: .\frontend\templates\base.html:111
+#: .\frontend\templates\base.html:123
 msgid "frontend.base.restart"
 msgstr "Restartovat"
+
+#: .\frontend\templates\base.html:183
+msgid "frontend.base.mangas"
+msgstr "Mangy"
+
+#: .\frontend\templates\base.html:197
+msgid "frontend.base.volumes"
+msgstr "Svazky"
+
+#: .\frontend\templates\base.html:211
+msgid "frontend.base.chapters"
+msgstr "Kapitoly"
 
 #: .\frontend\templates\index.html:5
 msgid "frontend.index.index"
@@ -714,23 +726,23 @@ msgstr "<i class='fa fa-play'></i> Pustit stahování"
 msgid "plugins.manager.pause_downloads"
 msgstr "<i class='fa fa-pause'></i> Pozastavit stahování"
 
-#: .\processes\models.py:34
+#: .\processes\models.py:35
 msgid "processes.models.process_base.plugin"
 msgstr "Plugin"
 
-#: .\processes\models.py:35
+#: .\processes\models.py:36
 msgid "processes.models.process_base.url"
 msgstr "URL"
 
-#: .\processes\models.py:36
+#: .\processes\models.py:37
 msgid "processes.models.process_base.last_run"
 msgstr "Naposledy spuštěno"
 
-#: .\processes\models.py:37
+#: .\processes\models.py:38
 msgid "processes.models.process_base.arguments"
 msgstr "Argumenty"
 
-#: .\processes\models.py:90
+#: .\processes\models.py:139
 msgid "processes.models.monitor_chapter.manga"
 msgstr "Manga"
 

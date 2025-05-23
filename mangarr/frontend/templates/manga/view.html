@@ -2,6 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load int_or_float %}
+{% load trim %}
 
 {% block title %}{{ manga.localized_name.value|default:manga.name.value }}{% endblock %}
 
@@ -89,27 +90,27 @@
     <div class="p-3 background-lightest text-white d-flex justify-content-between align-items-center rounded"
          data-toggle="collapse"
          data-target="#volume-{{ forloop.counter }}"
-         aria-expanded="false"
+         aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
          aria-controls="volume-{{ forloop.counter }}"
          style="cursor: pointer;">
       <h5 class="mb-0 text-truncate" style="max-width: 90%;">
         {% blocktrans with volume=volume.volume pages=volume.pages.downloaded of_pages=volume.pages.of %}{{pages}}/{{of_pages}} frontend.manga_view.volume {{ volume }}{% endblocktrans %}
       </h5>
-      <i class="fas fa-chevron-down transition"></i>
+      <i class="fas {% if forloop.first %}fa-chevron-up{% else %}fa-chevron-down{% endif %} transition"></i>
     </div>
 
     <!-- Collapsible Table with responsive wrapper -->
-    <div id="volume-{{ forloop.counter }}" class="collapse">
+    <div id="volume-{{ forloop.counter }}" class="collapse {% if forloop.first %}show{% endif %}">
       <div class="table-responsive">
         <table class="table background-dark table-sm mb-0">
           <thead class="background-light">
             <tr>
-              <th class="text-center border-0 py-2">{% trans "frontend.manga_view.number" %}</th>
+              <th class="text-center border-0 py-2 col-1">{% trans "frontend.manga_view.number" %}</th>
               <th class="border-0 py-2">{% trans "frontend.manga_view.title" %}</th>
-              <th class="text-center border-0 py-2">{% trans "frontend.manga_view.isbn" %}</th>
-              <th class="text-center border-0 py-2">{% trans "frontend.manga_view.localization" %}</th>
-              <th class="text-center border-0 py-2">{% trans "frontend.manga_view.page_count" %}</th>
-              <th class="text-center border-0 py-2">{% trans "frontend.manga_view.downloaded" %}</th>
+              <th class="text-center border-0 py-2 col-2">{% trans "frontend.manga_view.isbn" %}</th>
+              <th class="text-center border-0 py-2 col-2">{% trans "frontend.manga_view.localization" %}</th>
+              <th class="text-center border-0 py-2 col-1">{% trans "frontend.manga_view.page_count" %}</th>
+              <th class="text-center border-0 py-2 col-1">{% trans "frontend.manga_view.downloaded" %}</th>
             </tr>
           </thead>
           <tbody class="chapter-table background-dark">
@@ -117,8 +118,8 @@
             <tr class="pt-2 light-hover">
               <td class="text-center border-0 py-2">{{ chapter.number.value|int_or_float }}</td>
               <td class="border-0 py-2">
-                <a href="{{ chapter.source_url }}" target="_blank" class="text-white text-truncate d-block" style="max-width: 200px;">
-                  {{ chapter.name.value }}
+                <a href="{{ chapter.source_url }}" target="_blank" class="text-white text-truncate d-block" style="max-width: 40vw;">
+                  {{ chapter.name.value|trim }}
                 </a>
               </td>
               <td class="text-center border-0 py-2">{{ chapter.isbn.value|default:"?" }}</td>
@@ -158,8 +159,8 @@
     var $link = $(this),
         $p    = $($link.data('target'));
 
-    // only show toggle link if text actually overflows the collapsed height
     if ($p[0].scrollHeight <= $p.innerHeight()) {
+      $p.toggleClass('collapsed');
       $link.hide();
     }
   });

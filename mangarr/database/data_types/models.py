@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from abc import abstractmethod
 from datetime import datetime
+import time
 import logging
 logger = logging.getLogger(__name__)
 
@@ -11,6 +13,7 @@ FLOAT_DEFAULT = {"value": 0.0, "locked": False}
 DATE_DEFAULT = {"value": "1900-01-01T12:00:00+00:00", "locked": False}
 ENUM_DEFAULT = {"value": 1, "locked": False}
 
+
 def prevent_if_locked(func):
     def wrapper(self, new_value):
         if self.locked:
@@ -20,8 +23,21 @@ def prevent_if_locked(func):
     return wrapper
 
 
+class BaseType(models.Model):
+    class Meta:
+        abstract = True
+    
+    @property
+    def value_str(self) -> str:
+        return str(self.value)
+    
+    @property
+    @abstractmethod
+    def value(self) -> str:
+        pass
 
-class StringType(models.Model):
+
+class StringType(BaseType):
     _data = models.JSONField(default=dict, blank=True, verbose_name=_("database.data_types_models.data"))
 
     @property
@@ -65,7 +81,7 @@ class StringType(models.Model):
 
         return title or f"StringType: {self.pk}"
 
-class BoolType(models.Model):
+class BoolType(BaseType):
     _data = models.JSONField(default=dict, blank=True, verbose_name=_("database.data_types_models.data"))
 
     @property
@@ -110,7 +126,7 @@ class BoolType(models.Model):
         return title or f"BoolType: {self.pk}"
 
 
-class IntType(models.Model):
+class IntType(BaseType):
     _data = models.JSONField(default=dict, blank=True, verbose_name=_("database.data_types_models.data"))
 
     @property
@@ -155,7 +171,7 @@ class IntType(models.Model):
         return title or f"IntType: {self.pk}"
 
 
-class FloatType(models.Model):
+class FloatType(BaseType):
     _data = models.JSONField(default=dict, blank=True, verbose_name=_("database.data_types_models.data"))
 
     @property
@@ -199,12 +215,16 @@ class FloatType(models.Model):
 
         return title or f"FloatType: {self.pk}"
     
-class DateType(models.Model):
+class DateType(BaseType):
     _data = models.JSONField(default=dict, blank=True, verbose_name=_("database.data_types_models.data"))
 
     @property
     def value(self) -> datetime:
         return datetime.strptime(self._data.get("value", "1900-01-01T12:00:00+00:00"), "%Y-%m-%dT%H:%M:%S%z")
+    
+    @property
+    def value_str(self) -> datetime:
+        return self._data.get("value", "1900-01-01T12:00:00+00:00")
     
     @value.setter
     @prevent_if_locked
@@ -252,7 +272,7 @@ class DateType(models.Model):
     
 from plugins.base import Formats, AgeRating, Status
     
-class FormatsEnumType(models.Model):
+class FormatsEnumType(BaseType):
     _data = models.JSONField(default=dict, blank=True, verbose_name=_("database.data_types_models.data"))
 
     @property
@@ -296,7 +316,7 @@ class FormatsEnumType(models.Model):
 
         return title or f"FormatsEnumType: {self.pk}"
     
-class AgeRatingEnumType(models.Model):
+class AgeRatingEnumType(BaseType):
     _data = models.JSONField(default=dict, blank=True, verbose_name=_("database.data_types_models.data"))
 
     @property
@@ -340,7 +360,7 @@ class AgeRatingEnumType(models.Model):
 
         return title or f"AgeRatingEnumType: {self.pk}"
     
-class StatusEnumType(models.Model):
+class StatusEnumType(BaseType):
     _data = models.JSONField(default=dict, blank=True, verbose_name=_("database.data_types_models.data"))
 
     @property

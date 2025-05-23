@@ -4,12 +4,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from server.functions import superuser_or_staff_required, superuser_required
 from database.users.models import UserProfile, RegisterToken
+from database.manga.models import Manga, Volume, Chapter
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.decorators import permission_required
 from django.views.decorators.http import require_POST
 import json
-from .functions import manga_is_monitored, manga_is_requested
+from .functions import manga_is_monitored, manga_is_requested, validate_token
 from server.settings import NSFW_ALLOWED
 from processes.models import MonitorManga
 from django.db import IntegrityError
@@ -19,6 +20,29 @@ logger = logging.getLogger(__name__)
 
 
 # Create your views here.
+@validate_token
+def search(request):
+    query:str = request.GET.get("query")
+
+    mangas = []
+    volumes = []
+    chapters = []
+
+    for manga in Manga.objects.all():
+        if query.lower() in manga.name.value.lower():
+            mangas.append(manga.json_serialized())
+
+    for volume in Volume.objects.all():
+        if query.lower() in volume.name.value.lower():
+            volumes.append(volume.json_serialized())
+
+    for chapter in Chapter.objects.all():
+        if query.lower() in chapter.name.value.lower():
+            chapters.append(chapter.json_serialized())
+
+    return JsonResponse({"mangas": mangas, "volumes": volumes, "chapters": chapters})
+
+
 @superuser_or_staff_required
 def get_user_permissions(request, user_id):
     user = get_object_or_404(User, pk=user_id)
@@ -36,7 +60,6 @@ def get_user_permissions(request, user_id):
             for perm in all_permissions
         ]
    })
-
 
 @superuser_or_staff_required
 def update_user_permissions(request, user_id):
@@ -192,7 +215,7 @@ def monitor_manga(request):
 
         manga.save()
         trigger_monitor()
-        return JsonResponse({"error": "Temp success"}, status=200)
+        return JsonResponse({"success": True}, status=200)
     except Exception as e:
         return JsonResponse({"error": f"Error - {e}"}, status=500)
 

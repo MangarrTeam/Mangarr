@@ -1,10 +1,11 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from database.data_types.models import StringType, BoolType, IntType, FloatType, DateType, FormatsEnumType, AgeRatingEnumType, StatusEnumType
+from datetime import datetime
 from plugins.base import Formats, AgeRating
 from plugins.utils import get_downloaded_metadata
 from django.contrib.auth.models import User
-from plugins.base import MangaPluginBase
+from plugins.base import MangaPluginBase, NO_THUMBNAIL_URL
 from plugins.functions import get_plugin_by_key
 from django.db.models.signals import post_delete 
 from django.dispatch import receiver
@@ -62,7 +63,8 @@ class MangaRequest(models.Model):
     def __str__(self):
         return f'{self.variables["name"] if self.variables.get("name") else self.get("url")} ({self.get_plugin_display()})'
     
-from django.db.models.fields.related import OneToOneField, ManyToManyField, ForeignKey
+from django.db.models.fields.related import OneToOneField, ManyToManyField, ManyToOneRel, ForeignKey
+from django.db.models.fields import DateTimeField, CharField
 
 class Manga(models.Model):
     plugin = models.CharField(max_length=64, choices=get_choices(), verbose_name=_("database.models.manga_request.plugin"))
@@ -79,13 +81,17 @@ class Manga(models.Model):
 
     def __str__(self) -> str:
         return self.name.value
+    
+    @property
+    def cover(self) -> str:
+        return self.arguments.get("cover", NO_THUMBNAIL_URL)
 
     @staticmethod
     def monitor_exist(url:str) -> bool:
         return Manga.objects.filter(url=url).exists()
 
     def choose_plugin(self, key:str) -> None:
-        if self.plugin is not None:
+        if self.plugin is not None and len(self.plugin) > 0:
             return
         choices = get_choices()
         if not any([ch[0] == key for ch in choices]):
@@ -103,8 +109,6 @@ class Manga(models.Model):
             self.alternative_names.create(manga=self, alternative_names=alt_name)
 
     def update_fields(self, data:dict) -> None:
-        self.choose_plugin(self.plugin)
-            
         if data.get("name"):
             self.name.value = data.get("name")
         
@@ -135,6 +139,24 @@ class Manga(models.Model):
                     setattr(self, field.name, new_item)
         super().save(*args, **kwargs)
 
+    def json_serialized(self) -> dict:
+        output = {}
+        for field in self._meta.get_fields():
+            if not hasattr(self, field.name):
+                continue
+            if isinstance(field, OneToOneField):
+                output[field.name] = getattr(self, field.name).value_str
+            elif isinstance(field, ManyToOneRel):
+                output[field.name] = [str(item) for item in getattr(self, field.name).all()]
+            elif isinstance(field, ForeignKey):
+                output[field.name] = str(getattr(self, field.name))
+            elif isinstance(field, DateTimeField):
+                output[field.name] = getattr(self, field.name).strftime("%Y-%m-%dT%H:%M:%S%z")
+            else:
+                output[field.name] = getattr(self, field.name)
+        output["cover"] = self.cover
+        return output
+
     def get_fields_values_for_xml(self) -> dict:
         return {
             "Series": self.name.value,
@@ -148,6 +170,8 @@ class MangaANLink(models.Model):
     manga = models.ForeignKey(Manga, on_delete=models.CASCADE, related_name="alternative_names")
     alternative_names = models.OneToOneField(StringType, on_delete=models.PROTECT, verbose_name=_("database.models.manga.alternative_names"), related_name="manga_alternative_names")
 
+    def __str__(self) -> str:
+        return self.alternative_names.value_str
 
 class Volume(models.Model):
     name = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.volume.name"), related_name="volume_name")
@@ -177,6 +201,21 @@ class Volume(models.Model):
                     setattr(self, field.name, new_item)
         super().save(*args, **kwargs)
 
+    def json_serialized(self) -> dict:
+        output = {}
+        for field in self._meta.get_fields():
+            if not hasattr(self, field.name):
+                continue
+            if isinstance(field, OneToOneField):
+                output[field.name] = getattr(self, field.name).value
+            elif isinstance(field, ForeignKey):
+                output[field.name] = str(getattr(self, field.name))
+            else:
+                output[field.name] = getattr(self, field.name)
+        output["manga_id"] = self.manga.id
+        output["cover"] = self.manga.cover
+        return {}
+    
     def update_fields(self, data:dict) -> None:            
         if data.get("name"):
             self.name.value = data.get("name")
@@ -257,6 +296,23 @@ class Chapter(models.Model):
                     setattr(self, field.name, new_instance)
         super().save(*args, **kwargs)
 
+    def json_serialized(self) -> dict:
+        output = {}
+        for field in self._meta.get_fields():
+            if not hasattr(self, field.name):
+                continue
+            if field.name == "file":
+                continue
+            if isinstance(field, OneToOneField):
+                output[field.name] = getattr(self, field.name).value
+            elif isinstance(field, ForeignKey):
+                output[field.name] = str(getattr(self, field.name))
+            else:
+                output[field.name] = getattr(self, field.name)
+        output["manga_id"] = self.volume.manga.id
+        output["cover"] = self.volume.manga.cover
+        return output
+    
     def update_fields(self, data:dict) -> None:
         if data.get("name"):
             self.name.value = data.get("name")

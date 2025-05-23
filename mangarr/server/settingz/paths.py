@@ -43,7 +43,3 @@ FILE_PATH_ROOT.mkdir(exist_ok=True)
 
 CACHE_FILE_PATH_ROOT = Path(os.path.join(MANGA_ROOT, 'cache'))
 CACHE_FILE_PATH_ROOT.mkdir(exist_ok=True)
-
-
-ZIP_OUTPUT_PATH = Path(os.path.join(PROJECT_ROOT, 'zip_output'))
-ZIP_OUTPUT_PATH.mkdir(exist_ok=True)
