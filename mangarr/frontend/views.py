@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def index(request):
+    return redirect("monitored_mangas")
     return custom_render(request, "index.html")
 
 @login_required
