@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 def restart_app() -> None:
     try:
+        subprocess.run(["supervisorctl", "restart", "daphne"], check=True)
         subprocess.run(["supervisorctl", "restart", "gunicorn"], check=True)
         logger.info("Gunicorn restart triggered via supervisorctl")
     except subprocess.CalledProcessError as e:

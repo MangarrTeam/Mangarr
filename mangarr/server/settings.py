@@ -34,6 +34,18 @@ from .settingz.auth_validators import *
 from .settingz.localization import *
 
 
+ASGI_APPLICATION = "server.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)]
+        }
+    }
+}
+
+
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")

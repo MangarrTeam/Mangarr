@@ -9,9 +9,13 @@ import shutil
 import zipfile
 import os
 from django.utils import timezone
+from datetime import timedelta
 import datetime
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 from database.manga.functions import make_valid_filename
 from .functions import convert_datetime
+from django.db.models import Q
 import logging
 logger = logging.getLogger(__name__)
 
@@ -157,20 +161,51 @@ class MonitorChapter(ProcessBase):
                         raise PageWasNone(f"Page {i} was None, skipping chapter will retry later")
                     filename = f"{i+1:0{width}}.png"
                     cbz.writestr(filename, page_stream.getvalue())
+                    on_download(i+1, len(chapter_pages))
 
                 cbz.writestr("ComicInfo.xml", chapter.create_xml())
+            on_download(0, 0)
 
             chapter_file_folder = FILE_PATH_ROOT / f"{make_valid_filename(chapter.volume.manga.name.value)}"
             chapter_file_folder.mkdir(exist_ok=True)
             chapter_file_path_name = chapter_file_folder / chapter.get_file_name()
 
-            shutil.move(chapter_cache_file_path_name, chapter_file_path_name)
-            chapter.file = f"{chapter_file_path_name}"
-            chapter.downloaded = True
-            chapter.save()
+            try:
+                shutil.move(chapter_cache_file_path_name, chapter_file_path_name)
+                chapter.file = f"{chapter_file_path_name}"
+                chapter.downloaded = True
+                chapter.save()
+            except Exception as e:
+                logger.error(f"Error - {e}")
+
             self.delete()
 
         except Exception as e:
             self.last_run = timezone.now()
             self.save()
             logger.error(f"Error - {e}")
+
+from websockets.consumers import notify_clients
+
+@receiver(post_save, sender=MonitorManga)
+@receiver(post_delete, sender=MonitorManga)
+@receiver(post_save, sender=MonitorChapter)
+@receiver(post_delete, sender=MonitorChapter)
+def monitor_changed(sender, instance, **kwargs):
+    one_hour_ago = timezone.now() - timedelta(hours=1)
+    data = {
+        "scanning": {
+            "manga": len(MonitorManga.objects.filter(Q(last_run__lt=one_hour_ago) | Q(last_run__isnull=True))),
+            "chapters": len(MonitorChapter.objects.filter(Q(last_run__lt=one_hour_ago) | Q(last_run__isnull=True)))
+        },
+    }
+    notify_clients(data)
+
+def on_download(current:int, of:int):
+    data = {
+        "downloading": {
+            "current": current,
+            "of": of
+        }
+    }
+    notify_clients(data)

@@ -54,7 +54,7 @@
 </header>
 
 <aside id="sidebar" class="bottom-0 sidebar">
-    <ul class="nav flex-column">
+    <ul class="nav flex-column h-100">
         {% comment %}
         <li class="nav-item">
             <a href="{% url 'settings' %}" class="nav-link text-white">
@@ -122,6 +122,13 @@
                     <i class="fa fa-undo my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.restart" context "default" %}</p>
                 </div>
                 {% endif %}
+            </div>
+        </li>
+        <li class="nav-item mt-auto text-white">
+            <div class="d-flex flex-column w-100">
+                <span id="mangaMonitoring" class="text-muted small w-100"></span>
+                <span id="chapterMonitoring" class="text-muted small w-100"></span>
+                <span id="pagesDownloading" class="text-muted small w-100"></span>
             </div>
         </li>
     </ul>
@@ -239,6 +246,44 @@ document.addEventListener('click', function (event) {
 
 
 
+const socket = new WebSocket("ws://" + window.location.host + "/ws/stats/");
+
+socket.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+    const scanning = data["scanning"];
+    if(!!scanning) {
+        const mangaScanning = scanning["manga"];
+        const mangaSpan = document.getElementById("mangaMonitoring");
+        if(!!mangaScanning) {
+            mangaSpan.style.display = "initial";
+            mangaSpan.innerText = "{% blocktrans context 'Number of mangas that are currently scanning' %}frontend.base.manga_scanning $MANGAS_NUMBER{% endblocktrans %}".replace("$MANGAS_NUMBER", mangaScanning);
+        } else {
+            mangaSpan.style.display = "none";
+        }
+        const chaptersScanning = scanning["chapters"];
+        const chapterSpan = document.getElementById("chapterMonitoring");
+        if(!!chaptersScanning) {
+            chapterSpan.style.display = "initial";
+            chapterSpan.innerText = "{% blocktrans context 'Number of chapters that are currently scanning' %}frontend.base.chapter_scanning $CHAPTERS_NUMBER{% endblocktrans %}".replace("$CHAPTERS_NUMBER", chaptersScanning);
+        } else {
+            chapterSpan.style.display = "none";
+        }
+    }
+    const downloading = data["downloading"];
+    if(!!downloading) {
+        const currentPage = downloading["current"] || 0;
+        const ofPages = downloading["of"];
+        const pagesSpan = document.getElementById("pagesDownloading");
+        if(!!ofPages) {
+            pagesSpan.style.display = "initial";
+            pagesSpan.innerText = "{% blocktrans context 'Which page is currently downloading of how many' %}frontend.base.page_downloading $CURRENT_PAGE/$OF_PAGES{% endblocktrans %}".replace("$CURRENT_PAGE", currentPage).replace("$OF_PAGES", ofPages);
+        } else {
+            pagesSpan.style.display = "none";
+        }
+    }
+};
+
+
 
 window.addEventListener("load",function() {
     //alert(`Height: ${window.innerHeight}, Width: ${window.innerWidth}`);
@@ -247,4 +292,3 @@ window.addEventListener("load",function() {
 {% block scripts %}
 {% endblock %}
 {% endblock %}
-

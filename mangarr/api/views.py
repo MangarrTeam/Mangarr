@@ -211,7 +211,10 @@ def monitor_manga(request):
             return JsonResponse({"error": "Domain does not exist"}, status=403)
         
         plugin_key = f'{category}_{domain}'
-        manga = MonitorManga(plugin=plugin_key, url=data.get("manga", {}).get("url"), arguments=data.get("manga"))
+        url = data.get("manga", {}).get("url")
+        if url is not None:
+            MangaRequest.delete_if_exist(url)
+        manga = MonitorManga(plugin=plugin_key, url=url, arguments=data.get("manga"))
 
         manga.save()
         trigger_monitor()

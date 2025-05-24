@@ -14,6 +14,7 @@ RUN apt-get update && \
     nginx \
     gettext \
     supervisor \
+    redis-server \
     && rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip

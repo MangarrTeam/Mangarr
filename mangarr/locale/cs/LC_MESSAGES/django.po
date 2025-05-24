@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mangarr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-24 03:00+0200\n"
+"POT-Creation-Date: 2025-05-24 19:28+0200\n"
 "PO-Revision-Date: 2025-05-24 01:16\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
@@ -350,20 +350,35 @@ msgctxt "default"
 msgid "frontend.base.restart"
 msgstr "Restartovat"
 
-#: .\frontend\templates\base.html:183
+#: .\frontend\templates\base.html:188
 msgctxt "default"
 msgid "frontend.base.mangas"
 msgstr "Mangy"
 
-#: .\frontend\templates\base.html:197
+#: .\frontend\templates\base.html:202
 msgctxt "default"
 msgid "frontend.base.volumes"
 msgstr "Svazky"
 
-#: .\frontend\templates\base.html:211
+#: .\frontend\templates\base.html:216
 msgctxt "default"
 msgid "frontend.base.chapters"
 msgstr "Kapitoly"
+
+#: .\frontend\templates\base.html:258
+msgctxt "Number of mangas that are currently scanning"
+msgid "frontend.base.manga_scanning $MANGAS_NUMBER"
+msgstr "Mangy $MANGAS_NUMBER"
+
+#: .\frontend\templates\base.html:266
+msgctxt "Number of chapters that are currently scanning"
+msgid "frontend.base.chapter_scanning $CHAPTERS_NUMBER"
+msgstr "Kapitoly: $CHAPTERS_NUMBER"
+
+#: .\frontend\templates\base.html:278
+msgctxt "Which page is currently downloading of how many"
+msgid "frontend.base.page_downloading $CURRENT_PAGE/$OF_PAGES"
+msgstr "Strana $CURRENT_PAGE/$OF_PAGES"
 
 #: .\frontend\templates\index.html:5
 msgctxt "default"
@@ -921,27 +936,27 @@ msgctxt "default"
 msgid "plugins.manager.community_plugins"
 msgstr "Komunitní pluginy"
 
-#: .\processes\models.py:35
+#: .\processes\models.py:39
 msgctxt "default"
 msgid "processes.models.process_base.plugin"
 msgstr "Plugin"
 
-#: .\processes\models.py:36
+#: .\processes\models.py:40
 msgctxt "default"
 msgid "processes.models.process_base.url"
 msgstr "URL"
 
-#: .\processes\models.py:37
+#: .\processes\models.py:41
 msgctxt "default"
 msgid "processes.models.process_base.last_run"
 msgstr "Naposledy spuštěno"
 
-#: .\processes\models.py:38
+#: .\processes\models.py:42
 msgctxt "default"
 msgid "processes.models.process_base.arguments"
 msgstr "Argumenty"
 
-#: .\processes\models.py:123
+#: .\processes\models.py:127
 msgctxt "default"
 msgid "processes.models.monitor_chapter.manga"
 msgstr "Manga"
@@ -955,4 +970,3 @@ msgstr "Angličtina"
 msgctxt "Server localization name Czech"
 msgid "langs.czech"
 msgstr "Čeština"
-

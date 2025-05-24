@@ -7,7 +7,7 @@ from plugins.utils import get_downloaded_metadata
 from django.contrib.auth.models import User
 from plugins.base import MangaPluginBase, NO_THUMBNAIL_URL
 from plugins.functions import get_plugin_by_key
-from django.db.models.signals import post_delete 
+from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from server.settings import FILE_PATH_ROOT
 import xml.etree.ElementTree as ET
@@ -53,6 +53,13 @@ class MangaRequest(models.Model):
             if req_url is not None and req_url == url:
                 return True
         return False
+
+    @staticmethod
+    def delete_if_exist(url:str):
+        for req in MangaRequest.objects.filter(variables__has_key="url"):
+            req_url = req.variables.get("url")
+            if req_url is not None and req_url == url:
+                req.delete()
     
     def save(self):
         if self.variables.get("url") is None:

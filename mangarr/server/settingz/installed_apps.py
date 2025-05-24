@@ -4,7 +4,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'daphne',
     'django.contrib.staticfiles',
+    'channels',
     'plugins',
     'database.other',
     'database.users',
@@ -13,6 +15,7 @@ INSTALLED_APPS = [
     'processes',
     'frontend',
     'api',
+    'websockets',
 ]
 
 STATICFILES_FINDERS = [

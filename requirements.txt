@@ -6,6 +6,8 @@ beautifulsoup4
 lxml
 Pillow
 gunicorn
-flask
 pytz
 packaging
+channels
+channels_redis
+daphne
