@@ -7,6 +7,7 @@ from server.settings import FILE_PATH_ROOT, CACHE_FILE_PATH_ROOT
 import hashlib
 import shutil
 import zipfile
+import time
 import os
 from django.utils import timezone
 from datetime import timedelta
@@ -162,6 +163,8 @@ class MonitorChapter(ProcessBase):
                     filename = f"{i+1:0{width}}.png"
                     cbz.writestr(filename, page_stream.getvalue())
                     on_download(i+1, len(chapter_pages))
+                    # Delay for 1 second between downloads
+                    time.sleep(0.5)
 
                 cbz.writestr("ComicInfo.xml", chapter.create_xml())
             on_download(0, 0)
@@ -171,6 +174,8 @@ class MonitorChapter(ProcessBase):
             chapter_file_path_name = chapter_file_folder / chapter.get_file_name()
 
             try:
+                if not chapter_file_path_name.exists():
+                    raise Exception(f'File path "{chapter_file_path_name}" is invalid')
                 shutil.move(chapter_cache_file_path_name, chapter_file_path_name)
                 chapter.file = f"{chapter_file_path_name}"
                 chapter.downloaded = True
@@ -179,6 +184,9 @@ class MonitorChapter(ProcessBase):
                 logger.error(f"Error - {e}")
 
             self.delete()
+
+            # Delay for 10 seconds
+            time.sleep(10)
 
         except Exception as e:
             self.last_run = timezone.now()
