@@ -2,6 +2,8 @@ Django==5.2.1
 djangorestframework
 whitenoise
 requests
+beautifulsoup4
+lxml
 Pillow
 gunicorn
 flask
