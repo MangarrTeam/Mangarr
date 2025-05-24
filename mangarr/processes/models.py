@@ -15,7 +15,7 @@ import datetime
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from database.manga.functions import make_valid_filename
-from .functions import convert_datetime
+from .functions import convert_datetime, move_file
 from django.db.models import Q
 import logging
 logger = logging.getLogger(__name__)
@@ -174,9 +174,7 @@ class MonitorChapter(ProcessBase):
             chapter_file_path_name = chapter_file_folder / chapter.get_file_name()
 
             try:
-                if not chapter_cache_file_path_name.exists():
-                    raise Exception(f'File path "{chapter_cache_file_path_name}" is invalid')
-                shutil.move(chapter_cache_file_path_name, chapter_file_path_name)
+                move_file(chapter_cache_file_path_name, chapter_file_path_name)
                 chapter.file = f"{chapter_file_path_name}"
                 chapter.downloaded = True
                 chapter.save()
