@@ -126,7 +126,7 @@
     <div class="modal-content text-white">
       <div class="modal-header background-dark border-0">
         <h5 class="modal-title" id="permissionModalLabel">
-          {% trans "frontend.manager_panel.edit_permissions_for" context "default" %}
+          {% blocktrans with username="<span id='modalUsername'></span>" context "default" %}frontend.manager_panel.edit_permissions_for {{ username }}{% endblocktrans %}
         </h5>
         <button type="button" class="btn-close" data-dismiss="modal"></button>
       </div>
@@ -155,7 +155,7 @@
         <button type="button" class="btn-close" data-dismiss="modal"></button>
       </div>
       <div class="modal-body background-light border-0">
-        <p>{% trans "frontend.manager_panel.confirm_delete_user_text" context "default" %}</p>
+        <p>{% blocktrans with username="<strong id='deleteUsername'></strong>" context "default" %}frontend.manager_panel.confirm_delete_user_text {{ username }}{% endblocktrans %}</p>
       </div>
       <div class="modal-footer background-light border-0">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "frontend.manager_panel.cancel" context "default" %}</button>
@@ -174,7 +174,7 @@
         <button type="button" class="btn-close" data-dismiss="modal"></button>
       </div>
       <div class="modal-body background-light border-0">
-        <p class="text-truncate mb-0">{% trans "frontend.manager_panel.confirm_delete_token_text" context "default" %}</p>
+        <p class="text-truncate mb-0">{% blocktrans with token="<strong id='deleteTokenname'></strong>" context "default" %}frontend.manager_panel.confirm_delete_token_text {{ token }}{% endblocktrans %}</p>
       </div>
       <div class="modal-footer background-light border-0">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "frontend.manager_panel.cancel" context "default" %}</button>
