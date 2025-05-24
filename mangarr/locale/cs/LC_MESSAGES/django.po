@@ -472,7 +472,7 @@ msgstr "Nebyly nalezeny žádné registrační tokeny"
 #, python-format
 msgctxt "default"
 msgid "frontend.manager_panel.edit_permissions_for %(username)s"
-msgstr "Upravit práva pro %(username)s"
+msgstr ""
 
 #: .\frontend\templates\manager\user_list.html:142
 msgctxt "default"
@@ -494,7 +494,7 @@ msgstr "Opravdu smazat"
 #, python-format
 msgctxt "default"
 msgid "frontend.manager_panel.confirm_delete_user_text %(username)s"
-msgstr "Jste si jisti že chcete smazat %(username)s?"
+msgstr ""
 
 #: .\frontend\templates\manager\user_list.html:161
 #: .\frontend\templates\manager\user_list.html:180
@@ -512,7 +512,7 @@ msgstr "Potvrdit"
 #, python-format
 msgctxt "default"
 msgid "frontend.manager_panel.confirm_delete_token_text %(token)s"
-msgstr "Jste si jisti že chcete smazat %(token)s?"
+msgstr ""
 
 #: .\frontend\templates\manga\monitored.html:5
 msgctxt "default"
@@ -955,3 +955,4 @@ msgstr "Angličtina"
 msgctxt "Server localization name Czech"
 msgid "langs.czech"
 msgstr "Čeština"
+
