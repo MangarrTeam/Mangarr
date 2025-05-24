@@ -174,7 +174,7 @@ class MonitorChapter(ProcessBase):
             chapter_file_path_name = chapter_file_folder / chapter.get_file_name()
 
             try:
-                if not chapter_file_path_name.exists():
+                if not chapter_cache_file_path_name.exists():
                     raise Exception(f'File path "{chapter_file_path_name}" is invalid')
                 shutil.move(chapter_cache_file_path_name, chapter_file_path_name)
                 chapter.file = f"{chapter_file_path_name}"
