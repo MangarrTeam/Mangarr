@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-24 02:33+0200\n"
+"POT-Creation-Date: 2025-05-24 03:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -470,9 +470,10 @@ msgid "frontend.manager_panel.no_register_tokens_found"
 msgstr "No register tokens found"
 
 #: .\frontend\templates\manager\user_list.html:129
+#, python-format
 msgctxt "default"
-msgid "frontend.manager_panel.edit_permissions_for"
-msgstr "Edit permissions for <span id='modalUsername'></span>"
+msgid "frontend.manager_panel.edit_permissions_for %(username)s"
+msgstr "Edit permissions for %(username)s"
 
 #: .\frontend\templates\manager\user_list.html:142
 msgctxt "default"
@@ -491,9 +492,10 @@ msgid "frontend.manager_panel.confirm_delete_title"
 msgstr "Confirm delete"
 
 #: .\frontend\templates\manager\user_list.html:158
+#, python-format
 msgctxt "default"
-msgid "frontend.manager_panel.confirm_delete_user_text"
-msgstr "Are you sure you want to delete <strong id='deleteUsername'></strong>?"
+msgid "frontend.manager_panel.confirm_delete_user_text %(username)s"
+msgstr "Are you sure you want to delete %(username)s?"
 
 #: .\frontend\templates\manager\user_list.html:161
 #: .\frontend\templates\manager\user_list.html:180
@@ -508,10 +510,10 @@ msgid "frontend.manager_panel.confirm"
 msgstr "Confirm"
 
 #: .\frontend\templates\manager\user_list.html:177
+#, python-format
 msgctxt "default"
-msgid "frontend.manager_panel.confirm_delete_token_text"
-msgstr ""
-"Are you sure you want to delete <strong id='deleteTokenname'></strong>?"
+msgid "frontend.manager_panel.confirm_delete_token_text %(token)s"
+msgstr "Are you sure you want to delete %(token)s?"
 
 #: .\frontend\templates\manga\monitored.html:5
 msgctxt "default"
