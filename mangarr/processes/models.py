@@ -175,7 +175,7 @@ class MonitorChapter(ProcessBase):
 
             try:
                 if not chapter_cache_file_path_name.exists():
-                    raise Exception(f'File path "{chapter_file_path_name}" is invalid')
+                    raise Exception(f'File path "{chapter_cache_file_path_name}" is invalid')
                 shutil.move(chapter_cache_file_path_name, chapter_file_path_name)
                 chapter.file = f"{chapter_file_path_name}"
                 chapter.downloaded = True
