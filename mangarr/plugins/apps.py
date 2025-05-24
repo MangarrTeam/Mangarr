@@ -10,7 +10,7 @@ class PluginsConfig(AppConfig):
     threads_started = False
 
     def ready(self):
-        if os.environ.get('RUN_THREADS', 'false') == 'true':
+        if not (os.environ.get('RUN_THREADS', 'false') == 'true'):
             return
         if not self.threads_started:
             from . import tasks
