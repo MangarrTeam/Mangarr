@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mangarr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-24 03:00+0200\n"
-"PO-Revision-Date: 2025-05-24 01:10\n"
+"PO-Revision-Date: 2025-05-24 01:16\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "Language: cs_CZ\n"
@@ -472,7 +472,7 @@ msgstr "Nebyly nalezeny žádné registrační tokeny"
 #, python-format
 msgctxt "default"
 msgid "frontend.manager_panel.edit_permissions_for %(username)s"
-msgstr ""
+msgstr "Upravit práva pro %(username)s"
 
 #: .\frontend\templates\manager\user_list.html:142
 msgctxt "default"
@@ -494,7 +494,7 @@ msgstr "Opravdu smazat"
 #, python-format
 msgctxt "default"
 msgid "frontend.manager_panel.confirm_delete_user_text %(username)s"
-msgstr ""
+msgstr "Jste si jisti že chcete smazat %(username)s?"
 
 #: .\frontend\templates\manager\user_list.html:161
 #: .\frontend\templates\manager\user_list.html:180
@@ -512,7 +512,7 @@ msgstr "Potvrdit"
 #, python-format
 msgctxt "default"
 msgid "frontend.manager_panel.confirm_delete_token_text %(token)s"
-msgstr ""
+msgstr "Jste si jisti že chcete smazat %(token)s?"
 
 #: .\frontend\templates\manga\monitored.html:5
 msgctxt "default"
