@@ -415,7 +415,7 @@ class Chapter(models.Model):
         }
 
     def create_xml(self) -> str:
-        root = ET.Element("ConicInfo")
+        root = ET.Element("ComicInfo")
 
         for tag, text in self.get_fields_values_for_xml().items():
             if text is None:
