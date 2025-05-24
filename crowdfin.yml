@@ -1,3 +1,0 @@
-files:
-  - source: /mangarr/locale/en/LC_MESSAGES/django.po
-    translation: /mangarr/locale/%two_letters_code%/LC_MESSAGES/django.po
