@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mangarr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-24 02:33+0200\n"
-"PO-Revision-Date: 2025-05-24 00:53\n"
+"POT-Creation-Date: 2025-05-24 03:00+0200\n"
+"PO-Revision-Date: 2025-05-24 01:10\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "Language: cs_CZ\n"
@@ -278,7 +278,7 @@ msgstr "Může hledat"
 #: .\database\users\models.py:17
 msgctxt "default"
 msgid "permission.can_request"
-msgstr "Může važádat"
+msgstr "Může vyžádat"
 
 #: .\database\users\models.py:18
 msgctxt "default"
@@ -469,9 +469,10 @@ msgid "frontend.manager_panel.no_register_tokens_found"
 msgstr "Nebyly nalezeny žádné registrační tokeny"
 
 #: .\frontend\templates\manager\user_list.html:129
+#, python-format
 msgctxt "default"
-msgid "frontend.manager_panel.edit_permissions_for"
-msgstr "Upravit práva pro <span id='modalUsername'></span>"
+msgid "frontend.manager_panel.edit_permissions_for %(username)s"
+msgstr ""
 
 #: .\frontend\templates\manager\user_list.html:142
 msgctxt "default"
@@ -490,9 +491,10 @@ msgid "frontend.manager_panel.confirm_delete_title"
 msgstr "Opravdu smazat"
 
 #: .\frontend\templates\manager\user_list.html:158
+#, python-format
 msgctxt "default"
-msgid "frontend.manager_panel.confirm_delete_user_text"
-msgstr "Jste si jisti že chcete smazat <strong id='deleteUsername'></strong>?"
+msgid "frontend.manager_panel.confirm_delete_user_text %(username)s"
+msgstr ""
 
 #: .\frontend\templates\manager\user_list.html:161
 #: .\frontend\templates\manager\user_list.html:180
@@ -507,9 +509,10 @@ msgid "frontend.manager_panel.confirm"
 msgstr "Potvrdit"
 
 #: .\frontend\templates\manager\user_list.html:177
+#, python-format
 msgctxt "default"
-msgid "frontend.manager_panel.confirm_delete_token_text"
-msgstr "Jste si jisti že chcete smazat <strong id='deleteTokenname'></strong>?"
+msgid "frontend.manager_panel.confirm_delete_token_text %(token)s"
+msgstr ""
 
 #: .\frontend\templates\manga\monitored.html:5
 msgctxt "default"
