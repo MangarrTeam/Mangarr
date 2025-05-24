@@ -6,11 +6,11 @@
 {% load is_in %}
 {% load my_split %}
 
-{% block title %}{% trans "frontend.settings.settings" %}{% endblock %}
+{% block title %}{% trans "frontend.settings.settings" context "default" %}{% endblock %}
 
 
 {% block content %}
-<h1 class="mb-4 text-white">{% trans "frontend.settings.settings" %}</h1>
+<h1 class="mb-4 text-white">{% trans "frontend.settings.settings" context "default" %}</h1>
 <form method="post" id="setting-form">
     {% csrf_token %}
 
@@ -73,9 +73,9 @@
 
 </form>
 <div class="text-start pb-2">
-    <button type="submit" class="btn btn-primary" form="setting-form">{% trans "frontend.settings.save_settings" %}</button>
+    <button type="submit" class="btn btn-primary" form="setting-form">{% trans "frontend.settings.save_settings" context "default" %}</button>
     {% if config_changed %}
-        <button type="button" id="restart" class="btn btn-danger">{% trans "frontend.settings.restart" %}</button>
+        <button type="button" id="restart" class="btn btn-danger">{% trans "frontend.settings.restart" context "default" %}</button>
     {% endif %}
 </div>
 {% endblock %}

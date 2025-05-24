@@ -2,35 +2,35 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}{% trans "frontend.profile.profile" %}{% endblock %}
+{% block title %}{% trans "frontend.profile.profile" context "default" %}{% endblock %}
 
 {% block content %}
-<h1 class="mb-4 text-white">{% trans "frontend.profile.profile" %}</h1>
+<h1 class="mb-4 text-white">{% trans "frontend.profile.profile" context "default" %}</h1>
 
 <form method="post" action="{% url 'profile' %}" id="profile-form">
     {% csrf_token %}
 
     <div class="card mb-3 text-white border-0 rounded-2">
-        <div class="card-header background-middle h4">{% trans "frontend.profile.account" %}</div>
+        <div class="card-header background-middle h4">{% trans "frontend.profile.account" context "default" %}</div>
         <div class="card-body background-light">
             <!-- Username -->
             <div class="form-group mb-2 d-flex flex-column-reverse">
                 <input type="text" class="form-control bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white"
                        id="username" name="username" value="{{ user.username }}">
-                <label for="username">{% trans "frontend.profile.username" %}</label>
+                <label for="username">{% trans "frontend.profile.username" context "default" %}</label>
             </div>
 
             <!-- Email -->
             <div class="form-group mb-2 d-flex flex-column-reverse">
                 <input type="email" class="form-control bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white"
                        id="email" name="email" value="{{ user.email }}">
-                <label for="email">{% trans "frontend.profile.email" %}</label>
+                <label for="email">{% trans "frontend.profile.email" context "default" %}</label>
             </div>
         </div>
     </div>
 
     <div class="text-start pb-2">
-        <button type="submit" class="btn btn-primary">{% trans "frontend.profile.save" %}</button>
+        <button type="submit" class="btn btn-primary">{% trans "frontend.profile.save" context "default" %}</button>
     </div>
 </form>
 
@@ -38,12 +38,12 @@
     {% csrf_token %}
 
     <div class="card mb-3 text-white border-0 rounded-2">
-        <div class="card-header background-middle h4">{% trans "frontend.profile.password" %}</div>
+        <div class="card-header background-middle h4">{% trans "frontend.profile.password" context "default" %}</div>
 
         <div class="card-body background-light">
             <!-- Old password -->
             <div class="form-group mb-2 d-flex flex-column">
-                <label>{% trans "frontend.profile.old_password" %}</label>
+                <label>{% trans "frontend.profile.old_password" context "default" %}</label>
                 <div class="input-group flex-row">
                     <input type="password" class="form-control bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white" name="old_password" id="old_password" required>
                     <button class="btn btn-outline-secondary ml-2" type="button" onclick="togglePass('old_password', this)">
@@ -54,7 +54,7 @@
 
             <!-- New password 1 -->
             <div class="form-group mb-2 d-flex flex-column">
-                <label>{% trans "frontend.profile.new_password" %}</label>
+                <label>{% trans "frontend.profile.new_password" context "default" %}</label>
                 <div class="input-group flex-row">
                     <input type="password" class="form-control bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white" name="new_password1" id="new_password1" required>
                     <button class="btn btn-outline-secondary ml-2" type="button" onclick="togglePass('new_password1', this)">
@@ -65,7 +65,7 @@
 
             <!-- New password 2 -->
             <div class="form-group mb-2 d-flex flex-column">
-                <label>{% trans "frontend.profile.confirm_password" %}</label>
+                <label>{% trans "frontend.profile.confirm_password" context "default" %}</label>
                 <div class="input-group flex-row">
                 <input type="password" class="form-control bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white" name="new_password2" id="new_password2" required>
                     <button class="btn btn-outline-secondary ml-2" type="button" onclick="togglePass('new_password2', this)">
@@ -77,7 +77,7 @@
     </div>
 
     <div class="text-start pb-2">
-        <button type="submit" class="btn btn-primary">{% trans "frontend.profile.change_password" %}</button>
+        <button type="submit" class="btn btn-primary">{% trans "frontend.profile.change_password" context "default" %}</button>
     </div>
 </form>
 {% endblock %}

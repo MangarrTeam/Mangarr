@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import pgettext
 
 # Create your models here.
 class UserProfile(models.Model):
@@ -9,14 +9,14 @@ class UserProfile(models.Model):
 
     class Meta:
         permissions = [
-            ('can_restart', _('permission.can_restart')),
-            ('can_change_settings', _('permission.can_change_settings')),
-            ('can_invite', _('permission.can_invite')),
-            ('can_manage_plugins', _('permission.can_manage_plugins')),
-            ('can_search', _('permission.can_search')),
-            ('can_request', _('permission.can_request')),
-            ('can_manage_requests', _('permission.can_manage_requests')),
-            ('can_download', _('permission.can_download')),
+            ('can_restart', pgettext('default', 'permission.can_restart')),
+            ('can_change_settings', pgettext('default', 'permission.can_change_settings')),
+            ('can_invite', pgettext('default', 'permission.can_invite')),
+            ('can_manage_plugins', pgettext('default', 'permission.can_manage_plugins')),
+            ('can_search', pgettext('default', 'permission.can_search')),
+            ('can_request', pgettext('default', 'permission.can_request')),
+            ('can_manage_requests', pgettext('default', 'permission.can_manage_requests')),
+            ('can_download', pgettext('default', 'permission.can_download')),
         ]
 
 

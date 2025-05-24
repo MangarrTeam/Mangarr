@@ -66,10 +66,10 @@
 
     <div class="meta mb-3 small text-muted">
       {% if manga.genres.value %}
-        <div><strong>{% trans "frontend.manga_view.genres" %}:</strong> {{ manga.genres.value }}</div>
+        <div><strong>{% trans "frontend.manga_view.genres" context "default" %}:</strong> {{ manga.genres.value }}</div>
       {% endif %}
       {% if manga.tags.value %}
-        <div><strong>{% trans "frontend.manga_view.tags" %}:</strong> {{ manga.tags.value }}</div>
+        <div><strong>{% trans "frontend.manga_view.tags" context "default" %}:</strong> {{ manga.tags.value }}</div>
       {% endif %}
     </div>
 
@@ -77,7 +77,7 @@
     {{ manga.description.value }}
   </p>
   <button class="read-more btn btn-sm btn-outline-light mt-2 w-100 text-truncate" data-target="#manga-desc-{{ manga.id }}">
-          {% trans "frontend.manga_view.show_more" %}
+          {% trans "frontend.manga_view.show_more" context "default" %}
     </button>
   </div>
 </div>
@@ -94,7 +94,7 @@
          aria-controls="volume-{{ forloop.counter }}"
          style="cursor: pointer;">
       <h5 class="mb-0 text-truncate" style="max-width: 90%;">
-        {% blocktrans with volume=volume.volume pages=volume.pages.downloaded of_pages=volume.pages.of %}{{pages}}/{{of_pages}} frontend.manga_view.volume {{ volume }}{% endblocktrans %}
+        {% blocktrans with volume=volume.volume pages=volume.pages.downloaded of_pages=volume.pages.of context "How many chapters from total is downloaded from which volume" %}{{pages}}/{{of_pages}} frontend.manga_view.volume {{ volume }}{% endblocktrans %}
       </h5>
       <i class="fas {% if forloop.first %}fa-chevron-up{% else %}fa-chevron-down{% endif %} transition"></i>
     </div>
@@ -105,12 +105,12 @@
         <table class="table background-dark table-sm mb-0">
           <thead class="background-light">
             <tr>
-              <th class="text-center border-0 py-2 col-1">{% trans "frontend.manga_view.number" %}</th>
-              <th class="border-0 py-2">{% trans "frontend.manga_view.title" %}</th>
-              <th class="text-center border-0 py-2 col-2">{% trans "frontend.manga_view.isbn" %}</th>
-              <th class="text-center border-0 py-2 col-2">{% trans "frontend.manga_view.localization" %}</th>
-              <th class="text-center border-0 py-2 col-1">{% trans "frontend.manga_view.page_count" %}</th>
-              <th class="text-center border-0 py-2 col-1">{% trans "frontend.manga_view.downloaded" %}</th>
+              <th class="text-center border-0 py-2 col-1">{% trans "frontend.manga_view.number" context "default" %}</th>
+              <th class="border-0 py-2">{% trans "frontend.manga_view.title" context "default" %}</th>
+              <th class="text-center border-0 py-2 col-2">{% trans "frontend.manga_view.isbn" context "default" %}</th>
+              <th class="text-center border-0 py-2 col-2">{% trans "frontend.manga_view.localization" context "default" %}</th>
+              <th class="text-center border-0 py-2 col-1">{% trans "frontend.manga_view.page_count" context "default" %}</th>
+              <th class="text-center border-0 py-2 col-1">{% trans "frontend.manga_view.downloaded" context "default" %}</th>
             </tr>
           </thead>
           <tbody class="chapter-table background-dark">
@@ -131,7 +131,7 @@
             </tr>
             {% empty %}
             <tr>
-              <td colspan="6" class="text-center">{% trans "frontend.manga_view.no_chapters_available" %}</td>
+              <td colspan="6" class="text-center">{% trans "frontend.manga_view.no_chapters_available" context "default" %}</td>
             </tr>
             {% endfor %}
           </tbody>
@@ -172,9 +172,9 @@
 
     $p.toggleClass('collapsed');
     if ($p.hasClass('collapsed')) {
-      $link.text('{% trans "frontend.manga_view.show_more" %}');
+      $link.text('{% trans "frontend.manga_view.show_more" context "default" %}');
     } else {
-      $link.text('{% trans "frontend.manga_view.show_less" %}');
+      $link.text('{% trans "frontend.manga_view.show_less" context "default" %}');
     }
   });
 });

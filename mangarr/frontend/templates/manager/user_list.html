@@ -5,23 +5,23 @@
 {% load my_reverse %}
 {% load get_full_uri %}
 
-{% block title %}{% trans "frontend.manager_panel.manager_panel" %}{% endblock %}
+{% block title %}{% trans "frontend.manager_panel.manager_panel" context "default" %}{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/user_list.css' %}">
 {% endblock %}
 
 {% block content %}
-<h1 class="text-white">{% trans "frontend.manager_panel.user_management" %}</h1>
+<h1 class="text-white">{% trans "frontend.manager_panel.user_management" context "default" %}</h1>
 
 <div class="table-responsive">
   <table class="table table-hover text-center">
     <thead class="background-middle text-white">
       <tr>
-        <th class="border-0 text-nowrap">{% trans "frontend.manager_panel.username" %}</th>
-        <th class="border-0 text-nowrap">{% trans "frontend.manager_panel.email" %}</th>
-        <th class="border-0 text-nowrap">{% trans "frontend.manager_panel.is_manager" %}</th>
-        <th class="border-0 col-3 text-nowrap">{% trans "frontend.manager_panel.actions" %}</th>
+        <th class="border-0 text-nowrap">{% trans "frontend.manager_panel.username" context "default" %}</th>
+        <th class="border-0 text-nowrap">{% trans "frontend.manager_panel.email" context "default" %}</th>
+        <th class="border-0 text-nowrap">{% trans "frontend.manager_panel.is_manager" context "default" %}</th>
+        <th class="border-0 col-3 text-nowrap">{% trans "frontend.manager_panel.actions" context "default" %}</th>
       </tr>
     </thead>
     <tbody class="background-light text-white">
@@ -35,16 +35,16 @@
         </td>
         <td class="align-middle text-nowrap">
           {% if luser.is_staff or luser.is_superuser %}
-            {% trans 'frontend.manager_panel.is_manager_yes' %}
+            {% trans 'frontend.manager_panel.is_manager_yes' context 'default' %}
           {% else %}
-            {% trans 'frontend.manager_panel.is_manager_no' %}
+            {% trans 'frontend.manager_panel.is_manager_no' context 'default' %}
           {% endif %}
         </td>
         <td>
           <div class="d-flex flex-column">
             {% if not luser.is_superuser %}
             <button class="btn btn-sm btn-primary my-1" onclick="editPermissions({{ luser.id }}, '{{ luser.username }}')">
-              {% trans "frontend.manager_panel.edit_permissions" %}
+              {% trans "frontend.manager_panel.edit_permissions" context "default" %}
             </button>
             {% if user.is_superuser %}
             <form method="post" action="{% url 'toggle_user_staff' luser.id %}" class="my-1">
@@ -52,20 +52,20 @@
               <input type="hidden" value="manager_user_list" id="zource" name="zource">
               {% if not luser.is_staff %}
               <button type="submit" class="btn btn-sm btn-info w-100" onclick="editPermissions({{ luser.id }}, '{{ luser.username }}')">
-                {% trans "frontend.manager_panel.add_staff" %}
+                {% trans "frontend.manager_panel.add_staff" context "default" %}
               </button>
               {% else %}
               <button type="submit" class="btn btn-sm btn-warning w-100" onclick="editPermissions({{ luser.id }}, '{{ luser.username }}')">
-                {% trans "frontend.manager_panel.remove_staff" %}
+                {% trans "frontend.manager_panel.remove_staff" context "default" %}
               </button>
               {% endif %}
             </form>
             {% endif %}
             <button class="btn btn-sm btn-danger my-1" onclick="confirmDeleteUser({{ luser.id }}, '{{ luser.username }}')">
-              {% trans "frontend.manager_panel.delete" %}
+              {% trans "frontend.manager_panel.delete" context "default" %}
             </button>
             {% else %}
-            <em>{% trans "frontend.manager_panel.superuser" %}</em>
+            <em>{% trans "frontend.manager_panel.superuser" context "default" %}</em>
             {% endif %}
           </div>
         </td>
@@ -77,11 +77,11 @@
 
 
 <div class="d-flex pt-4">
-  <h1 class="text-white">{% trans "frontend.manager_panel.register_tokens_management" %}</h1>
+  <h1 class="text-white">{% trans "frontend.manager_panel.register_tokens_management" context "default" %}</h1>
   {% if user|has_permition:"database.can_invite" %}
   <form method="post" action="{% url 'create_register_token' %}" class="ml-auto my-auto">
     {% csrf_token %}
-    <button type="submit" class="btn btn-sm btn-success py-2">{% trans "frontend.manager_panel.register_token_add" %}</button>
+    <button type="submit" class="btn btn-sm btn-success py-2">{% blocktrans with icon="<i class='fa fa-plus'></i>" context "Add button with plus icon" %}{{icon}} frontend.manager_panel.register_token_add{% endblocktrans %}</button>
   </form>
   {% endif %}
 </div>
@@ -89,8 +89,8 @@
 <table class="table table-hover text-center">
     <thead class="background-middle text-white">
         <tr>
-            <th class="border-0 ">{% trans "frontend.manager_panel.token" %}</th>
-            <th class="border-0 col-3">{% trans "frontend.manager_panel.actions" %}</th>
+            <th class="border-0 ">{% trans "frontend.manager_panel.token" context "default" %}</th>
+            <th class="border-0 col-3">{% trans "frontend.manager_panel.actions" context "default" %}</th>
         </tr>
     </thead>
     <tbody class="background-light text-white">
@@ -100,13 +100,13 @@
             <td>
               <div class="d-flex flex-column">
                 <button class="btn btn-sm btn-success my-1" onclick="copyToken('{{ register_token.token }}')">
-                    {% trans "frontend.manager_panel.copy_token" %}
+                    {% trans "frontend.manager_panel.copy_token" context "default" %}
                 </button>
                 <button class="btn btn-sm btn-success my-1" onclick="copyTokenURL('{{ register_token.token }}')">
-                    {% trans "frontend.manager_panel.copy_token_url" %}
+                    {% trans "frontend.manager_panel.copy_token_url" context "default" %}
                 </button>
                 <button class="btn btn-sm btn-danger my-1" onclick="confirmDeleteToken({{ register_token.id }}, '{{ register_token.token }}')">
-                    {% trans "frontend.manager_panel.delete" %}
+                    {% trans "frontend.manager_panel.delete" context "default" %}
                 </button>
               </div>
             </td>
@@ -114,7 +114,7 @@
         
         {% empty %}
           <tr>
-              <td colspan="2" class="text-center">{% trans "frontend.manager_panel.no_register_tokens_found" %}</td>
+              <td colspan="2" class="text-center">{% trans "frontend.manager_panel.no_register_tokens_found" context "default" %}</td>
           </tr>
         {% endfor %}
     </tbody>
@@ -126,7 +126,7 @@
     <div class="modal-content text-white">
       <div class="modal-header background-dark border-0">
         <h5 class="modal-title" id="permissionModalLabel">
-          {% trans "frontend.manager_panel.edit_permissions_for" %}
+          {% trans "frontend.manager_panel.edit_permissions_for" context "default" %}
         </h5>
         <button type="button" class="btn-close" data-dismiss="modal"></button>
       </div>
@@ -139,8 +139,8 @@
         </form>
       </div>
       <div class="modal-footer background-light border-0">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "frontend.manager_panel.close" %}</button>
-        <button type="button" class="btn btn-success" onclick="submitPermissions()">{% trans "frontend.manager_panel.save_changes" %}</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "frontend.manager_panel.close" context "default" %}</button>
+        <button type="button" class="btn btn-success" onclick="submitPermissions()">{% trans "frontend.manager_panel.save_changes" context "default" %}</button>
       </div>
     </div>
   </div>
@@ -151,15 +151,15 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content text-white">
       <div class="modal-header background-light border-0">
-        <h5 class="modal-title">{% trans "frontend.manager_panel.confirm_delete_title" %}</h5>
+        <h5 class="modal-title">{% trans "frontend.manager_panel.confirm_delete_title" context "default" %}</h5>
         <button type="button" class="btn-close" data-dismiss="modal"></button>
       </div>
       <div class="modal-body background-light border-0">
-        <p>{% trans "frontend.manager_panel.confirm_delete_user_text" %}</p>
+        <p>{% trans "frontend.manager_panel.confirm_delete_user_text" context "default" %}</p>
       </div>
       <div class="modal-footer background-light border-0">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "frontend.manager_panel.cancel" %}</button>
-        <button type="button" class="btn btn-danger" onclick="deleteUser()">{% trans "frontend.manager_panel.confirm" %}</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "frontend.manager_panel.cancel" context "default" %}</button>
+        <button type="button" class="btn btn-danger" onclick="deleteUser()">{% trans "frontend.manager_panel.confirm" context "default" %}</button>
       </div>
     </div>
   </div>
@@ -170,15 +170,15 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content text-white">
       <div class="modal-header background-light border-0">
-        <h5 class="modal-title">{% trans "frontend.manager_panel.confirm_delete_title" %}</h5>
+        <h5 class="modal-title">{% trans "frontend.manager_panel.confirm_delete_title" context "default" %}</h5>
         <button type="button" class="btn-close" data-dismiss="modal"></button>
       </div>
       <div class="modal-body background-light border-0">
-        <p class="text-truncate mb-0">{% trans "frontend.manager_panel.confirm_delete_token_text" %}</p>
+        <p class="text-truncate mb-0">{% trans "frontend.manager_panel.confirm_delete_token_text" context "default" %}</p>
       </div>
       <div class="modal-footer background-light border-0">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "frontend.manager_panel.cancel" %}</button>
-        <button type="button" class="btn btn-danger" onclick="deleteToken()">{% trans "frontend.manager_panel.confirm" %}</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "frontend.manager_panel.cancel" context "default" %}</button>
+        <button type="button" class="btn btn-danger" onclick="deleteToken()">{% trans "frontend.manager_panel.confirm" context "default" %}</button>
       </div>
     </div>
   </div>

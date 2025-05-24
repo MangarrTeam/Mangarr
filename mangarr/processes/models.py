@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import pgettext
 from database.manga.models import Manga, Volume, Chapter
 from plugins.base import MangaPluginBase
 from plugins.functions import get_plugin_by_key
@@ -32,10 +32,10 @@ def make_json_serializable(value):
 
 # Create your models here.
 class ProcessBase(models.Model):
-    plugin = models.CharField(verbose_name=_("processes.models.process_base.plugin"))
-    url = models.URLField(verbose_name=_("processes.models.process_base.url"), unique=True)
-    last_run = models.DateTimeField(blank=True, null=True, verbose_name=_("processes.models.process_base.last_run"))
-    arguments = models.JSONField(default=dict, verbose_name=_("processes.models.process_base.arguments"), blank=True)
+    plugin = models.CharField(verbose_name=pgettext("default", "processes.models.process_base.plugin"))
+    url = models.URLField(verbose_name=pgettext("default", "processes.models.process_base.url"), unique=True)
+    last_run = models.DateTimeField(blank=True, null=True, verbose_name=pgettext("default", "processes.models.process_base.last_run"))
+    arguments = models.JSONField(default=dict, verbose_name=pgettext("default", "processes.models.process_base.arguments"), blank=True)
     
     class Meta:
         abstract = True
@@ -120,7 +120,7 @@ class PageWasNone(Exception):
     pass
    
 class MonitorChapter(ProcessBase):
-    manga = models.ForeignKey(Manga, on_delete=models.CASCADE, verbose_name=_("processes.models.monitor_chapter.manga"))
+    manga = models.ForeignKey(Manga, on_delete=models.CASCADE, verbose_name=pgettext("default", "processes.models.monitor_chapter.manga"))
     def update(self):
         try:
             plugin = self.get_plugin()

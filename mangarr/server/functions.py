@@ -7,7 +7,6 @@ import logging
 from django.db import models
 from django.contrib.auth.decorators import user_passes_test
 
-
 logger = logging.getLogger(__name__)
 
 def restart_app() -> None:

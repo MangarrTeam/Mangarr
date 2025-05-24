@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import pgettext
 from database.data_types.models import StringType, BoolType, IntType, FloatType, DateType, FormatsEnumType, AgeRatingEnumType, StatusEnumType
 from datetime import datetime
 from plugins.base import Formats, AgeRating
@@ -25,9 +25,9 @@ def get_choices() -> list[tuple]:
     ]
 
 class MangaRequest(models.Model):
-    plugin = models.CharField(max_length=64, choices=get_choices(), verbose_name=_("database.models.manga_request.plugin"))
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name=_("database.models.manga_request.requested_by"))
-    variables = models.JSONField(default=dict, blank=True, verbose_name=_("database.models.manga_request.variables"))
+    plugin = models.CharField(max_length=64, choices=get_choices(), verbose_name=pgettext("Plugin field name for MangaRequest", "database.models.manga_request.plugin"))
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name=pgettext("User FK field name for MangaRequest", "database.models.manga_request.requested_by"))
+    variables = models.JSONField(default=dict, blank=True, verbose_name=pgettext("Variables JSON field name for MangaRequest", "database.models.manga_request.variables"))
 
 
     @staticmethod
@@ -67,17 +67,17 @@ from django.db.models.fields.related import OneToOneField, ManyToManyField, Many
 from django.db.models.fields import DateTimeField, CharField
 
 class Manga(models.Model):
-    plugin = models.CharField(max_length=64, choices=get_choices(), verbose_name=_("database.models.manga_request.plugin"))
-    name = models.OneToOneField(StringType, on_delete=models.PROTECT, null=True, verbose_name=_("database.models.manga.name"), related_name="manga_name")
-    localized_name = models.OneToOneField(StringType, on_delete=models.PROTECT, null=True, verbose_name=_("database.models.manga.localized_name"), related_name="manga_localized_name")
-    description = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.manga.description"), related_name="manga_description")
-    genres = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.manga.genres"), related_name="manga_genres")
-    tags = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.manga.tags"), related_name="manga_tags")
-    date_added = models.DateTimeField(auto_now_add=True)
-    last_update = models.DateTimeField(auto_now_add=True)
-    complete = models.BooleanField(default=False)
-    url = models.URLField(verbose_name=_("database.models.manga.url"), unique=True)
-    arguments = models.JSONField(default=dict, verbose_name=_("processes.models.manga.arguments"), blank=True)
+    plugin = models.CharField(max_length=64, choices=get_choices(), verbose_name=pgettext("Plugin field name for Manga", "database.models.manga_request.plugin"))
+    name = models.OneToOneField(StringType, on_delete=models.PROTECT, null=True, verbose_name=pgettext("Name field name for Manga", "database.models.manga.name"), related_name="manga_name")
+    localized_name = models.OneToOneField(StringType, on_delete=models.PROTECT, null=True, verbose_name=pgettext("Localized name field name for Manga", "database.models.manga.localized_name"), related_name="manga_localized_name")
+    description = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Description field name for Manga", "database.models.manga.description"), related_name="manga_description")
+    genres = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Genres field name for Manga", "database.models.manga.genres"), related_name="manga_genres")
+    tags = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Tags field name for Manga", "database.models.manga.tags"), related_name="manga_tags")
+    date_added = models.DateTimeField(auto_now_add=True, verbose_name=pgettext("Date added field name for Manga", "database.models.manga.date_added"))
+    last_update = models.DateTimeField(auto_now_add=True, verbose_name=pgettext("Last update field name for Manga", "database.models.manga.last_update"))
+    complete = models.BooleanField(default=False, verbose_name=pgettext("Complete field name for Manga", "database.models.manga.complete"))
+    url = models.URLField(verbose_name=pgettext("URL field name for Manga", "database.models.manga.url"), unique=True)
+    arguments = models.JSONField(default=dict, verbose_name=pgettext("Arguments JSON field name for Manga", "processes.models.manga.arguments"), blank=True)
 
     def __str__(self) -> str:
         return self.name.value
@@ -168,17 +168,17 @@ class Manga(models.Model):
 
 class MangaANLink(models.Model):
     manga = models.ForeignKey(Manga, on_delete=models.CASCADE, related_name="alternative_names")
-    alternative_names = models.OneToOneField(StringType, on_delete=models.PROTECT, verbose_name=_("database.models.manga.alternative_names"), related_name="manga_alternative_names")
+    alternative_names = models.OneToOneField(StringType, on_delete=models.PROTECT, verbose_name=pgettext("Alternative names field name for MangaANLink", "database.models.manga.alternative_names"), related_name="manga_alternative_names")
 
     def __str__(self) -> str:
         return self.alternative_names.value_str
 
 class Volume(models.Model):
-    name = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.volume.name"), related_name="volume_name")
-    description = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.volume.description"), related_name="volume_description")
-    number = models.OneToOneField(FloatType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.volume.number"), related_name="volume_number")
-    manga = models.ForeignKey(Manga, on_delete=models.CASCADE, related_name="volumes")
-    arguments = models.JSONField(default=dict, verbose_name=_("processes.models.volume.arguments"), blank=True)
+    name = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Name field name for Volume", "database.models.volume.name"), related_name="volume_name")
+    description = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Description field name for Volume", "database.models.volume.description"), related_name="volume_description")
+    number = models.OneToOneField(FloatType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Number field name for Volume", "database.models.volume.number"), related_name="volume_number")
+    manga = models.ForeignKey(Manga, on_delete=models.CASCADE, related_name="volumes", verbose_name=pgettext("Mange FK field name for Volume", "processes.models.volume.manga"))
+    arguments = models.JSONField(default=dict, verbose_name=pgettext("Arguments JSON field name for Volume", "processes.models.volume.arguments"), blank=True)
 
 
     @property
@@ -236,31 +236,31 @@ class Volume(models.Model):
         }
 
 class Chapter(models.Model):
-    name = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.chapter.name"), related_name="chapter_name")
-    description = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.chapter.description"), related_name="chapter_description")
-    localization = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.chapter.localization"), related_name="chapter_localization")
-    publisher = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.chapter.publisher"), related_name="chapter_publisher")
-    imprint = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.chapter.imprint"), related_name="chapter_imprint")
-    release_date = models.OneToOneField(DateType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.chapter.release_date"), related_name="chapter_release_date")
-    writer = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.chapter.writer"), related_name="chapter_writer")
-    penciller = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.chapter.penciller"), related_name="chapter_penciller")
-    inker = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.chapter.inker"), related_name="chapter_inker")
-    colorist = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.chapter.colorist"), related_name="chapter_colorist")
-    letterer = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.chapter.letterer"), related_name="chapter_letterer")
-    cover_artist = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.chapter.cover_artist"), related_name="chapter_cover_artist")
-    editor = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.chapter.editor"), related_name="chapter_editor")
-    translator = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.chapter.translator"), related_name="chapter_translator")
-    page_count = models.OneToOneField(IntType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.chapter.page_count"), related_name="chapter_page_count")
-    format = models.OneToOneField(FormatsEnumType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.chapter.format"), related_name="chapter_format")
-    age_rating = models.OneToOneField(AgeRatingEnumType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.chapter.age_rating"), related_name="chapter_age_rating")
-    isbn = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.chapter.isbn"), related_name="chapter_isbn")
-    number = models.OneToOneField(FloatType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_("database.models.chapter.number"), related_name="chapter_number")
-    volume = models.ForeignKey(Volume, on_delete=models.CASCADE, related_name="chapters")
-    file = models.CharField(max_length=512, default=FILE_PATH_ROOT, verbose_name=_("database.models.chapter.file_path"))
-    url = models.URLField(verbose_name=_("database.models.chapter.url"), unique=True)
-    source_url = models.URLField(verbose_name=_("database.models.chapter.source_url"))
-    downloaded = models.BooleanField(default=False, verbose_name=_("database.models.chapter.downloaded"))
-    arguments = models.JSONField(default=dict, verbose_name=_("processes.models.manga.arguments"), blank=True)
+    name = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Name field name for Chapter", "database.models.chapter.name"), related_name="chapter_name")
+    description = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Description field name for Chapter", "database.models.chapter.description"), related_name="chapter_description")
+    localization = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Localization field name for Chapter", "database.models.chapter.localization"), related_name="chapter_localization")
+    publisher = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Publisher field name for Chapter", "database.models.chapter.publisher"), related_name="chapter_publisher")
+    imprint = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Imprint field name for Chapter", "database.models.chapter.imprint"), related_name="chapter_imprint")
+    release_date = models.OneToOneField(DateType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Release date field name for Chapter", "database.models.chapter.release_date"), related_name="chapter_release_date")
+    writer = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Writer field name for Chapter", "database.models.chapter.writer"), related_name="chapter_writer")
+    penciller = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Penciller field name for Chapter", "database.models.chapter.penciller"), related_name="chapter_penciller")
+    inker = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Inker field name for Chapter", "database.models.chapter.inker"), related_name="chapter_inker")
+    colorist = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Colorist field name for Chapter", "database.models.chapter.colorist"), related_name="chapter_colorist")
+    letterer = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Letterer field name for Chapter", "database.models.chapter.letterer"), related_name="chapter_letterer")
+    cover_artist = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Cover artist field name for Chapter", "database.models.chapter.cover_artist"), related_name="chapter_cover_artist")
+    editor = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Editor field name for Chapter", "database.models.chapter.editor"), related_name="chapter_editor")
+    translator = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Translator field name for Chapter", "database.models.chapter.translator"), related_name="chapter_translator")
+    page_count = models.OneToOneField(IntType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Page count field name for Chapter", "database.models.chapter.page_count"), related_name="chapter_page_count")
+    format = models.OneToOneField(FormatsEnumType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Format field name for Chapter", "database.models.chapter.format"), related_name="chapter_format")
+    age_rating = models.OneToOneField(AgeRatingEnumType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Age rating field name for Chapter", "database.models.chapter.age_rating"), related_name="chapter_age_rating")
+    isbn = models.OneToOneField(StringType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("ISBN field name for Chapter", "database.models.chapter.isbn"), related_name="chapter_isbn")
+    number = models.OneToOneField(FloatType, on_delete=models.PROTECT, blank=True, null=True, verbose_name=pgettext("Number field name for Chapter", "database.models.chapter.number"), related_name="chapter_number")
+    volume = models.ForeignKey(Volume, on_delete=models.CASCADE, related_name="chapters", verbose_name=pgettext("Volume FK field name for Chapter", "database.models.chapter.volume"))
+    file = models.CharField(max_length=512, default=FILE_PATH_ROOT, verbose_name=pgettext("File field name for Chapter", "database.models.chapter.file_path"))
+    url = models.URLField(verbose_name=pgettext("URL field name for Chapter", "database.models.chapter.url"), unique=True)
+    source_url = models.URLField(verbose_name=pgettext("Source URL field name for Chapter", "database.models.chapter.source_url"))
+    downloaded = models.BooleanField(default=False, verbose_name=pgettext("Downloaded field name for Chapter", "database.models.chapter.downloaded"))
+    arguments = models.JSONField(default=dict, verbose_name=pgettext("Arguments JSON field name for Chapter", "processes.models.manga.arguments"), blank=True)
 
 
     @property

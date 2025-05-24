@@ -3,7 +3,7 @@
 {% load i18n %}
 {% load has_permition %}
 
-{% block title %}{% trans "frontend.search.search" %}{% endblock %}
+{% block title %}{% trans "frontend.search.search" context "default" %}{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/manga/search.css' %}">
@@ -18,7 +18,7 @@
         type="text"
         name="query"
         id="query"
-        placeholder="{% trans 'frontend.search.search_manga' %}"
+        placeholder="{% trans 'frontend.search.search_manga' context 'default' %}"
         class="form-control border-top-0 border-left-0 border-right-0 rounded-0 bg-transparent text-white w-100"
         required
       />
@@ -31,7 +31,7 @@
         class="form-control custom-select bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white"
         required
       >
-        <option value="" class="background-dark" disabled selected>{% trans "frontend.search.select_plugin" %}</option>
+        <option value="" class="background-dark" disabled selected>{% trans "frontend.search.select_plugin" context "default" %}</option>
         {% for category, domain, name, languages in plugins %}
         <option
             value="{{ domain }}"
@@ -53,7 +53,7 @@
             class="form-control custom-select bg-transparent border-left-0 border-top-0 border-right-0 rounded-0"
             disabled
         >
-            <option value="" class="background-dark" disabled selected>{% trans "frontend.search.select_language" %}</option>
+            <option value="" class="background-dark" disabled selected>{% trans "frontend.search.select_language" context "default" %}</option>
         </select>
     </div>
 
@@ -62,7 +62,7 @@
         type="submit"
         class="btn btn-primary btn-block"
       >
-        {% trans 'frontend.search.search' %}
+        {% trans 'frontend.search.search' context 'default' %}
       </button>
     </div>
   </form>
@@ -115,7 +115,7 @@ document.getElementById('search-form').addEventListener('submit', async (e) => {
         const img = document.createElement("img");
         img.className = "card-img";
         img.src = "/uploads/static/no_thumbnail.png";
-        img.alt = '{% trans "frontend.manga_search.no_manga_found" %}';
+        img.alt = '{% trans "frontend.manga_search.no_manga_found" context "default" %}';
         img.style.objectFit = "cover";
         img.style.height = "100%";
 
@@ -125,8 +125,8 @@ document.getElementById('search-form').addEventListener('submit', async (e) => {
 
         const title = document.createElement("h6");
         title.className = "card-title mb-1 w-100 multi-line-title";
-        title.title = '{% trans "frontend.manga_search.no_manga_found" %}';
-        title.textContent = '{% trans "frontend.manga_search.no_manga_found" %}';
+        title.title = '{% trans "frontend.manga_search.no_manga_found" context "default" %}';
+        title.textContent = '{% trans "frontend.manga_search.no_manga_found" context "default" %}';
 
         card.appendChild(img);
         overlay.appendChild(title);
@@ -179,7 +179,7 @@ document.getElementById('search-form').addEventListener('submit', async (e) => {
         {% if user|has_permition:'database.can_request' %}
         const requestBtn = document.createElement("button");
         requestBtn.className = `btn btn-sm btn-primary mr-2 w-100 text-truncate ${manga["monitored"] ? "d-none" : ""}`;
-        requestBtn.textContent = '{% trans "frontend.search.request" %}';
+        requestBtn.textContent = '{% trans "frontend.search.request" context "default" %}';
         requestBtn.disabled = manga["requested"];
         requestBtn.onclick = async (e) => {
             e.preventDefault();
@@ -238,7 +238,7 @@ document.getElementById('search-form').addEventListener('submit', async (e) => {
         {% if user|has_permition:'database.can_download' %}
         const monitorBtn = document.createElement("button");
         monitorBtn.className = "btn btn-sm btn-secondary w-100 text-truncate";
-        monitorBtn.textContent = '{% trans "frontend.search.monitor" %}';
+        monitorBtn.textContent = '{% trans "frontend.search.monitor" context "default" %}';
         monitorBtn.disabled = manga["monitored"];
         monitorBtn.onclick = async (e) => {
             e.preventDefault();
@@ -302,7 +302,7 @@ document.getElementById('search-form').addEventListener('submit', async (e) => {
         // View button
         const viewBtn = document.createElement("button");
         viewBtn.className = "btn btn-sm btn-outline-light mt-2 w-100 text-truncate";
-        viewBtn.textContent = '{% trans "frontend.search.view" %}';
+        viewBtn.textContent = '{% trans "frontend.search.view" context "default" %}';
         viewBtn.onclick = (e) => {
             e.preventDefault();
             window.open(manga.url, "_blank", "noopener,noreferrer");
@@ -353,7 +353,7 @@ document.getElementById('plugin-select').addEventListener('change', (e) => {
         const defaultOption = document.createElement('option');
         defaultOption.disabled = true;
         defaultOption.selected = true;
-        defaultOption.textContent = '{{ _("frontend.search.select_language") }}';
+        defaultOption.textContent = '{% trans "frontend.search.select_language" context "default" %}';
         defaultOption.className = "background-dark";
         languageSelect.appendChild(defaultOption);
 
@@ -369,7 +369,7 @@ document.getElementById('plugin-select').addEventListener('change', (e) => {
         const noLangOption = document.createElement('option');
         noLangOption.disabled = true;
         noLangOption.selected = true;
-        noLangOption.textContent = '{{ _("frontend.search.no_language") }}';
+        noLangOption.textContent = '{% trans "frontend.search.no_language" context "default" %}';
         languageSelect.appendChild(noLangOption);
     }
 });

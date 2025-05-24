@@ -10,7 +10,7 @@ from plugins.base import NO_THUMBNAIL_URL
 from server.settings import CONFIG, LANGUAGE_CODE
 from server.settings import LANGUAGES, LANGUAGES_KEYS
 from database.users.models import User, UserProfile, RegisterToken
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import pgettext
 
 logger = logging.getLogger(__name__)
 
@@ -89,20 +89,20 @@ def settings_view(request):
     settings_dict = {
         'Django': {
             'secret_key': {
-                'section_name': _('frontend.settings.django'),
-                'item_name': _('frontend.settings.secret_key'),
+                'section_name': pgettext('default', 'frontend.settings.django'),
+                'item_name': pgettext('default', 'frontend.settings.secret_key'),
                 'value': CONFIG.get('Django', 'secret_key'),
                 'type': 'pass'
             },
             'debug': {
-                'section_name': _('frontend.settings.django'),
-                'item_name': _('frontend.settings.debug'),
+                'section_name': pgettext('default', 'frontend.settings.django'),
+                'item_name': pgettext('default', 'frontend.settings.debug'),
                 'value': CONFIG.get('Django', 'debug'),
                 'type': 'bool'
             },
             'tz': {
-                'section_name': _('frontend.settings.django'),
-                'item_name': _('frontend.settings.tz'),
+                'section_name': pgettext('default', 'frontend.settings.django'),
+                'item_name': pgettext('default', 'frontend.settings.tz'),
                 'value': CONFIG.get('Django', 'tz'),
                 'type': 'choice',
                 'choices': [{'key': tzs, 'value': tzs } for tzs in pytz.common_timezones]
@@ -110,38 +110,38 @@ def settings_view(request):
         },
         'Plugins': {
             'nsfw_allowed': {
-                'section_name': _('frontend.settings.plugins'),
-                'item_name': _('frontend.settings.nsfw_allowed'),
+                'section_name': pgettext('default', 'frontend.settings.plugins'),
+                'item_name': pgettext('default', 'frontend.settings.nsfw_allowed'),
                 'value': CONFIG.get('Plugins', 'nsfw_allowed'),
                 'type': 'bool'
             }
         },
         'Networking': {
             'allowed_hosts': {
-                'section_name': _('frontend.settings.networking'),
-                'item_name': _('frontend.settings.allowed_hosts'),
+                'section_name': pgettext('default', 'frontend.settings.networking'),
+                'item_name': pgettext('default', 'frontend.settings.allowed_hosts'),
                 'value': CONFIG.get('Networking', 'allowed_hosts'),
                 'type': 'list'
             },
             'csrf_trusted_origins': {
-                'section_name': _('frontend.settings.networking'),
-                'item_name': _('frontend.settings.csrf_trusted_origins'),
+                'section_name': pgettext('default', 'frontend.settings.networking'),
+                'item_name': pgettext('default', 'frontend.settings.csrf_trusted_origins'),
                 'value': CONFIG.get('Networking', 'csrf_trusted_origins'),
                 'type': 'list'
             }
         },
         'Other': {
             'instance_name': {
-                'section_name': _('frontend.settings.other'),
-                'item_name': _('frontend.settings.instance_name'),
+                'section_name': pgettext('default', 'frontend.settings.other'),
+                'item_name': pgettext('default', 'frontend.settings.instance_name'),
                 'value': CONFIG.get('Other', 'instance_name'),
                 'type': 'str'
             }
         },
         'Localization': {
             'locale': {
-                'section_name': _('frontend.settings.localization'),
-                'item_name': _('frontend.settings.locale'),
+                'section_name': pgettext('default', 'frontend.settings.localization'),
+                'item_name': pgettext('default', 'frontend.settings.locale'),
                 'value': CONFIG.get('Localization', 'locale', fallback=LANGUAGE_CODE, choices=LANGUAGES_KEYS),
                 'type': 'choice',
                 'choices': [ {'key': l[0], 'value': l[1] } for l in LANGUAGES]
@@ -223,7 +223,7 @@ from database.manga.models import MangaRequest, Manga
 
 @permission_required("database.can_manage_requests")
 def manga_requests(request):
-    return custom_render(request, "manga/requests.html", {"manga_requests": [{"plugin": r.plugin, "manga": r.variables, "pk": r.pk, "user": r.user or _("frontend.request_manga.user_unknown")} for r in MangaRequest.objects.all()]})
+    return custom_render(request, "manga/requests.html", {"manga_requests": [{"plugin": r.plugin, "manga": r.variables, "pk": r.pk, "user": r.user or pgettext("default", "frontend.request_manga.user_unknown")} for r in MangaRequest.objects.all()]})
 
 @login_required
 def manga_monitored(request):

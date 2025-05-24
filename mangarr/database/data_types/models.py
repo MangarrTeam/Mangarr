@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import pgettext
 from abc import abstractmethod
 from datetime import datetime
 import time
@@ -38,7 +38,7 @@ class BaseType(models.Model):
 
 
 class StringType(BaseType):
-    _data = models.JSONField(default=dict, blank=True, verbose_name=_("database.data_types_models.data"))
+    _data = models.JSONField(default=dict, blank=True, verbose_name=pgettext("default", "database.data_types.models.data"))
 
     @property
     def value(self) -> str:
@@ -82,7 +82,7 @@ class StringType(BaseType):
         return title or f"StringType: {self.pk}"
 
 class BoolType(BaseType):
-    _data = models.JSONField(default=dict, blank=True, verbose_name=_("database.data_types_models.data"))
+    _data = models.JSONField(default=dict, blank=True, verbose_name=pgettext("default", "database.data_types.models.data"))
 
     @property
     def value(self) -> str:
@@ -127,7 +127,7 @@ class BoolType(BaseType):
 
 
 class IntType(BaseType):
-    _data = models.JSONField(default=dict, blank=True, verbose_name=_("database.data_types_models.data"))
+    _data = models.JSONField(default=dict, blank=True, verbose_name=pgettext("default", "database.data_types.models.data"))
 
     @property
     def value(self) -> str:
@@ -172,7 +172,7 @@ class IntType(BaseType):
 
 
 class FloatType(BaseType):
-    _data = models.JSONField(default=dict, blank=True, verbose_name=_("database.data_types_models.data"))
+    _data = models.JSONField(default=dict, blank=True, verbose_name=pgettext("default", "database.data_types.models.data"))
 
     @property
     def value(self) -> str:
@@ -216,7 +216,7 @@ class FloatType(BaseType):
         return title or f"FloatType: {self.pk}"
     
 class DateType(BaseType):
-    _data = models.JSONField(default=dict, blank=True, verbose_name=_("database.data_types_models.data"))
+    _data = models.JSONField(default=dict, blank=True, verbose_name=pgettext("default", "database.data_types.models.data"))
 
     @property
     def value(self) -> datetime:
@@ -273,7 +273,7 @@ class DateType(BaseType):
 from plugins.base import Formats, AgeRating, Status
     
 class FormatsEnumType(BaseType):
-    _data = models.JSONField(default=dict, blank=True, verbose_name=_("database.data_types_models.data"))
+    _data = models.JSONField(default=dict, blank=True, verbose_name=pgettext("default", "database.data_types.models.data"))
 
     @property
     def value(self) -> Formats:
@@ -317,7 +317,7 @@ class FormatsEnumType(BaseType):
         return title or f"FormatsEnumType: {self.pk}"
     
 class AgeRatingEnumType(BaseType):
-    _data = models.JSONField(default=dict, blank=True, verbose_name=_("database.data_types_models.data"))
+    _data = models.JSONField(default=dict, blank=True, verbose_name=pgettext("default", "database.data_types.models.data"))
 
     @property
     def value(self) -> AgeRating:
@@ -361,7 +361,7 @@ class AgeRatingEnumType(BaseType):
         return title or f"AgeRatingEnumType: {self.pk}"
     
 class StatusEnumType(BaseType):
-    _data = models.JSONField(default=dict, blank=True, verbose_name=_("database.data_types_models.data"))
+    _data = models.JSONField(default=dict, blank=True, verbose_name=pgettext("default", "database.data_types.models.data"))
 
     @property
     def value(self) -> Status:
