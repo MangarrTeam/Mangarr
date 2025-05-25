@@ -229,7 +229,7 @@ def manga_requests(request):
 
 @login_required
 def manga_monitored(request):
-    return custom_render(request, "manga/monitored.html", {"mangas": [{"name": m.name.value, "url": m.arguments.get("url"), "cover": m.arguments.get("cover", NO_THUMBNAIL_URL), "pk": m.pk, "plugin": m.get_plugin_display()} for m in Manga.objects.all()]})
+    return custom_render(request, "manga/monitored.html", {"mangas": sorted([{"name": m.name.value, "url": m.arguments.get("url"), "cover": m.arguments.get("cover", NO_THUMBNAIL_URL), "pk": m.pk, "plugin": m.get_plugin_display()} for m in Manga.objects.all()], key=lambda x: x["name"])})
 
 @login_required
 def manga_view(request, pk):
