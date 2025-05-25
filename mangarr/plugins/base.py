@@ -130,7 +130,7 @@ class MangaPluginBase(ABC, metaclass=EnforceStructureMeta):
     
     @enforce_structure(search_manga_dict())
     @abstractmethod
-    def search_manga(self, query:str, nsfw:bool, language:str) -> list[dict]:
+    def search_manga(self, query:str, language:str) -> list[dict]:
         """
         Gets list of mangas parsed from query
 
@@ -175,40 +175,6 @@ class MangaPluginBase(ABC, metaclass=EnforceStructureMeta):
             dict: Dictionary of manga metadata like name, description etc.
         """
         pass
-
-    """
-    @final
-    @staticmethod
-    def get_volume_dict() -> dict:
-        \"""
-        Gets predefined volume dictionary
-
-        Returns:
-            dict: Predefined volume dictionary
-        \"""
-        return {
-            "name": "",
-            "description": "",
-            "number": 1.0,
-            "arguments": {},
-            "url": None,
-        }
-
-    @enforce_structure(get_volume_dict())
-    @abstractmethod
-    def get_volumes(self, arguments:dict) -> list[dict]:
-        \"""
-        Gets list of volumes urls and other neccessary parameters
-
-        Args:
-            arguments (dict): Dictionary of arguments
-
-        Returns:
-            list[dict]: List of volumes urls and other neccessary parameters
-        \"""
-        pass
-    """
-
 
     @final
     @staticmethod
