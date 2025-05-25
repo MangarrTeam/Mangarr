@@ -34,7 +34,27 @@
     </div>
 </form>
 
-<form method="post" action="{% url 'change_password' %}" class="pt-5" id="password-form">
+<div class="background-dark card mb-3 text-white border-0 rounded-2 pt-5">
+    <div class="card-header background-middle h4">{% trans "frontend.profile.token" context "Token title in profile settings" %}</div>
+    <div class="card-body background-light">
+        <!-- Token -->
+        <div class="form-group mb-2 d-flex flex-column-reverse">
+            <div class="input-group flex-row">
+                <input type="text" class="form-control bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white"
+                        id="token" name="token" value="{{ user.profile.token }}" readonly>
+                <button class="btn btn-outline-success ml-2" type="button" onclick="copy_token()">
+                    <i class="fa fa-copy" id="copyTokenIcon"></i>
+                </button>
+                <button class="btn btn-outline-secondary ml-2" type="button" onclick="regen_token()">
+                    <i class="fa fa-refresh"></i>
+                </button>
+            </div>
+            <label for="token">{% trans "frontend.profile.token" context "Token title in profile settings" %}</label>
+        </div>
+    </div>
+</div>
+
+<form method="post" action="{% url 'change_password' %}" id="password-form">
     {% csrf_token %}
 
     <div class="card mb-3 text-white border-0 rounded-2">
@@ -95,6 +115,44 @@
             btn.querySelector("i").classList.remove("fa-eye");
             btn.querySelector("i").classList.add("fa-eye-slash");
         }
+    }
+
+    var token = "{{ user.profile.token }}";
+
+    function copy_token() {
+        navigator.clipboard.writeText(token)
+            .then(() => {
+                const copy_token = document.getElementById('copyTokenIcon');
+                copy_token.classList.replace("fa-copy", "fa-check");
+                setTimeout(() => {
+                    copy_token.classList.replace("fa-check", "fa-copy");
+                }, 1000);
+            })
+            .catch(err => {
+                console.error('Copy failed:', err);
+            });
+    }
+    
+    function regen_token() {
+        const token_input = document.getElementById('token');
+        fetch(`{% url 'regenerate_token' %}?token=${token}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => {
+            if (!response.ok) throw new Error("Request failed");
+            return response.json();
+        })
+        .then(data => {
+            token = data["token"];
+            token_input.value = token;
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+        
     }
 </script>
 {% endblock %}

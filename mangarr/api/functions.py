@@ -18,7 +18,7 @@ def manga_is_requested(manga:dict) -> bool:
 
 def validate_token(func):
     def wrapper(request):
-        token = request.GET.get("token")
+        token = request.GET.get("token") or request.POST.get("token")
         if token is None:
             return JsonResponse({"error": "Token is not defined"}, status=401)
         if not UserProfile.objects.filter(token=token).exists():

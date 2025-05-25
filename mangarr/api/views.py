@@ -8,6 +8,7 @@ from database.manga.models import Manga, Volume, Chapter
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.decorators import permission_required
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 import json
 from .functions import manga_is_monitored, manga_is_requested, validate_token
@@ -41,6 +42,13 @@ def search(request):
             chapters.append(chapter.json_serialized())
 
     return JsonResponse({"mangas": mangas, "volumes": volumes, "chapters": chapters})
+
+@csrf_exempt
+@require_POST
+@validate_token
+def regenerate_token_view(request):
+    token = UserProfile.objects.get(token=request.GET.get("token")).regenerate_token()
+    return JsonResponse(data={"success": True, "token": token})
 
 
 @superuser_or_staff_required
