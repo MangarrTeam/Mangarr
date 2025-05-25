@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mangarr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-25 01:55+0200\n"
-"PO-Revision-Date: 2025-05-25 00:12\n"
+"POT-Creation-Date: 2025-05-25 15:18+0200\n"
+"PO-Revision-Date: 2025-05-25 13:33\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "Language: cs_CZ\n"
@@ -17,11 +17,8 @@ msgstr ""
 "X-Crowdin-File: /main/mangarr/locale/en/LC_MESSAGES/django.po\n"
 "X-Crowdin-File-ID: 12\n"
 
-#: .\database\data_types\models.py:41 .\database\data_types\models.py:85
-#: .\database\data_types\models.py:130 .\database\data_types\models.py:175
-#: .\database\data_types\models.py:219 .\database\data_types\models.py:276
-#: .\database\data_types\models.py:320 .\database\data_types\models.py:364
-msgctxt "default"
+#: .\database\data_types\models.py:27
+msgctxt "Data field name for Type models"
 msgid "database.data_types.models.data"
 msgstr "Data"
 
@@ -251,117 +248,122 @@ msgid "processes.models.manga.arguments"
 msgstr "Argumenty"
 
 #: .\database\users\models.py:12
-msgctxt "default"
+msgctxt "Permission value for 'Can restart'"
 msgid "permission.can_restart"
 msgstr "Může restartovat"
 
 #: .\database\users\models.py:13
-msgctxt "default"
+msgctxt "Permission value for 'Can change settings'"
 msgid "permission.can_change_settings"
 msgstr "Může měnit nastavení"
 
 #: .\database\users\models.py:14
-msgctxt "default"
+msgctxt "Permission value for 'Can invite'"
 msgid "permission.can_invite"
 msgstr "Může pozvat"
 
 #: .\database\users\models.py:15
-msgctxt "default"
+msgctxt "Permission value for 'Can manage plugins'"
 msgid "permission.can_manage_plugins"
 msgstr "Může spravovat pluginy"
 
 #: .\database\users\models.py:16
-msgctxt "default"
+msgctxt "Permission value for 'Can search'"
 msgid "permission.can_search"
 msgstr "Může hledat"
 
 #: .\database\users\models.py:17
-msgctxt "default"
+msgctxt "Permission value for 'Can request'"
 msgid "permission.can_request"
 msgstr "Může vyžádat"
 
 #: .\database\users\models.py:18
-msgctxt "default"
+msgctxt "Permission value for 'Can manage requests'"
 msgid "permission.can_manage_requests"
 msgstr "Může spravovat žádosti"
 
 #: .\database\users\models.py:19
-msgctxt "default"
+msgctxt "Permission value for 'Can download'"
 msgid "permission.can_download"
 msgstr "Může stahovat"
 
 #: .\frontend\templates\base.html:22
-msgctxt "default"
+msgctxt "Placeholder for search bar"
 msgid "frontend.base.search"
 msgstr "Hledat..."
 
-#: .\frontend\templates\base.html:45 .\frontend\templates\base.html:103
-msgctxt "default"
+#: .\frontend\templates\base.html:45
+msgctxt "Title for profile redirect"
 msgid "frontend.base.profile"
 msgstr "Profil"
 
 #: .\frontend\templates\base.html:48
-msgctxt "default"
+msgctxt "Title for logout"
 msgid "frontend.base.logout"
 msgstr "Odhlásit"
 
 #: .\frontend\templates\base.html:72
-msgctxt "default"
+msgctxt "Title for manga"
 msgid "frontend.base.manga"
 msgstr "Manga"
 
 #: .\frontend\templates\base.html:77
-msgctxt "default"
+msgctxt "Title for monitored manga"
 msgid "frontend.base.monitored_manga"
 msgstr "Sledovaná manga"
 
 #: .\frontend\templates\base.html:81
-msgctxt "default"
+msgctxt "Title for manga search"
 msgid "frontend.base.manga_search"
 msgstr "Vyhledat mangu"
 
 #: .\frontend\templates\base.html:86
-msgctxt "default"
+msgctxt "Title for manga requests"
 msgid "frontend.base.manga_requests"
 msgstr "Vyžádané mangy"
 
 #: .\frontend\templates\base.html:98
-msgctxt "default"
+msgctxt "Title for settings"
 msgid "frontend.base.settings"
 msgstr "Nastavení"
 
+#: .\frontend\templates\base.html:103
+msgctxt "Title for profile"
+msgid "frontend.base.profile"
+msgstr "Profil"
+
 #: .\frontend\templates\base.html:107
-msgctxt "default"
+msgctxt "Title for server settings"
 msgid "frontend.base.server_settings"
 msgstr "Nastavení serveru"
 
 #: .\frontend\templates\base.html:112
-msgctxt "default"
+msgctxt "Title for plugin manager"
 msgid "frontend.base.plugin_manager"
 msgstr "Správce pluginů"
 
 #: .\frontend\templates\base.html:117
-msgctxt "default"
+msgctxt "Title for users"
 msgid "frontend.base.users"
 msgstr "Uživatelé"
 
 #: .\frontend\templates\base.html:123
-msgctxt "default"
+msgctxt "Title for restart"
 msgid "frontend.base.restart"
 msgstr "Restartovat"
 
 #: .\frontend\templates\base.html:190
-msgctxt "default"
+msgctxt "Title for mangas in search bar"
 msgid "frontend.base.mangas"
 msgstr "Mangy"
 
 #: .\frontend\templates\base.html:204
-msgctxt "default"
+msgctxt "Title for volumes in search bar"
 msgid "frontend.base.volumes"
 msgstr "Svazky"
 
 #: .\frontend\templates\base.html:218
-msgctxt "default"
+msgctxt "Title for chapters in search bar"
 msgid "frontend.base.chapters"
 msgstr "Kapitoly"
 
@@ -381,79 +383,79 @@ msgid "frontend.base.page_downloading $CURRENT_PAGE/$OF_PAGES"
 msgstr "Strana $CURRENT_PAGE/$OF_PAGES"
 
 #: .\frontend\templates\index.html:5
-msgctxt "default"
+msgctxt "Title for index"
 msgid "frontend.index.index"
 msgstr "Index"
 
 #: .\frontend\templates\manager\user_list.html:8
-msgctxt "default"
+msgctxt "Title for manager panel"
 msgid "frontend.manager_panel.manager_panel"
 msgstr "Panel správce"
 
 #: .\frontend\templates\manager\user_list.html:15
-msgctxt "default"
+msgctxt "Title for user management"
 msgid "frontend.manager_panel.user_management"
 msgstr "Správa uživatelů"
 
 #: .\frontend\templates\manager\user_list.html:21
-msgctxt "default"
+msgctxt "Caption for username column"
 msgid "frontend.manager_panel.username"
 msgstr "Uživatelské jméno"
 
 #: .\frontend\templates\manager\user_list.html:22
-msgctxt "default"
+msgctxt "Caption for email column"
 msgid "frontend.manager_panel.email"
 msgstr "Email"
 
 #: .\frontend\templates\manager\user_list.html:23
-msgctxt "default"
+msgctxt "Caption for is manager column"
 msgid "frontend.manager_panel.is_manager"
 msgstr "Je správce"
 
 #: .\frontend\templates\manager\user_list.html:24
 #: .\frontend\templates\manager\user_list.html:93
-msgctxt "default"
+msgctxt "Caption for actions column"
 msgid "frontend.manager_panel.actions"
 msgstr "Akce"
 
 #: .\frontend\templates\manager\user_list.html:38
-msgctxt "default"
+msgctxt "Test yes for is manager"
 msgid "frontend.manager_panel.is_manager_yes"
 msgstr "Ano"
 
 #: .\frontend\templates\manager\user_list.html:40
-msgctxt "default"
+msgctxt "Test no for is manager"
 msgid "frontend.manager_panel.is_manager_no"
 msgstr "Ne"
 
 #: .\frontend\templates\manager\user_list.html:47
-msgctxt "default"
+msgctxt "Edit permissions button title"
 msgid "frontend.manager_panel.edit_permissions"
 msgstr "Upravit práva"
 
 #: .\frontend\templates\manager\user_list.html:55
-msgctxt "default"
+msgctxt "Add staff button title"
 msgid "frontend.manager_panel.add_staff"
 msgstr "Přidat správce"
 
 #: .\frontend\templates\manager\user_list.html:59
-msgctxt "default"
+msgctxt "Remove staff button title"
 msgid "frontend.manager_panel.remove_staff"
 msgstr "Odebrat správce"
 
 #: .\frontend\templates\manager\user_list.html:65
 #: .\frontend\templates\manager\user_list.html:109
-msgctxt "default"
+msgctxt "Delete button title"
 msgid "frontend.manager_panel.delete"
 msgstr "Smazat"
 
 #: .\frontend\templates\manager\user_list.html:68
-msgctxt "default"
+msgctxt "Superuser text"
 msgid "frontend.manager_panel.superuser"
 msgstr "Superuser"
 
 #: .\frontend\templates\manager\user_list.html:80
-msgctxt "default"
+msgctxt "Register tokens management title"
 msgid "frontend.manager_panel.register_tokens_management"
 msgstr "Správa registračních tokenů"
 
@@ -464,187 +466,186 @@ msgid "%(icon)s frontend.manager_panel.register_token_add"
 msgstr "%(icon)s Vytvořit"
 
 #: .\frontend\templates\manager\user_list.html:92
-msgctxt "default"
+msgctxt "Caption for token column"
 msgid "frontend.manager_panel.token"
 msgstr "Token"
 
 #: .\frontend\templates\manager\user_list.html:103
-msgctxt "default"
+msgctxt "Title for copy token"
 msgid "frontend.manager_panel.copy_token"
 msgstr "Zkopírovat token"
 
 #: .\frontend\templates\manager\user_list.html:106
-msgctxt "default"
+msgctxt "Title for copy token URL"
 msgid "frontend.manager_panel.copy_token_url"
 msgstr "Zkopírovat token s URL"
 
 #: .\frontend\templates\manager\user_list.html:117
-msgctxt "default"
+msgctxt "Text if there is no tokens"
 msgid "frontend.manager_panel.no_register_tokens_found"
 msgstr "Nebyly nalezeny žádné registrační tokeny"
 
 #: .\frontend\templates\manager\user_list.html:129
 #, python-format
-msgctxt "default"
+msgctxt "Edit permission for 'user' title"
 msgid "frontend.manager_panel.edit_permissions_for %(username)s"
 msgstr "Upravit práva pro %(username)s"
 
 #: .\frontend\templates\manager\user_list.html:142
-msgctxt "default"
+msgctxt "Close button text"
 msgid "frontend.manager_panel.close"
 msgstr "Zavřít"
 
 #: .\frontend\templates\manager\user_list.html:143
-msgctxt "default"
+msgctxt "Save button text"
 msgid "frontend.manager_panel.save_changes"
 msgstr "Uložit změny"
 
 #: .\frontend\templates\manager\user_list.html:154
 #: .\frontend\templates\manager\user_list.html:173
-msgctxt "default"
+msgctxt "Confirm delete title"
 msgid "frontend.manager_panel.confirm_delete_title"
 msgstr "Opravdu smazat"
 
 #: .\frontend\templates\manager\user_list.html:158
 #, python-format
-msgctxt "default"
+msgctxt "Confirm delete of 'user' title"
 msgid "frontend.manager_panel.confirm_delete_user_text %(username)s"
 msgstr "Jste si jisti že chcete smazat %(username)s?"
 
 #: .\frontend\templates\manager\user_list.html:161
 #: .\frontend\templates\manager\user_list.html:180
-msgctxt "default"
+msgctxt "Cancel button text"
 msgid "frontend.manager_panel.cancel"
 msgstr "Zrušit"
 
 #: .\frontend\templates\manager\user_list.html:162
 #: .\frontend\templates\manager\user_list.html:181
-msgctxt "default"
+msgctxt "Confirm button text"
 msgid "frontend.manager_panel.confirm"
 msgstr "Potvrdit"
 
 #: .\frontend\templates\manager\user_list.html:177
 #, python-format
-msgctxt "default"
+msgctxt "Confirm delete of 'token' title"
 msgid "frontend.manager_panel.confirm_delete_token_text %(token)s"
 msgstr "Jste si jisti že chcete smazat %(token)s?"
 
 #: .\frontend\templates\manga\monitored.html:5
-msgctxt "default"
+msgctxt "Title for monitored mangas"
 msgid "frontend.manga_monitored.monitored_mangas"
 msgstr "Monitorované mangy"
 
 #: .\frontend\templates\manga\monitored.html:27
-msgctxt "default"
+msgctxt "View manga button text"
 msgid "frontend.manga_monitored.view"
 msgstr "Zobrazit"
 
 #: .\frontend\templates\manga\monitored.html:30
-msgctxt "default"
+msgctxt "View original manga button text"
 msgid "frontend.manga_monitored.view_original"
 msgstr "Zobrazit originál"
 
 #: .\frontend\templates\manga\monitored.html:43
 #: .\frontend\templates\manga\monitored.html:47
-msgctxt "default"
+msgctxt "No manga found text"
 msgid "frontend.manga_monitored.none_found"
 msgstr "Žádné mangy"
 
 #: .\frontend\templates\manga\requests.html:6
-#: .\frontend\templates\manga\requests.html:14
-msgctxt "default"
+msgctxt "Request manga title"
 msgid "frontend.manga_requests.requested_manga"
 msgstr "Vyžádané mangy"
 
-#: .\frontend\templates\manga\requests.html:29
+#: .\frontend\templates\manga\requests.html:27
 #, python-format
 msgctxt "User which requested the Manga"
 msgid "frontend.manga_requests.requested_by %(name)s"
 msgstr "Vyžádal: %(name)s"
 
-#: .\frontend\templates\manga\requests.html:33
-msgctxt "default"
+#: .\frontend\templates\manga\requests.html:31
+msgctxt "Approve button text"
 msgid "frontend.manga_requests.approve"
 msgstr "Schválit"
 
-#: .\frontend\templates\manga\requests.html:34
-msgctxt "default"
+#: .\frontend\templates\manga\requests.html:32
+msgctxt "Deny button text"
 msgid "frontend.manga_requests.deny"
 msgstr "Zamítnout"
 
-#: .\frontend\templates\manga\requests.html:36
-msgctxt "default"
+#: .\frontend\templates\manga\requests.html:34
+msgctxt "View button text"
 msgid "frontend.manga_requests.view"
 msgstr "Otevřít na stránce"
 
-#: .\frontend\templates\manga\requests.html:47
-#: .\frontend\templates\manga\requests.html:51
-msgctxt "default"
+#: .\frontend\templates\manga\requests.html:45
+#: .\frontend\templates\manga\requests.html:49
+msgctxt "No request found text"
 msgid "frontend.manga_requests.none_found"
 msgstr "Žádné žádosti"
 
 #: .\frontend\templates\manga\search.html:6
 #: .\frontend\templates\manga\search.html:65
-msgctxt "default"
+msgctxt "Search title"
 msgid "frontend.search.search"
 msgstr "Hledat"
 
 #: .\frontend\templates\manga\search.html:21
-msgctxt "default"
+msgctxt "Search placeholder"
 msgid "frontend.search.search_manga"
 msgstr "Vyhledávání..."
 
 #: .\frontend\templates\manga\search.html:34
-msgctxt "default"
+msgctxt "Select plugin title"
 msgid "frontend.search.select_plugin"
 msgstr "Vybrat plugin"
 
 #: .\frontend\templates\manga\search.html:56
 #: .\frontend\templates\manga\search.html:356
-msgctxt "default"
+msgctxt "Select language title"
 msgid "frontend.search.select_language"
 msgstr "Vyberte jazyk"
 
 #: .\frontend\templates\manga\search.html:118
 #: .\frontend\templates\manga\search.html:128
 #: .\frontend\templates\manga\search.html:129
-msgctxt "default"
+msgctxt "No manga found text"
 msgid "frontend.manga_search.no_manga_found"
 msgstr "Nenalezena žádná manga"
 
 #: .\frontend\templates\manga\search.html:182
-msgctxt "default"
+msgctxt "Request button text"
 msgid "frontend.search.request"
 msgstr "Vyžádat"
 
 #: .\frontend\templates\manga\search.html:241
-msgctxt "default"
+msgctxt "Monitor button text"
 msgid "frontend.search.monitor"
 msgstr "Monitorovat"
 
 #: .\frontend\templates\manga\search.html:305
-msgctxt "default"
+msgctxt "View button text"
 msgid "frontend.search.view"
 msgstr "Otevřít na stránce"
 
 #: .\frontend\templates\manga\search.html:372
-msgctxt "default"
+msgctxt "No language text"
 msgid "frontend.search.no_language"
 msgstr "Žádný jazyk"
 
 #: .\frontend\templates\manga\view.html:69
-msgctxt "default"
+msgctxt "Genres text"
 msgid "frontend.manga_view.genres"
 msgstr "Žánry"
 
 #: .\frontend\templates\manga\view.html:72
-msgctxt "default"
+msgctxt "Tags text"
 msgid "frontend.manga_view.tags"
 msgstr "Tagy"
 
 #: .\frontend\templates\manga\view.html:80
 #: .\frontend\templates\manga\view.html:175
-msgctxt "default"
+msgctxt "Show more button text"
 msgid "frontend.manga_view.show_more"
 msgstr "Zobrazit více"
 
@@ -655,314 +656,314 @@ msgid "%(pages)s/%(of_pages)s frontend.manga_view.volume %(volume)s"
 msgstr "%(pages)s/%(of_pages)s Svazek %(volume)s"
 
 #: .\frontend\templates\manga\view.html:108
-msgctxt "default"
+msgctxt "Caption for number column"
 msgid "frontend.manga_view.number"
 msgstr "Číslo"
 
 #: .\frontend\templates\manga\view.html:109
-msgctxt "default"
+msgctxt "Caption for title column"
 msgid "frontend.manga_view.title"
 msgstr "Název"
 
 #: .\frontend\templates\manga\view.html:110
-msgctxt "default"
+msgctxt "Caption for ISBN column"
 msgid "frontend.manga_view.isbn"
 msgstr "ISBN"
 
 #: .\frontend\templates\manga\view.html:111
-msgctxt "default"
+msgctxt "Caption for localization column"
 msgid "frontend.manga_view.localization"
 msgstr "Lokalizace"
 
 #: .\frontend\templates\manga\view.html:112
-msgctxt "default"
+msgctxt "Caption for page count column"
 msgid "frontend.manga_view.page_count"
 msgstr "Počet stran"
 
 #: .\frontend\templates\manga\view.html:113
-msgctxt "default"
+msgctxt "Caption for downloaded column"
 msgid "frontend.manga_view.downloaded"
 msgstr "Staženo"
 
 #: .\frontend\templates\manga\view.html:134
-msgctxt "default"
+msgctxt "No chapters found text"
 msgid "frontend.manga_view.no_chapters_available"
 msgstr "Žádné kapitoly"
 
 #: .\frontend\templates\manga\view.html:177
-msgctxt "default"
+msgctxt "Show less button text"
 msgid "frontend.manga_view.show_less"
 msgstr "Zobrazit méně"
 
-#: .\frontend\templates\profile.html:5 .\frontend\templates\profile.html:8
-msgctxt "default"
+#: .\frontend\templates\profile.html:5
+msgctxt "Profile title"
 msgid "frontend.profile.profile"
 msgstr "Profil"
 
-#: .\frontend\templates\profile.html:14
-msgctxt "default"
+#: .\frontend\templates\profile.html:12
+msgctxt "Account section title"
 msgid "frontend.profile.account"
 msgstr "Účet"
 
-#: .\frontend\templates\profile.html:20
-msgctxt "default"
+#: .\frontend\templates\profile.html:18
+msgctxt "Label for username"
 msgid "frontend.profile.username"
 msgstr "Uživatelské jméno"
 
-#: .\frontend\templates\profile.html:27
-msgctxt "default"
+#: .\frontend\templates\profile.html:25
+msgctxt "Label for email"
 msgid "frontend.profile.email"
 msgstr "Email"
 
-#: .\frontend\templates\profile.html:33
-msgctxt "default"
+#: .\frontend\templates\profile.html:31
+msgctxt "Save button text"
 msgid "frontend.profile.save"
 msgstr "Uložit"
 
-#: .\frontend\templates\profile.html:38 .\frontend\templates\profile.html:49
+#: .\frontend\templates\profile.html:36 .\frontend\templates\profile.html:50
 msgctxt "Token title in profile settings"
 msgid "frontend.profile.token"
 msgstr "Token"
 
-#: .\frontend\templates\profile.html:58
-msgctxt "default"
+#: .\frontend\templates\profile.html:59
+msgctxt "Password section title"
 msgid "frontend.profile.password"
 msgstr "Heslo"
 
-#: .\frontend\templates\profile.html:63
-msgctxt "default"
+#: .\frontend\templates\profile.html:64
+msgctxt "Old password label"
 msgid "frontend.profile.old_password"
 msgstr "Původní heslo"
 
-#: .\frontend\templates\profile.html:74
-msgctxt "default"
+#: .\frontend\templates\profile.html:75
+msgctxt "New password label"
 msgid "frontend.profile.new_password"
 msgstr "Nové heslo"
 
-#: .\frontend\templates\profile.html:85
-msgctxt "default"
+#: .\frontend\templates\profile.html:86
+msgctxt "Confirm password label"
 msgid "frontend.profile.confirm_password"
 msgstr "Potvrzení hesla"
 
-#: .\frontend\templates\profile.html:97
-msgctxt "default"
+#: .\frontend\templates\profile.html:98
+msgctxt "Change password button text"
 msgid "frontend.profile.change_password"
 msgstr "Změnit heslo"
 
-#: .\frontend\templates\settings.html:9 .\frontend\templates\settings.html:13
-msgctxt "default"
+#: .\frontend\templates\settings.html:9 .\frontend\templates\settings.html:14
+msgctxt "Settings title"
 msgid "frontend.settings.settings"
 msgstr "Nastavení"
 
-#: .\frontend\templates\settings.html:76
-msgctxt "default"
-msgid "frontend.settings.save_settings"
-msgstr "Uložit nastavení"
-
-#: .\frontend\templates\settings.html:78
+#: .\frontend\templates\settings.html:16
 #: .\plugins\templates\plugins\manager.html:13
-msgctxt "default"
+msgctxt "Restart button text"
 msgid "frontend.settings.restart"
 msgstr "Restartovat"
 
+#: .\frontend\templates\settings.html:82
+msgctxt "Save setting button text"
+msgid "frontend.settings.save_settings"
+msgstr "Uložit nastavení"
+
 #: .\frontend\views.py:92 .\frontend\views.py:98 .\frontend\views.py:104
-msgctxt "default"
+msgctxt "Django section title"
 msgid "frontend.settings.django"
 msgstr "Django"
 
 #: .\frontend\views.py:93
-msgctxt "default"
+msgctxt "Secret key label"
 msgid "frontend.settings.secret_key"
 msgstr "Soukromý klíč"
 
 #: .\frontend\views.py:99
-msgctxt "default"
+msgctxt "Debug label"
 msgid "frontend.settings.debug"
 msgstr "Debug"
 
 #: .\frontend\views.py:105
-msgctxt "default"
+msgctxt "TZ label"
 msgid "frontend.settings.tz"
 msgstr "TZ"
 
 #: .\frontend\views.py:113
-msgctxt "default"
+msgctxt "Plugins section title"
 msgid "frontend.settings.plugins"
 msgstr "Pluginy"
 
 #: .\frontend\views.py:114
-msgctxt "default"
+msgctxt "NSFW allowed label"
 msgid "frontend.settings.nsfw_allowed"
 msgstr "NSFW povoleno"
 
 #: .\frontend\views.py:121 .\frontend\views.py:127
-msgctxt "default"
+msgctxt "Networking section title"
 msgid "frontend.settings.networking"
 msgstr "Síť"
 
 #: .\frontend\views.py:122
-msgctxt "default"
+msgctxt "Allowed hosts label"
 msgid "frontend.settings.allowed_hosts"
 msgstr "Povolení hostitelé"
 
 #: .\frontend\views.py:128
-msgctxt "default"
+msgctxt "CSRF trusted origins label"
 msgid "frontend.settings.csrf_trusted_origins"
 msgstr "Důvěryhodné zdroje CSRF"
 
 #: .\frontend\views.py:135
-msgctxt "default"
+msgctxt "Other section title"
 msgid "frontend.settings.other"
 msgstr "Jiné"
 
 #: .\frontend\views.py:136
-msgctxt "default"
+msgctxt "Instance name label"
 msgid "frontend.settings.instance_name"
 msgstr "Jméno instance"
 
 #: .\frontend\views.py:143
-msgctxt "default"
+msgctxt "Localization section title"
 msgid "frontend.settings.localization"
 msgstr "Lokalizace"
 
 #: .\frontend\views.py:144
-msgctxt "default"
+msgctxt "Locale label"
 msgid "frontend.settings.locale"
 msgstr "Lokalita"
 
 #: .\frontend\views.py:226
-msgctxt "default"
+msgctxt "User unknown text"
 msgid "frontend.request_manga.user_unknown"
 msgstr "Neznámý uživatel"
 
 #: .\plugins\templates\plugins\manager.html:6
 #: .\plugins\templates\plugins\manager.html:10
-msgctxt "default"
+msgctxt "Plugin manager title"
 msgid "plugins.manager.plugin_manager"
 msgstr "Správce pluginů"
 
 #: .\plugins\templates\plugins\manager.html:18
-msgctxt "default"
+msgctxt "Core plugins section title"
 msgid "plugins.manager.core_plugins"
 msgstr "Hlavní pluginy"
 
 #: .\plugins\templates\plugins\manager.html:23
 #: .\plugins\templates\plugins\manager.html:94
-msgctxt "default"
+msgctxt "Caption for name column"
 msgid "plugins.manager.name"
 msgstr "Název"
 
 #: .\plugins\templates\plugins\manager.html:24
 #: .\plugins\templates\plugins\manager.html:95
-msgctxt "default"
+msgctxt "Caption for domain column"
 msgid "plugins.manager.domain"
 msgstr "Doména"
 
 #: .\plugins\templates\plugins\manager.html:25
 #: .\plugins\templates\plugins\manager.html:96
-msgctxt "default"
+msgctxt "Caption for version column"
 msgid "plugins.manager.version"
 msgstr "Verze"
 
 #: .\plugins\templates\plugins\manager.html:26
 #: .\plugins\templates\plugins\manager.html:97
-msgctxt "default"
+msgctxt "Caption for status column"
 msgid "plugins.manager.status"
 msgstr "Status"
 
 #: .\plugins\templates\plugins\manager.html:27
 #: .\plugins\templates\plugins\manager.html:98
-msgctxt "default"
+msgctxt "Caption for actions column"
 msgid "plugins.manager.action"
 msgstr "Akce"
 
 #: .\plugins\templates\plugins\manager.html:38
 #: .\plugins\templates\plugins\manager.html:109
-msgctxt "default"
+msgctxt "Installed text"
 msgid "plugins.manager.installed"
 msgstr "Instalováno"
 
 #: .\plugins\templates\plugins\manager.html:40
 #: .\plugins\templates\plugins\manager.html:111
-msgctxt "default"
+msgctxt "Update available text"
 msgid "plugins.manager.update_available"
 msgstr "Dostupná aktualizace"
 
 #: .\plugins\templates\plugins\manager.html:46
 #: .\plugins\templates\plugins\manager.html:117
-msgctxt "default"
+msgctxt "Local only text"
 msgid "plugins.manager.local_only"
 msgstr "Pouze lokální"
 
 #: .\plugins\templates\plugins\manager.html:48
 #: .\plugins\templates\plugins\manager.html:119
-msgctxt "default"
+msgctxt "Downloaded text"
 msgid "plugins.manager.downloaded"
 msgstr "Staženo"
 
 #: .\plugins\templates\plugins\manager.html:50
 #: .\plugins\templates\plugins\manager.html:121
-msgctxt "default"
+msgctxt "Not downloaded text"
 msgid "plugins.manager.not_downloaded"
 msgstr "Nestaženo"
 
 #: .\plugins\templates\plugins\manager.html:60
 #: .\plugins\templates\plugins\manager.html:131
-msgctxt "default"
+msgctxt "Update button text"
 msgid "plugins.manager.update"
 msgstr "Aktualizovat"
 
 #: .\plugins\templates\plugins\manager.html:62
 #: .\plugins\templates\plugins\manager.html:133
-msgctxt "default"
+msgctxt "Redownload button text"
 msgid "plugins.manager.redownload"
 msgstr "Stáhnout znovu"
 
 #: .\plugins\templates\plugins\manager.html:68
 #: .\plugins\templates\plugins\manager.html:139
-msgctxt "default"
+msgctxt "Delete button text"
 msgid "plugins.manager.delete"
 msgstr "Smazat"
 
 #: .\plugins\templates\plugins\manager.html:73
 #: .\plugins\templates\plugins\manager.html:144
-msgctxt "default"
+msgctxt "Download button text"
 msgid "plugins.manager.download"
 msgstr "Stáhnout"
 
 #: .\plugins\templates\plugins\manager.html:81
 #: .\plugins\templates\plugins\manager.html:152
-msgctxt "default"
+msgctxt "No plugins found text"
 msgid "plugins.manager.no_plugins_found"
 msgstr "Nebyly nalezeny žádné pluginy"
 
 #: .\plugins\templates\plugins\manager.html:89
-msgctxt "default"
+msgctxt "Community plugins section title"
 msgid "plugins.manager.community_plugins"
 msgstr "Komunitní pluginy"
 
 #: .\processes\models.py:40
-msgctxt "default"
+msgctxt "Plugin field name"
 msgid "processes.models.process_base.plugin"
 msgstr "Plugin"
 
 #: .\processes\models.py:41
-msgctxt "default"
+msgctxt "URL field name"
 msgid "processes.models.process_base.url"
 msgstr "URL"
 
 #: .\processes\models.py:42
-msgctxt "default"
+msgctxt "Last run field name"
 msgid "processes.models.process_base.last_run"
 msgstr "Naposledy spuštěno"
 
 #: .\processes\models.py:43
-msgctxt "default"
+msgctxt "Arguments JSON field name"
 msgid "processes.models.process_base.arguments"
 msgstr "Argumenty"
 
 #: .\processes\models.py:128
-msgctxt "default"
+msgctxt "Manga FK name"
 msgid "processes.models.monitor_chapter.manga"
 msgstr "Manga"
 
