@@ -9,14 +9,14 @@ class UserProfile(models.Model):
 
     class Meta:
         permissions = [
-            ('can_restart', pgettext('default', 'permission.can_restart')),
-            ('can_change_settings', pgettext('default', 'permission.can_change_settings')),
-            ('can_invite', pgettext('default', 'permission.can_invite')),
-            ('can_manage_plugins', pgettext('default', 'permission.can_manage_plugins')),
-            ('can_search', pgettext('default', 'permission.can_search')),
-            ('can_request', pgettext('default', 'permission.can_request')),
-            ('can_manage_requests', pgettext('default', 'permission.can_manage_requests')),
-            ('can_download', pgettext('default', 'permission.can_download')),
+            ('can_restart', pgettext("Permission value for 'Can restart'", 'permission.can_restart')),
+            ('can_change_settings', pgettext("Permission value for 'Can change settings'", 'permission.can_change_settings')),
+            ('can_invite', pgettext("Permission value for 'Can invite'", 'permission.can_invite')),
+            ('can_manage_plugins', pgettext("Permission value for 'Can manage plugins'", 'permission.can_manage_plugins')),
+            ('can_search', pgettext("Permission value for 'Can search'", 'permission.can_search')),
+            ('can_request', pgettext("Permission value for 'Can request'", 'permission.can_request')),
+            ('can_manage_requests', pgettext("Permission value for 'Can manage requests'", 'permission.can_manage_requests')),
+            ('can_download', pgettext("Permission value for 'Can download'", 'permission.can_download')),
         ]
 
 
@@ -26,10 +26,11 @@ class UserProfile(models.Model):
     def get_custom_permissions(self) -> list:
         return [permission[0] for permission in self._meta.permissions]
     
-    def regenerate_token(self) -> None:
+    def regenerate_token(self) -> str:
         from server.functions import generate_unique_token
         self.token = generate_unique_token(UserProfile)
         self.save()
+        return self.token
 
 class RegisterToken(models.Model):
     token = models.CharField(max_length=64, unique=True, editable=False)

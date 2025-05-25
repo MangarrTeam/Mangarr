@@ -19,7 +19,7 @@
         </button>
         
         <div class="nav-item d-flex flex-grow-1 search-bar position-relative">
-            <input type="text" id="tableFilter" class="form-control my-2 py-2 border-top-0 border-left-0 border-right-0 rounded-0 bg-transparent text-white w-100" placeholder="{% trans 'frontend.base.search' context 'default' %}">
+            <input type="text" id="tableFilter" class="form-control my-2 py-2 border-top-0 border-left-0 border-right-0 rounded-0 bg-transparent text-white w-100" placeholder="{% trans 'frontend.base.search' context 'Placeholder for search bar' %}">
             
             <!-- Results container -->
             <div id="searchResults" class="position-absolute background-middle text-white border-0 rounded-bottom mx-2 mb-2" style="display: none; min-width: 200px; max-width: 100vw; max-height: 50vh;">
@@ -42,10 +42,10 @@
                         <span class="dropdown-item {% if user.is_superuser %}text-orange{% elif user.is_staff %}text-yellow{% else %}text-white{% endif %}">{{ user.username }}</span>
                     </div>
                 </div>
-                    <a href="{% url 'profile' %}" role="button" class="highlighted dropdown-item text-white"><i class="fa fa-user"></i> {% trans "frontend.base.profile" context "default" %}</a>
+                    <a href="{% url 'profile' %}" role="button" class="highlighted dropdown-item text-white"><i class="fa fa-user"></i> {% trans "frontend.base.profile" context "Title for profile redirect" %}</a>
                 <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
-                    <button style="cursor: pointer;" class="highlighted dropdown-item text-danger" type="submit"><i class="fa fa-sign-out-alt"></i> {% trans "frontend.base.logout" context "default" %}</button>
+                    <button style="cursor: pointer;" class="highlighted dropdown-item text-danger" type="submit"><i class="fa fa-sign-out-alt"></i> {% trans "frontend.base.logout" context "Title for logout" %}</button>
                 </form>
             </div>
         </div>
@@ -58,7 +58,7 @@
         {% comment %}
         <li class="nav-item">
             <a href="{% url 'settings' %}" class="nav-link text-white">
-                <i class="fa fa-cogs text-white"></i> {% trans "frontend.base.settings" context "default" %}
+                <i class="fa fa-cogs text-white"></i> {% trans "frontend.base.settings" context "Title for settings" %}
             </a>
         </li>
         {% endcomment %}
@@ -68,21 +68,21 @@
             <button class="nav-link text-white d-flex align-items-center w-100 bg-transparent border-0 text-left" 
                 data-toggle="collapse" data-target="#dropdownManga" 
                 aria-expanded="false" aria-controls="dropdownManga" style="cursor: pointer;">
-                <i class="fa fa-book mr-2"></i><p class="my-auto"> {% trans "frontend.base.manga" context "default" %}</p>
+                <i class="fa fa-book mr-2"></i><p class="my-auto"> {% trans "frontend.base.manga" context "Title for manga" %}</p>
             </button>
             
             <div class="collapse pl-4 pt-2" id="dropdownManga">
                 <a href="{% url 'monitored_mangas' %}" class="nav-link text-white d-flex flex-row my-auto">
-                    <i class="fa fa-eye text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.monitored_manga" context "default" %}</p>
+                    <i class="fa fa-eye text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.monitored_manga" context "Title for monitored manga" %}</p>
                 </a>
                 {% if user|has_permition:'database.can_search' %}
                 <a href="{% url 'manga_search' %}" class="nav-link text-white d-flex flex-row my-auto">
-                    <i class="fa fa-search text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.manga_search" context "default" %}</p>
+                    <i class="fa fa-search text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.manga_search" context "Title for manga search" %}</p>
                 </a>
                 {% endif %}
                 {% if user|has_permition:'database.can_manage_requests' %}
                 <a href="{% url 'manga_requests' %}" class="nav-link text-white d-flex flex-row my-auto">
-                    <i class="fa fa-inbox text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.manga_requests" context "default" %}</p>
+                    <i class="fa fa-inbox text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.manga_requests" context "Title for manga requests" %}</p>
                 </a>
                 {% endif %}
             </div>
@@ -94,32 +94,32 @@
             <button class="nav-link text-white d-flex align-items-center w-100 bg-transparent border-0 text-left" 
                 data-toggle="collapse" data-target="#dropdownSettings" 
                 aria-expanded="false" aria-controls="dropdownSettings" style="cursor: pointer;">
-                <i class="fa fa-cogs mr-2"></i><p class="my-auto"> {% trans "frontend.base.settings" context "default" %}</p>
+                <i class="fa fa-cogs mr-2"></i><p class="my-auto"> {% trans "frontend.base.settings" context "Title for settings" %}</p>
             </button>
             
             <div class="collapse pl-4 pt-2" id="dropdownSettings">
                 <a href="{% url 'profile' %}" class="nav-link text-white d-flex flex-row my-auto">
-                    <i class="fa fa-user text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.profile" context "default" %}</p>
+                    <i class="fa fa-user text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.profile" context "Title for profile" %}</p>
                 </a>
                 {% if user|has_permition:'database.can_change_settings' %}
                 <a href="{% url 'settings' %}" class="nav-link text-white d-flex flex-row my-auto">
-                    <i class="fa fa-server text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.server_settings" context "default" %}</p>
+                    <i class="fa fa-server text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.server_settings" context "Title for server settings" %}</p>
                 </a>
                 {% endif %}
                 {% if user|has_permition:'database.can_manage_plugins' %}
                 <a href="{% url 'plugin_manager' %}" class="nav-link text-white d-flex flex-row my-auto">
-                    <i class="fa fa-plug text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.plugin_manager" context "default" %}</p>
+                    <i class="fa fa-plug text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.plugin_manager" context "Title for plugin manager" %}</p>
                 </a>
                 {% endif %}
                 {% if user.is_superuser or user.is_staff %}
                 <a href="{% url 'manager_user_list' %}" class="nav-link text-white d-flex flex-row my-auto">
-                    <i class="fa fa-users my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.users" context "default" %}</p>
+                    <i class="fa fa-users my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.users" context "Title for users" %}</p>
                 </a>
                 {% endif %}
                 
                 {% if user|has_permition:'database.can_restart' %}
                 <div class="nav-link text-danger d-flex flex-row my-auto" id="restart" style="cursor: pointer;">
-                    <i class="fa fa-undo my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.restart" context "default" %}</p>
+                    <i class="fa fa-undo my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.restart" context "Title for restart" %}</p>
                 </div>
                 {% endif %}
             </div>
@@ -186,7 +186,7 @@ document.getElementById('tableFilter').addEventListener('input', function(e) {
             let html = '';
 
             if (data.mangas.length > 0) {
-                html += '<strong class="background-lightest px-2 pt-2 d-block">{% trans "frontend.base.mangas" context "default" %}</strong>';
+                html += '<strong class="background-lightest px-2 pt-2 d-block">{% trans "frontend.base.mangas" context "Title for mangas in search bar" %}</strong>';
                 data.mangas.forEach(manga => {
                     const url = "{% url 'manga_view' 0 %}".replace("0", manga.id);
                     const cover = manga.cover;
@@ -200,7 +200,7 @@ document.getElementById('tableFilter').addEventListener('input', function(e) {
             }
 
             if (data.volumes.length > 0) {
-                html += '<strong class="background-lightest px-2 pt-2 d-block">{% trans "frontend.base.volumes" context "default" %}</strong>';
+                html += '<strong class="background-lightest px-2 pt-2 d-block">{% trans "frontend.base.volumes" context "Title for volumes in search bar" %}</strong>';
                 data.volumes.forEach(volume => {
                     const url = "{% url 'manga_view' 0 %}".replace("0", volume.manga_id);
                     const cover = volume.cover;
@@ -214,7 +214,7 @@ document.getElementById('tableFilter').addEventListener('input', function(e) {
             }
 
             if (data.chapters.length > 0) {
-                html += '<strong class="background-lightest px-2 pt-2 d-block">{% trans "frontend.base.chapters" context "default" %}</strong>';
+                html += '<strong class="background-lightest px-2 pt-2 d-block">{% trans "frontend.base.chapters" context "Title for chapters in search bar" %}</strong>';
                 data.chapters.forEach(chapter => {
                     const url = "{% url 'manga_view' 0 %}".replace("0", chapter.manga_id);
                     const cover = chapter.cover;

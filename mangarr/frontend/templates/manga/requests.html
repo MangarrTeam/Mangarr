@@ -3,7 +3,7 @@
 {% load i18n %}
 {% load has_permition %}
 
-{% block title %}{% trans "frontend.manga_requests.requested_manga" context "default" %}{% endblock %}
+{% block title %}{% trans "frontend.manga_requests.requested_manga" context "Request manga title" %}{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/manga/requests.css' %}">
@@ -11,8 +11,6 @@
 
 {% block content %}
 <div class="text-white text-truncate">
-    <h2 class="mb-4">{% trans "frontend.manga_requests.requested_manga" context "default" %}</h2>
-
     <div id="manga-grid" class="row">
         {% for manga_request in manga_requests %}
         <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
@@ -30,10 +28,10 @@
                     </h7>
                     <div class="hover-buttons d-none">
                         <div class="hover-buttons d-flex">
-                            <button class="btn btn-sm btn-success mr-1 w-100 text-truncate" onclick="approve_manga({{ manga_request.pk }})">{% trans "frontend.manga_requests.approve" context "default" %}</button>
-                            <button class="btn btn-sm btn-danger ml-1 w-100 text-truncate" onclick="deny_manga({{ manga_request.pk }})">{% trans "frontend.manga_requests.deny" context "default" %}</button>
+                            <button class="btn btn-sm btn-success mr-1 w-100 text-truncate" onclick="approve_manga({{ manga_request.pk }})">{% trans "frontend.manga_requests.approve" context "Approve button text" %}</button>
+                            <button class="btn btn-sm btn-danger ml-1 w-100 text-truncate" onclick="deny_manga({{ manga_request.pk }})">{% trans "frontend.manga_requests.deny" context "Deny button text" %}</button>
                         </div>
-                        <a href="{{ manga_request.manga.url }}" target="_blank"><button class="btn btn-sm btn-outline-light mt-2 w-100 text-truncate">{% trans "frontend.manga_requests.view" context "default" %}</button></a>
+                        <a href="{{ manga_request.manga.url }}" target="_blank"><button class="btn btn-sm btn-outline-light mt-2 w-100 text-truncate">{% trans "frontend.manga_requests.view" context "View button text" %}</button></a>
                     </div>
                 </div>
             </div>
@@ -44,11 +42,11 @@
                 style="aspect-ratio: 2 / 3;">
                 <img class="card-img"
                     src="/uploads/static/no_thumbnail.png"
-                    alt="{% trans 'frontend.manga_requests.none_found' context 'default' %}"
+                    alt="{% trans 'frontend.manga_requests.none_found' context 'No request found text' %}"
                     style="object-fit: cover; height: 100%;">
                 <div class="card-img-overlay d-flex flex-column justify-content-end p-2"
                     style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));">
-                    <h6 class="card-title mb-1 w-100 multi-line-title" title="{% trans 'frontend.manga_requests.none_found' context 'default' %}">{% trans 'frontend.manga_requests.none_found' context 'default' %}</h6>
+                    <h6 class="card-title mb-1 w-100 multi-line-title" title="{% trans 'frontend.manga_requests.none_found' context 'No request found text' %}">{% trans 'frontend.manga_requests.none_found' context 'No request found text' %}</h6>
                 </div>
             </div>
         </div>

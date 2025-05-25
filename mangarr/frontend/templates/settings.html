@@ -6,11 +6,17 @@
 {% load is_in %}
 {% load my_split %}
 
-{% block title %}{% trans "frontend.settings.settings" context "default" %}{% endblock %}
+{% block title %}{% trans "frontend.settings.settings" context "Settings title" %}{% endblock %}
 
 
 {% block content %}
-<h1 class="mb-4 text-white">{% trans "frontend.settings.settings" context "default" %}</h1>
+<div class="d-flex mb-4">
+    <h1 class="my-auto text-white">{% trans "frontend.settings.settings" context "Settings title" %}</h1>
+    {% if config_changed %}
+        <button type="button" id="restart" class="btn btn-danger my-auto ml-auto">{% trans "frontend.settings.restart" context "Restart button text" %}</button>
+    {% endif %}
+</div>
+
 <form method="post" id="setting-form">
     {% csrf_token %}
 
@@ -73,10 +79,7 @@
 
 </form>
 <div class="text-start pb-2">
-    <button type="submit" class="btn btn-primary" form="setting-form">{% trans "frontend.settings.save_settings" context "default" %}</button>
-    {% if config_changed %}
-        <button type="button" id="restart" class="btn btn-danger">{% trans "frontend.settings.restart" context "default" %}</button>
-    {% endif %}
+    <button type="submit" class="btn btn-primary" form="setting-form">{% trans "frontend.settings.save_settings" context "Save setting button text" %}</button>
 </div>
 {% endblock %}
 

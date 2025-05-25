@@ -24,6 +24,8 @@ def prevent_if_locked(func):
 
 
 class BaseType(models.Model):
+    _data = models.JSONField(default=dict, blank=True, verbose_name=pgettext("Data field name for Type models", "database.data_types.models.data"))
+
     class Meta:
         abstract = True
     
@@ -38,8 +40,6 @@ class BaseType(models.Model):
 
 
 class StringType(BaseType):
-    _data = models.JSONField(default=dict, blank=True, verbose_name=pgettext("default", "database.data_types.models.data"))
-
     @property
     def value(self) -> str:
         return self._data.get("value", "")
@@ -82,8 +82,6 @@ class StringType(BaseType):
         return title or f"StringType: {self.pk}"
 
 class BoolType(BaseType):
-    _data = models.JSONField(default=dict, blank=True, verbose_name=pgettext("default", "database.data_types.models.data"))
-
     @property
     def value(self) -> str:
         return self._data.get("value", False)
@@ -127,8 +125,6 @@ class BoolType(BaseType):
 
 
 class IntType(BaseType):
-    _data = models.JSONField(default=dict, blank=True, verbose_name=pgettext("default", "database.data_types.models.data"))
-
     @property
     def value(self) -> str:
         return self._data.get("value", 0)
@@ -172,8 +168,6 @@ class IntType(BaseType):
 
 
 class FloatType(BaseType):
-    _data = models.JSONField(default=dict, blank=True, verbose_name=pgettext("default", "database.data_types.models.data"))
-
     @property
     def value(self) -> str:
         return self._data.get("value", 0.0)
@@ -216,8 +210,6 @@ class FloatType(BaseType):
         return title or f"FloatType: {self.pk}"
     
 class DateType(BaseType):
-    _data = models.JSONField(default=dict, blank=True, verbose_name=pgettext("default", "database.data_types.models.data"))
-
     @property
     def value(self) -> datetime:
         return datetime.strptime(self._data.get("value", "1900-01-01T12:00:00+00:00"), "%Y-%m-%dT%H:%M:%S%z")
@@ -273,8 +265,6 @@ class DateType(BaseType):
 from plugins.base import Formats, AgeRating, Status
     
 class FormatsEnumType(BaseType):
-    _data = models.JSONField(default=dict, blank=True, verbose_name=pgettext("default", "database.data_types.models.data"))
-
     @property
     def value(self) -> Formats:
         return Formats(self._data["value"])
@@ -317,8 +307,6 @@ class FormatsEnumType(BaseType):
         return title or f"FormatsEnumType: {self.pk}"
     
 class AgeRatingEnumType(BaseType):
-    _data = models.JSONField(default=dict, blank=True, verbose_name=pgettext("default", "database.data_types.models.data"))
-
     @property
     def value(self) -> AgeRating:
         return AgeRating(self._data["value"])
@@ -361,8 +349,6 @@ class AgeRatingEnumType(BaseType):
         return title or f"AgeRatingEnumType: {self.pk}"
     
 class StatusEnumType(BaseType):
-    _data = models.JSONField(default=dict, blank=True, verbose_name=pgettext("default", "database.data_types.models.data"))
-
     @property
     def value(self) -> Status:
         return Status(self._data["value"])
