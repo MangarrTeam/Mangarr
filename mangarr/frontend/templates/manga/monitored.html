@@ -14,6 +14,7 @@
         {% for manga in mangas %}
         <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
             <div class="card bg-dark text-white border-0 overflow-hidden position-relative hover-buttons-container" style="aspect-ratio: 2 / 3;">
+                <span class="position-absolute bg-success text-white px-2 py-1 mr-1 mt-1 d-inline-block text-center multi-line-title" style="top: 0; right: 0; border-radius: 50rem;">{{ manga.plugin }}</span>
                 <img class="card-img"
                     src="{{ manga.cover }}"
                     alt="{{ manga.name }}"

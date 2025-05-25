@@ -32,7 +32,7 @@
         required
       >
         <option value="" class="background-dark" disabled selected>{% trans "frontend.search.select_plugin" context "Select plugin title" %}</option>
-        {% for category, domain, name, languages in plugins %}
+        {% for category, domain, name, languages, unique in plugins %}
         <option
             value="{{ domain }}"
             data-category="{{ category }}"
@@ -40,7 +40,7 @@
             data-languages="{{ languages|join:', ' }}"
              class="background-dark"
         >
-            {{ name }}
+            {{ name }}{% if not unique %} ({{ category }}){% endif %}
         </option>
         {% endfor %}
       </select>

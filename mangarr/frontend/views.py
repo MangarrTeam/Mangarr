@@ -217,7 +217,9 @@ from plugins.functions import get_plugins
 
 @permission_required("database.can_search")
 def manga_search(request):
-    return custom_render(request, "manga/search.html", {"plugins": get_plugins()})
+    plugins = get_plugins()
+    plugin_names = [name for _, _, name, _ in plugins]
+    return custom_render(request, "manga/search.html", {"plugins": [(category, domain, name, languages, name not in plugin_names) for category, domain, name, languages in plugins]})
 
 from database.manga.models import MangaRequest, Manga
 
@@ -227,7 +229,7 @@ def manga_requests(request):
 
 @login_required
 def manga_monitored(request):
-    return custom_render(request, "manga/monitored.html", {"mangas": [{"name": m.name.value, "url": m.arguments.get("url"), "cover": m.arguments.get("cover", NO_THUMBNAIL_URL), "pk": m.pk} for m in Manga.objects.all()]})
+    return custom_render(request, "manga/monitored.html", {"mangas": [{"name": m.name.value, "url": m.arguments.get("url"), "cover": m.arguments.get("cover", NO_THUMBNAIL_URL), "pk": m.pk, "plugin": m.get_plugin_display()} for m in Manga.objects.all()]})
 
 @login_required
 def manga_view(request, pk):
