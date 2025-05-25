@@ -1,4 +1,5 @@
 from django.db.utils import OperationalError
+from django.db.models import Q
 import time
 from django.utils import timezone
 from datetime import timedelta
@@ -29,46 +30,55 @@ def clear_cache():
             shutil.rmtree(file_path)
     logger.debug("Cache folder cleared")
 
+def monitoring_exists() -> bool:
+    one_hour_ago = timezone.now() - timedelta(hours=1)
+    return MonitorChapter.objects.filter(Q(last_run__lt=one_hour_ago) | Q(last_run__isnull=True)).exists() or MonitorManga.objects.filter(Q(last_run__lt=one_hour_ago) | Q(last_run__isnull=True)).exists()
+
 def monitoring():
     while not stop_event.is_set():
         try:
-            logger.debug("Monitoring check...")
-            clear_cache()
-            threshold = timezone.now() - timedelta(hours=24)
+            while monitoring_exists():
+                logger.debug("Monitoring check...")
+                clear_cache()
+                one_hour_ago = timezone.now() - timedelta(hours=1)
+                threshold = timezone.now() - timedelta(hours=24)
 
-            for manga in Manga.objects.filter(last_update__lt=threshold):
+                for manga in Manga.objects.filter(last_update__lt=threshold):
+                    if stop_event.is_set():
+                        break
+                    try:
+                        manga = MonitorManga.objects.get_or_create(plugin=manga.plugin, url=manga.url, arguments=manga.arguments)
+                    except Manga.DoesNotExist as e:
+                        logger.warning(f"Manga missing - {e}")
+                    except Exception as e:
+                        logger.error(f"Error - {e}")
+
+                
                 if stop_event.is_set():
                     break
-                try:
-                    manga = MonitorManga.objects.get_or_create(plugin=manga.plugin, url=manga.url, arguments=manga.arguments)
-                except Manga.DoesNotExist as e:
-                    logger.warning(f"Manga missing - {e}")
-                except Exception as e:
-                    logger.error(f"Error - {e}")
 
-            
-            if stop_event.is_set():
-                break
-
-            for manga_monitor in MonitorManga.objects.all():
+                for manga_monitor in MonitorManga.objects.filter(Q(last_run__lt=one_hour_ago) | Q(last_run__isnull=True)):
+                    if stop_event.is_set():
+                        break
+                    try:
+                        manga_monitor.update()
+                    except MonitorManga.DoesNotExist as e:
+                        logger.warning(f"Manga monitor missing - {e}")
+                    except Exception as e:
+                        logger.error(f"Error - {e}")
+                
+                for chapter_monitor in MonitorChapter.objects.filter(Q(last_run__lt=one_hour_ago) | Q(last_run__isnull=True)):
+                    if stop_event.is_set():
+                        break
+                    try:
+                        chapter_monitor.update()
+                    except MonitorChapter.DoesNotExist as e:
+                        logger.warning(f"Chapter monitor missing - {e}")
+                    except Exception as e:
+                        logger.error(f"Error - {e}")
+                
                 if stop_event.is_set():
                     break
-                try:
-                    manga_monitor.update()
-                except MonitorManga.DoesNotExist as e:
-                    logger.warning(f"Manga monitor missing - {e}")
-                except Exception as e:
-                    logger.error(f"Error - {e}")
-            
-            for chapter_monitor in MonitorChapter.objects.all():
-                if stop_event.is_set():
-                    break
-                try:
-                    chapter_monitor.update()
-                except MonitorChapter.DoesNotExist as e:
-                    logger.warning(f"Chapter monitor missing - {e}")
-                except Exception as e:
-                    logger.error(f"Error - {e}")
             
             if stop_event.is_set():
                 break

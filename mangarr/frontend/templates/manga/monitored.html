@@ -2,7 +2,7 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}{% trans "frontend.manga_monitored.monitored_mangas" context "default" %}{% endblock %}
+{% block title %}{% trans "frontend.manga_monitored.monitored_mangas" context "Title for monitored mangas" %}{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/manga/monitored.css' %}">
@@ -24,10 +24,10 @@
                         title="{{ manga.name }}">{{ manga.name }}</h6>
                     <div class="hover-buttons d-none">
                         <a href="{% url 'manga_view' manga.pk %}">
-                            <button class="btn btn-sm btn-success mr-2 w-100 text-truncate">{% trans "frontend.manga_monitored.view" context "default" %}</button>
+                            <button class="btn btn-sm btn-success mr-2 w-100 text-truncate">{% trans "frontend.manga_monitored.view" context "View manga button text" %}</button>
                         </a>
                         <a href="{{ manga.url }}" target="_blank">
-                            <button class="btn btn-sm btn-outline-light mt-2 w-100 text-truncate">{% trans "frontend.manga_monitored.view_original" context "default" %}</button>
+                            <button class="btn btn-sm btn-outline-light mt-2 w-100 text-truncate">{% trans "frontend.manga_monitored.view_original" context "View original manga button text" %}</button>
                         </a>
                     </div>
                 </div>
@@ -40,11 +40,11 @@
                 style="aspect-ratio: 2 / 3;">
                 <img class="card-img"
                     src="/uploads/static/no_thumbnail.png"
-                    alt="{% trans 'frontend.manga_monitored.none_found' context 'default' %}"
+                    alt="{% trans 'frontend.manga_monitored.none_found' context 'No manga found text' %}"
                     style="object-fit: cover; height: 100%;">
                 <div class="card-img-overlay d-flex flex-column justify-content-end p-2"
                     style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));">
-                    <h6 class="card-title mb-1 w-100 multi-line-title" title="{% trans 'frontend.manga_monitored.none_found' context 'default' %}">{% trans 'frontend.manga_monitored.none_found' context 'default' %}</h6>
+                    <h6 class="card-title mb-1 w-100 multi-line-title" title="{% trans 'frontend.manga_monitored.none_found' context 'No manga found text' %}">{% trans 'frontend.manga_monitored.none_found' context 'No manga found text' %}</h6>
                 </div>
             </div>
         </div>

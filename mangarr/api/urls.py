@@ -8,6 +8,7 @@ urlpatterns = [
 
 
 
+    path('manager/users/token/regenerate', views.regenerate_token_view, name='regenerate_token'),
     path('manager/users/<int:user_id>/staff/', views.toggle_staff_user, name='toggle_user_staff'),
     path('manager/users/<int:user_id>/permissions/', views.get_user_permissions, name='get_user_permissions'),
     path('manager/users/<int:user_id>/permissions/update/', views.update_user_permissions, name='update_user_permissions'),

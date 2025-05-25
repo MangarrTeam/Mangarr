@@ -3,28 +3,28 @@
 {% load i18n %}
 {% load has_permition %}
 
-{% block title %}{% trans "plugins.manager.plugin_manager" context "default" %}{% endblock %}
+{% block title %}{% trans "plugins.manager.plugin_manager" context "Plugin manager title" %}{% endblock %}
 
 {% block content %}
 <div class="d-flex mb-4">
-    <h1 class="my-auto text-white">{% trans "plugins.manager.plugin_manager" context "default" %}</h1>
+    <h1 class="my-auto text-white">{% trans "plugins.manager.plugin_manager" context "Plugin manager title" %}</h1>
     
     {% if plugin_changed %}
-        <button type="button" id="restart" class="btn btn-danger my-auto ml-auto" {% if not user|has_permition:'database.can_restart' %}disabled{% endif %}>{% trans "frontend.settings.restart" context "default" %}</button>
+        <button type="button" id="restart" class="btn btn-danger my-auto ml-auto" {% if not user|has_permition:'database.can_restart' %}disabled{% endif %}>{% trans "frontend.settings.restart" context "Restart button text" %}</button>
     {% endif %}
 </div>
     
 {# Core Plugins #}
-<h3 class="text-white">{% trans "plugins.manager.core_plugins" context "default" %}</h3>
+<h3 class="text-white">{% trans "plugins.manager.core_plugins" context "Core plugins section title" %}</h3>
 <div class="table-responsive">
     <table class="table table-hover text-center">
         <thead class="background-middle text-white">
             <tr>
-                <th class="border-0">{% trans "plugins.manager.name" context "default" %}</th>
-                <th class="border-0">{% trans "plugins.manager.domain" context "default" %}</th>
-                <th class="border-0">{% trans "plugins.manager.version" context "default" %}</th>
-                <th class="border-0">{% trans "plugins.manager.status" context "default" %}</th>
-                <th class="border-0 col-3 text-nowrap">{% trans "plugins.manager.action" context "default" %}</th>
+                <th class="border-0">{% trans "plugins.manager.name" context "Caption for name column" %}</th>
+                <th class="border-0">{% trans "plugins.manager.domain" context "Caption for domain column" %}</th>
+                <th class="border-0">{% trans "plugins.manager.version" context "Caption for version column" %}</th>
+                <th class="border-0">{% trans "plugins.manager.status" context "Caption for status column" %}</th>
+                <th class="border-0 col-3 text-nowrap">{% trans "plugins.manager.action" context "Caption for actions column" %}</th>
             </tr>
         </thead>
         <tbody class="background-light text-white">
@@ -35,19 +35,19 @@
                     <td class="align-middle flex">
                         {{ plugin.version }}
                         {% if plugin.downloaded_version %}
-                            <br><small class="text-muted">{% trans "plugins.manager.installed" context "default" %}: {{ plugin.downloaded_version }}</small>
+                            <br><small class="text-muted">{% trans "plugins.manager.installed" context "Installed text" %}: {{ plugin.downloaded_version }}</small>
                             {% if plugin.has_update %}
-                            <br><span class="badge badge-warning ms-2">{% trans "plugins.manager.update_available" context "default" %}</span>
+                            <br><span class="badge badge-warning ms-2">{% trans "plugins.manager.update_available" context "Update available text" %}</span>
                             {% endif %}
                         {% endif %}
                     </td>
                     <td class="align-middle">
                         {% if plugin.local_only %}
-                            <span class="badge badge-warning">{% trans "plugins.manager.local_only" context "default" %}</span>
+                            <span class="badge badge-warning">{% trans "plugins.manager.local_only" context "Local only text" %}</span>
                         {% elif plugin.downloaded_version %}
-                            <span class="badge badge-success">{% trans "plugins.manager.downloaded" context "default" %}</span>
+                            <span class="badge badge-success">{% trans "plugins.manager.downloaded" context "Downloaded text" %}</span>
                         {% else %}
-                            <span class="badge badge-secondary">{% trans "plugins.manager.not_downloaded" context "default" %}</span>
+                            <span class="badge badge-secondary">{% trans "plugins.manager.not_downloaded" context "Not downloaded text" %}</span>
                         {% endif %}
                     </td>
                     <td class="align-middle">
@@ -57,20 +57,20 @@
                                 <form action="{% url 'plugin_download' plugin.domain %}" method="post" class="my-1">
                                     {% csrf_token %}
                                     {% if plugin.has_update %}
-                                        <button type="submit" class="btn btn-sm btn-primary w-100">{% trans "plugins.manager.update" context "default" %}</button>
+                                        <button type="submit" class="btn btn-sm btn-primary w-100">{% trans "plugins.manager.update" context "Update button text" %}</button>
                                     {% else %}
-                                        <button type="submit" class="btn btn-sm btn-warning w-100">{% trans "plugins.manager.redownload" context "default" %}</button>
+                                        <button type="submit" class="btn btn-sm btn-warning w-100">{% trans "plugins.manager.redownload" context "Redownload button text" %}</button>
                                     {% endif %}
                                 </form>
                                 {% endif %}
                             <form action="{% url 'plugin_delete' plugin.domain %}" method="post" class="my-1">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-danger w-100">{% trans "plugins.manager.delete" context "default" %}</button>
+                                <button type="submit" class="btn btn-sm btn-danger w-100">{% trans "plugins.manager.delete" context "Delete button text" %}</button>
                             </form>
                             {% else %}
                             <form action="{% url 'plugin_download' plugin.domain %}" method="post" class="my-1">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-success w-100">{% trans "plugins.manager.download" context "default" %}</button>
+                                <button type="submit" class="btn btn-sm btn-success w-100">{% trans "plugins.manager.download" context "Download button text" %}</button>
                             </form>
                             {% endif %}
                         </div>
@@ -78,7 +78,7 @@
                 </tr>
             {% empty %}
             <tr>
-                <td colspan="5" class="text-center">{% trans "plugins.manager.no_plugins_found" context "default" %}</td>
+                <td colspan="5" class="text-center">{% trans "plugins.manager.no_plugins_found" context "No plugins found text" %}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -86,16 +86,16 @@
 </div>
 
 {# Community Plugins #}
-<h3 class="text-white mt-5">{% trans "plugins.manager.community_plugins" context "default" %}</h3>
+<h3 class="text-white mt-5">{% trans "plugins.manager.community_plugins" context "Community plugins section title" %}</h3>
 <div class="table-responsive">
     <table class="table table-hover text-center">
         <thead class="background-middle text-white">
             <tr>
-                <th class="border-0">{% trans "plugins.manager.name" context "default" %}</th>
-                <th class="border-0">{% trans "plugins.manager.domain" context "default" %}</th>
-                <th class="border-0">{% trans "plugins.manager.version" context "default" %}</th>
-                <th class="border-0">{% trans "plugins.manager.status" context "default" %}</th>
-                <th class="border-0 col-3 text-nowrap">{% trans "plugins.manager.action" context "default" %}</th>
+                <th class="border-0">{% trans "plugins.manager.name" context "Caption for name column" %}</th>
+                <th class="border-0">{% trans "plugins.manager.domain" context "Caption for domain column" %}</th>
+                <th class="border-0">{% trans "plugins.manager.version" context "Caption for version column" %}</th>
+                <th class="border-0">{% trans "plugins.manager.status" context "Caption for status column" %}</th>
+                <th class="border-0 col-3 text-nowrap">{% trans "plugins.manager.action" context "Caption for actions column" %}</th>
             </tr>
         </thead>
         <tbody class="background-light text-white">
@@ -106,19 +106,19 @@
                     <td class="align-middle flex">
                         {{ plugin.version }}
                         {% if plugin.downloaded_version %}
-                            <br><small class="text-muted">{% trans "plugins.manager.installed" context "default" %}: {{ plugin.downloaded_version }}</small>
+                            <br><small class="text-muted">{% trans "plugins.manager.installed" context "Installed text" %}: {{ plugin.downloaded_version }}</small>
                             {% if plugin.has_update %}
-                            <br><span class="badge badge-warning ms-2">{% trans "plugins.manager.update_available" context "default" %}</span>
+                            <br><span class="badge badge-warning ms-2">{% trans "plugins.manager.update_available" context "Update available text" %}</span>
                             {% endif %}
                         {% endif %}
                     </td>
                     <td class="align-middle">
                         {% if plugin.local_only %}
-                            <span class="badge badge-warning">{% trans "plugins.manager.local_only" context "default" %}</span>
+                            <span class="badge badge-warning">{% trans "plugins.manager.local_only" context "Local only text" %}</span>
                         {% elif plugin.downloaded_version %}
-                            <span class="badge badge-success">{% trans "plugins.manager.downloaded" context "default" %}</span>
+                            <span class="badge badge-success">{% trans "plugins.manager.downloaded" context "Downloaded text" %}</span>
                         {% else %}
-                            <span class="badge badge-secondary">{% trans "plugins.manager.not_downloaded" context "default" %}</span>
+                            <span class="badge badge-secondary">{% trans "plugins.manager.not_downloaded" context "Not downloaded text" %}</span>
                         {% endif %}
                     </td>
                     <td class="align-middle">
@@ -128,20 +128,20 @@
                                 <form action="{% url 'plugin_download' plugin.domain %}" method="post" class="my-1">
                                     {% csrf_token %}
                                     {% if plugin.has_update %}
-                                        <button type="submit" class="btn btn-sm btn-primary w-100">{% trans "plugins.manager.update" context "default" %}</button>
+                                        <button type="submit" class="btn btn-sm btn-primary w-100">{% trans "plugins.manager.update" context "Update button text" %}</button>
                                     {% else %}
-                                        <button type="submit" class="btn btn-sm btn-warning w-100">{% trans "plugins.manager.redownload" context "default" %}</button>
+                                        <button type="submit" class="btn btn-sm btn-warning w-100">{% trans "plugins.manager.redownload" context "Redownload button text" %}</button>
                                     {% endif %}
                                 </form>
                                 {% endif %}
                             <form action="{% url 'plugin_delete' plugin.domain %}" method="post" class="my-1">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-danger w-100">{% trans "plugins.manager.delete" context "default" %}</button>
+                                <button type="submit" class="btn btn-sm btn-danger w-100">{% trans "plugins.manager.delete" context "Delete button text" %}</button>
                             </form>
                             {% else %}
                             <form action="{% url 'plugin_download' plugin.domain %}" method="post" class="my-1">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-success w-100">{% trans "plugins.manager.download" context "default" %}</button>
+                                <button type="submit" class="btn btn-sm btn-success w-100">{% trans "plugins.manager.download" context "Download button text" %}</button>
                             </form>
                             {% endif %}
                         </div>
@@ -149,39 +149,10 @@
                 </tr>
             {% empty %}
             <tr>
-                <td colspan="5" class="text-center">{% trans "plugins.manager.no_plugins_found" context "default" %}</td>
+                <td colspan="5" class="text-center">{% trans "plugins.manager.no_plugins_found" context "No plugins found text" %}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
-{% endblock %}
-
-{% block scripts %}
-<script>
-    document.getElementById("toggle-downloads").addEventListener("click", function () {
-        const button = this;
-        const paused = button.dataset.paused === "true";
-
-        fetch("{% url 'download_toggle' %}", {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": "{{ csrf_token }}",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ current_state: paused })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                button.dataset.paused = data.paused.toString();
-                button.classList.remove(data.paused ? "btn-success" : "btn-warning");
-                button.classList.add(data.paused ? "btn-warning" : "btn-success");
-                button.innerHTML = data.paused ? "{% trans'plugins.manager.resume_downloads' context 'default' }}" : "{% trans 'plugins.manager.pause_downloads' context 'default' }}";
-            } else {
-                alert("Failed to toggle download state.");
-            }
-        });
-    });
-</script>
 {% endblock %}

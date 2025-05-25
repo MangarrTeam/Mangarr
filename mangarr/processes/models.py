@@ -7,6 +7,7 @@ from server.settings import FILE_PATH_ROOT, CACHE_FILE_PATH_ROOT
 import hashlib
 import shutil
 import zipfile
+import time
 import os
 from django.utils import timezone
 from datetime import timedelta
@@ -14,7 +15,7 @@ import datetime
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from database.manga.functions import make_valid_filename
-from .functions import convert_datetime
+from .functions import convert_datetime, move_file
 from django.db.models import Q
 import logging
 logger = logging.getLogger(__name__)
@@ -36,10 +37,10 @@ def make_json_serializable(value):
 
 # Create your models here.
 class ProcessBase(models.Model):
-    plugin = models.CharField(verbose_name=pgettext("default", "processes.models.process_base.plugin"))
-    url = models.URLField(verbose_name=pgettext("default", "processes.models.process_base.url"), unique=True)
-    last_run = models.DateTimeField(blank=True, null=True, verbose_name=pgettext("default", "processes.models.process_base.last_run"))
-    arguments = models.JSONField(default=dict, verbose_name=pgettext("default", "processes.models.process_base.arguments"), blank=True)
+    plugin = models.CharField(verbose_name=pgettext("Plugin field name", "processes.models.process_base.plugin"))
+    url = models.URLField(verbose_name=pgettext("URL field name", "processes.models.process_base.url"), unique=True)
+    last_run = models.DateTimeField(blank=True, null=True, verbose_name=pgettext("Last run field name", "processes.models.process_base.last_run"))
+    arguments = models.JSONField(default=dict, verbose_name=pgettext("Arguments JSON field name", "processes.models.process_base.arguments"), blank=True)
     
     class Meta:
         abstract = True
@@ -124,7 +125,7 @@ class PageWasNone(Exception):
     pass
    
 class MonitorChapter(ProcessBase):
-    manga = models.ForeignKey(Manga, on_delete=models.CASCADE, verbose_name=pgettext("default", "processes.models.monitor_chapter.manga"))
+    manga = models.ForeignKey(Manga, on_delete=models.CASCADE, verbose_name=pgettext("Manga FK name", "processes.models.monitor_chapter.manga"))
     def update(self):
         try:
             plugin = self.get_plugin()
@@ -162,6 +163,8 @@ class MonitorChapter(ProcessBase):
                     filename = f"{i+1:0{width}}.png"
                     cbz.writestr(filename, page_stream.getvalue())
                     on_download(i+1, len(chapter_pages))
+                    # Delay for 1 second between downloads
+                    time.sleep(0.5)
 
                 cbz.writestr("ComicInfo.xml", chapter.create_xml())
             on_download(0, 0)
@@ -171,7 +174,7 @@ class MonitorChapter(ProcessBase):
             chapter_file_path_name = chapter_file_folder / chapter.get_file_name()
 
             try:
-                shutil.move(chapter_cache_file_path_name, chapter_file_path_name)
+                move_file(chapter_cache_file_path_name, chapter_file_path_name)
                 chapter.file = f"{chapter_file_path_name}"
                 chapter.downloaded = True
                 chapter.save()
@@ -179,6 +182,9 @@ class MonitorChapter(ProcessBase):
                 logger.error(f"Error - {e}")
 
             self.delete()
+
+            # Delay for 10 seconds
+            time.sleep(10)
 
         except Exception as e:
             self.last_run = timezone.now()

@@ -2,48 +2,69 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}{% trans "frontend.profile.profile" context "default" %}{% endblock %}
+{% block title %}{% trans "frontend.profile.profile" context "Profile title" %}{% endblock %}
 
 {% block content %}
-<h1 class="mb-4 text-white">{% trans "frontend.profile.profile" context "default" %}</h1>
-
 <form method="post" action="{% url 'profile' %}" id="profile-form">
     {% csrf_token %}
 
     <div class="card mb-3 text-white border-0 rounded-2">
-        <div class="card-header background-middle h4">{% trans "frontend.profile.account" context "default" %}</div>
+        <div class="card-header background-middle h4">{% trans "frontend.profile.account" context "Account section title" %}</div>
         <div class="card-body background-light">
             <!-- Username -->
             <div class="form-group mb-2 d-flex flex-column-reverse">
                 <input type="text" class="form-control bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white"
                        id="username" name="username" value="{{ user.username }}">
-                <label for="username">{% trans "frontend.profile.username" context "default" %}</label>
+                <label for="username">{% trans "frontend.profile.username" context "Label for username" %}</label>
             </div>
 
             <!-- Email -->
             <div class="form-group mb-2 d-flex flex-column-reverse">
                 <input type="email" class="form-control bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white"
                        id="email" name="email" value="{{ user.email }}">
-                <label for="email">{% trans "frontend.profile.email" context "default" %}</label>
+                <label for="email">{% trans "frontend.profile.email" context "Label for email" %}</label>
             </div>
         </div>
     </div>
 
     <div class="text-start pb-2">
-        <button type="submit" class="btn btn-primary">{% trans "frontend.profile.save" context "default" %}</button>
+        <button type="submit" class="btn btn-primary">{% trans "frontend.profile.save" context "Save button text" %}</button>
     </div>
 </form>
 
-<form method="post" action="{% url 'change_password' %}" class="pt-5" id="password-form">
+<div class="background-dark card mb-3 text-white border-0 rounded-2 pt-5">
+    <div class="card-header background-middle h4">{% trans "frontend.profile.token" context "Token title in profile settings" %}</div>
+    <div class="card-body background-light">
+        <!-- Token -->
+        <div class="form-group mb-2 d-flex flex-column-reverse">
+            <div class="input-group flex-row">
+                <input type="password" class="form-control bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white"
+                        id="token" name="token" value="{{ user.profile.token }}" readonly>
+                <button class="btn btn-outline-success ml-2" type="button" onclick="copy_token()">
+                    <i class="fa fa-copy" id="copyTokenIcon"></i>
+                </button>
+                <button class="btn btn-outline-secondary ml-2" type="button" onclick="togglePass('token', this)">
+                    <i class="fa fa-eye-slash"></i>
+                </button>
+                <button class="btn btn-outline-warning ml-2" type="button" onclick="regen_token()">
+                    <i class="fa fa-refresh"></i>
+                </button>
+            </div>
+            <label for="token">{% trans "frontend.profile.token" context "Token title in profile settings" %}</label>
+        </div>
+    </div>
+</div>
+
+<form method="post" action="{% url 'change_password' %}" id="password-form">
     {% csrf_token %}
 
     <div class="card mb-3 text-white border-0 rounded-2">
-        <div class="card-header background-middle h4">{% trans "frontend.profile.password" context "default" %}</div>
+        <div class="card-header background-middle h4">{% trans "frontend.profile.password" context "Password section title" %}</div>
 
         <div class="card-body background-light">
             <!-- Old password -->
             <div class="form-group mb-2 d-flex flex-column">
-                <label>{% trans "frontend.profile.old_password" context "default" %}</label>
+                <label>{% trans "frontend.profile.old_password" context "Old password label" %}</label>
                 <div class="input-group flex-row">
                     <input type="password" class="form-control bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white" name="old_password" id="old_password" required>
                     <button class="btn btn-outline-secondary ml-2" type="button" onclick="togglePass('old_password', this)">
@@ -54,7 +75,7 @@
 
             <!-- New password 1 -->
             <div class="form-group mb-2 d-flex flex-column">
-                <label>{% trans "frontend.profile.new_password" context "default" %}</label>
+                <label>{% trans "frontend.profile.new_password" context "New password label" %}</label>
                 <div class="input-group flex-row">
                     <input type="password" class="form-control bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white" name="new_password1" id="new_password1" required>
                     <button class="btn btn-outline-secondary ml-2" type="button" onclick="togglePass('new_password1', this)">
@@ -65,7 +86,7 @@
 
             <!-- New password 2 -->
             <div class="form-group mb-2 d-flex flex-column">
-                <label>{% trans "frontend.profile.confirm_password" context "default" %}</label>
+                <label>{% trans "frontend.profile.confirm_password" context "Confirm password label" %}</label>
                 <div class="input-group flex-row">
                 <input type="password" class="form-control bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white" name="new_password2" id="new_password2" required>
                     <button class="btn btn-outline-secondary ml-2" type="button" onclick="togglePass('new_password2', this)">
@@ -77,7 +98,7 @@
     </div>
 
     <div class="text-start pb-2">
-        <button type="submit" class="btn btn-primary">{% trans "frontend.profile.change_password" context "default" %}</button>
+        <button type="submit" class="btn btn-primary">{% trans "frontend.profile.change_password" context "Change password button text" %}</button>
     </div>
 </form>
 {% endblock %}
@@ -95,6 +116,44 @@
             btn.querySelector("i").classList.remove("fa-eye");
             btn.querySelector("i").classList.add("fa-eye-slash");
         }
+    }
+
+    var token = "{{ user.profile.token }}";
+
+    function copy_token() {
+        navigator.clipboard.writeText(token)
+            .then(() => {
+                const copy_token = document.getElementById('copyTokenIcon');
+                copy_token.classList.replace("fa-copy", "fa-check");
+                setTimeout(() => {
+                    copy_token.classList.replace("fa-check", "fa-copy");
+                }, 1000);
+            })
+            .catch(err => {
+                console.error('Copy failed:', err);
+            });
+    }
+    
+    function regen_token() {
+        const token_input = document.getElementById('token');
+        fetch(`{% url 'regenerate_token' %}?token=${token}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => {
+            if (!response.ok) throw new Error("Request failed");
+            return response.json();
+        })
+        .then(data => {
+            token = data["token"];
+            token_input.value = token;
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+        
     }
 </script>
 {% endblock %}
