@@ -6,12 +6,17 @@ import requests
 from server.settings import PLUGINS_DIR
 from .manager import update_downloaded_metadata
 
+import logging
+logger = logging.getLogger(__name__)
+
 GITHUB_ZIP_URL = "https://github.com/{repo}/archive/refs/heads/{branch}.zip"
 
 def download_plugin(repo, category, domain, version, branch="main"):
+    logger.info(f"Downloading plugin from category: {category} with domain: {domain} version: {version} from repo: {repo}")
     url = GITHUB_ZIP_URL.format(repo=repo, branch=branch)
     
     with tempfile.TemporaryDirectory() as tmpdir:
+        logger.info(f"Making temp dir '{tmpdir}'")
         zip_path = os.path.join(tmpdir, "plugin.zip")
 
         # Download ZIP

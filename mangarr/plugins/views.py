@@ -7,9 +7,13 @@ from plugins.downloader import download_plugin
 from server.settings import PLUGINS_DIR, plugin_change_state, plugin_changed
 from .manager import update_downloaded_metadata
 from .functions import load_metadata
+import logging
+logger = logging.getLogger(__name__)
 
 def get_plugin_by_domain(domain):
-    return next((p for p in load_metadata() if p["domain"] == domain), None)
+    plugin = (p for p in load_metadata() if p["domain"] == domain)
+    print(plugin)
+    return next(plugin, None)
 
 @permission_required("database.can_manage_plugins")
 def plugin_manager(request):
@@ -26,15 +30,15 @@ def plugin_manager(request):
 def download_plugin_view(request, domain):
     plugin = get_plugin_by_domain(domain)
     if not plugin:
-        messages.error(request, "Plugin not found.")
+        logger.error(f"Plugin {domain} not found")
         return redirect("plugin_manager")
 
     try:
         download_plugin(plugin["source"], plugin["category"], plugin["domain"], plugin["version"])
         plugin_changed()
-        messages.success(request, f"Plugin '{plugin['name']}' downloaded.")
+        logger.info(f"Plugin '{plugin['name']}' downloaded.")
     except Exception as e:
-        messages.error(request, f"Failed: {e}")
+        logger.error(f"Error - {e}")
 
     return redirect("plugin_manager")
 
