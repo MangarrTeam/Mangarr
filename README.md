@@ -101,7 +101,7 @@ You can use this *docker-compose.yml* just replace/define the .env variables *PR
 ```yml
 services:
   mangarr:
-    image: ghcr.io/makhuta/mangarr:latest
+    image: ghcr.io/mangarrteam/mangarr:latest
     container_name: mangarr
     ports:
       - "80:80"
