@@ -47,7 +47,7 @@ class StringType(BaseType):
     @value.setter
     @prevent_if_locked
     def value(self, new_value) -> None:
-        if self._data["value"] == new_value:
+        if self.value == new_value:
             return
         self._data["value"] = new_value
         self.save()
@@ -91,7 +91,7 @@ class BoolType(BaseType):
     @value.setter
     @prevent_if_locked
     def value(self, new_value) -> None:
-        if self._data["value"] == new_value:
+        if self.value == new_value:
             return
         self._data["value"] = new_value
         self.save()
@@ -136,7 +136,7 @@ class IntType(BaseType):
     @value.setter
     @prevent_if_locked
     def value(self, new_value) -> None:
-        if self._data["value"] == int(new_value):
+        if self.value == int(new_value):
             return
         self._data["value"] = int(new_value)
         self.save()
@@ -181,7 +181,7 @@ class FloatType(BaseType):
     @value.setter
     @prevent_if_locked
     def value(self, new_value) -> None:
-        if self._data["value"] == float(new_value):
+        if self.value == float(new_value):
             return
         self._data["value"] = float(new_value)
         self.save()
@@ -234,14 +234,14 @@ class DateType(BaseType):
         try:
             if type(new_value) == str:
                 d = datetime.strptime(new_value, DATETIME_FORMAT).strftime(DATETIME_FORMAT)
-                if self._data["value"] == d:
+                if self.value == d:
                     return
                 self._data["value"] = d
             if type(new_value) == datetime:
                 d = new_value.strftime(DATETIME_FORMAT)
-                if self._data["value"] == d:
+                if self.value == d:
                     return
-                self._data["value"] = new_value.strftime(DATETIME_FORMAT)
+                self._data["value"] = d
         except Exception as e:
             logger.error(f"Error - {e}")
         else:
@@ -288,7 +288,7 @@ class FormatsEnumType(BaseType):
     @value.setter
     @prevent_if_locked
     def value(self, new_value:Formats) -> None:
-        if self._data["value"] == new_value.value:
+        if self.value == new_value.value:
             return
         self._data["value"] = new_value.value
         self.save()
@@ -332,7 +332,7 @@ class AgeRatingEnumType(BaseType):
     @value.setter
     @prevent_if_locked
     def value(self, new_value:AgeRating) -> None:
-        if self._data["value"] == new_value.value:
+        if self.value == new_value.value:
             return
         self._data["value"] = new_value.value
         self.save()
@@ -376,7 +376,7 @@ class StatusEnumType(BaseType):
     @value.setter
     @prevent_if_locked
     def value(self, new_value:Status) -> None:
-        if self._data["value"] == new_value.value:
+        if self.value == new_value.value:
             return
         self._data["value"] = new_value.value
         self.save()
