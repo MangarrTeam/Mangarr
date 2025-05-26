@@ -149,6 +149,11 @@ class MonitorChapter(ProcessBase):
                 **chapter_data
             })
 
+            if not created:
+                logger.debug(f"Chapter '{chapter.name.value}' already exists, skipping...")
+                self.delete()
+                return
+
             chapter_cache_folder = f'{self.plugin} {self.manga.name.value} {self.url}'
             chapter_cache_file_path_name = CACHE_FILE_PATH_ROOT / f"{get_hash(chapter_cache_folder)}.cbz"
 
