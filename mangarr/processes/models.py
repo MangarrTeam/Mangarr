@@ -149,8 +149,8 @@ class MonitorChapter(ProcessBase):
                 **chapter_data
             })
 
-            if not created:
-                logger.debug(f"Chapter '{chapter.name.value}' already exists, skipping...")
+            if chapter.downloaded:
+                logger.debug(f"Chapter '{chapter.name.value}' already downloaded, skipping...")
                 self.delete()
                 return
 
