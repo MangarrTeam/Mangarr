@@ -4,6 +4,8 @@ from .localization import LANGUAGES_KEYS
 
 CONFIG:SmartConfig = SmartConfig(paths.CONFIG_PATH)
 
+DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
+
 
 SECRET_KEY = CONFIG.get('Django', 'secret_key', 'your-secret-key', description='Secret key to Django (change this to something unique)')
 

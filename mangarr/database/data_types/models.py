@@ -209,10 +209,12 @@ class FloatType(BaseType):
 
         return title or f"FloatType: {self.pk}"
     
+from server.settings import DATETIME_FORMAT
+    
 class DateType(BaseType):
     @property
     def value(self) -> datetime:
-        return datetime.strptime(self._data.get("value", "1900-01-01T12:00:00+00:00"), "%Y-%m-%dT%H:%M:%S%z")
+        return datetime.strptime(self._data.get("value", "1900-01-01T12:00:00+00:00"), DATETIME_FORMAT)
     
     @property
     def value_str(self) -> datetime:
@@ -223,9 +225,9 @@ class DateType(BaseType):
     def value(self, new_value) -> None:
         try:
             if type(new_value) == str:
-                self._data["value"] = datetime.strptime(new_value, "%Y-%m-%dT%H:%M:%S%z").strftime("%Y-%m-%dT%H:%M:%S%z")
+                self._data["value"] = datetime.strptime(new_value, DATETIME_FORMAT).strftime(DATETIME_FORMAT)
             if type(new_value) == datetime:
-                self._data["value"] = new_value.strftime("%Y-%m-%dT%H:%M:%S%z")
+                self._data["value"] = new_value.strftime(DATETIME_FORMAT)
         except Exception as e:
             logger.error(f"Error - {e}")
         else:

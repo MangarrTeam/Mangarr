@@ -6,6 +6,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 NO_THUMBNAIL_URL = "/uploads/static/no_thumbnail.png"
+from server.settingz.config import DATETIME_FORMAT
 
 def enforce_structure(required_keys):
     def decorator(func):
