@@ -152,7 +152,7 @@ class MonitorChapter(ProcessBase):
             if chapter.downloaded:
                 logger.debug(f"Chapter '{chapter.name.value}' already downloaded, skipping...")
                 self.delete()
-                time.sleep(10)
+                time.sleep(1)
                 return
 
             chapter_cache_folder = f'{self.plugin} {self.manga.name.value} {self.url}'
