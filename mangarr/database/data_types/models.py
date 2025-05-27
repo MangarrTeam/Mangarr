@@ -2,7 +2,6 @@ from django.db import models
 from django.utils.translation import pgettext
 from abc import abstractmethod
 from datetime import datetime
-import time
 import logging
 logger = logging.getLogger(__name__)
 
@@ -22,7 +21,6 @@ def prevent_if_locked(func):
         return func(self, new_value)
     return wrapper
 
-
 class BaseType(models.Model):
     _data = models.JSONField(default=dict, blank=True, verbose_name=pgettext("Data field name for Type models", "database.data_types.models.data"))
 
@@ -38,6 +36,24 @@ class BaseType(models.Model):
     def value(self) -> str:
         pass
 
+    @property
+    def locked(self) -> bool:
+        return self._data.get("locked", False)
+    
+    def lock(self):
+        self._data["locked"] = True
+        self.save()
+
+    def unlock(self):
+        self._data["locked"] = False
+        self.save()
+
+    def __str__(self) -> str:
+        v = f"{self.value}"[:50]
+        if len(v) == 0:
+            return f"{self.__class__.__name__}: {self.pk} [{"Locked" if self.locked else "Not locked"}]"
+        return f"{self.__class__.__name__}: {self.pk} ({v}) [{"Locked" if self.locked else "Not locked"}]"
+
 
 class StringType(BaseType):
     @property
@@ -52,36 +68,12 @@ class StringType(BaseType):
         self._data["value"] = new_value
         self.save()
 
-    @property
-    def locked(self) -> bool:
-        return self._data.get("locked", False)
-    
-    def lock(self):
-        self._data["locked"] = True
-        self.save()
-
-    def unlock(self):
-        self._data["locked"] = False
-        self.save()
-
     def save(self, *args, **kwargs):
         self._data = {
             **STRING_DEFAULT,
             **self._data
         }
         super().save(*args, **kwargs)
-
-    def __str__(self) -> str:
-        title = None
-
-        for rel in self._meta.related_objects:
-            if rel.one_to_one:
-                accessor = rel.get_accessor_name()
-                related_obj = getattr(self, accessor, None)
-                if related_obj is not None:
-                    title = f"{accessor} ({str(related_obj)})"
-
-        return title or f"StringType: {self.pk}"
 
 class BoolType(BaseType):
     @property
@@ -96,37 +88,12 @@ class BoolType(BaseType):
         self._data["value"] = new_value
         self.save()
 
-    @property
-    def locked(self) -> bool:
-        return self._data.get("locked", False)
-    
-    def lock(self):
-        self._data["locked"] = True
-        self.save()
-
-    def unlock(self):
-        self._data["locked"] = False
-        self.save()
-
     def save(self, *args, **kwargs):
         self._data = {
             **BOOL_DEFAULT,
             **self._data
         }
         super().save(*args, **kwargs)
-
-    def __str__(self) -> str:
-        title = None
-
-        for rel in self._meta.related_objects:
-            if rel.one_to_one:
-                accessor = rel.get_accessor_name()
-                related_obj = getattr(self, accessor, None)
-                if related_obj is not None:
-                    title = f"{accessor} ({str(related_obj)})"
-
-        return title or f"BoolType: {self.pk}"
-
 
 class IntType(BaseType):
     @property
@@ -141,37 +108,12 @@ class IntType(BaseType):
         self._data["value"] = int(new_value)
         self.save()
 
-    @property
-    def locked(self) -> bool:
-        return self._data.get("locked", False)
-    
-    def lock(self):
-        self._data["locked"] = True
-        self.save()
-
-    def unlock(self):
-        self._data["locked"] = False
-        self.save()
-
     def save(self, *args, **kwargs):
         self._data = {
             **INT_DEFAULT,
             **self._data
         }
         super().save(*args, **kwargs)
-
-    def __str__(self) -> str:
-        title = None
-
-        for rel in self._meta.related_objects:
-            if rel.one_to_one:
-                accessor = rel.get_accessor_name()
-                related_obj = getattr(self, accessor, None)
-                if related_obj is not None:
-                    title = f"{accessor} ({str(related_obj)})"
-
-        return title or f"IntType: {self.pk}"
-
 
 class FloatType(BaseType):
     @property
@@ -186,18 +128,6 @@ class FloatType(BaseType):
         self._data["value"] = float(new_value)
         self.save()
 
-    @property
-    def locked(self) -> bool:
-        return self._data.get("locked", False)
-    
-    def lock(self):
-        self._data["locked"] = True
-        self.save()
-
-    def unlock(self):
-        self._data["locked"] = False
-        self.save()
-
     def save(self, *args, **kwargs):
         self._data = {
             **FLOAT_DEFAULT,
@@ -205,18 +135,6 @@ class FloatType(BaseType):
         }
         super().save(*args, **kwargs)
 
-    def __str__(self) -> str:
-        title = None
-
-        for rel in self._meta.related_objects:
-            if rel.one_to_one:
-                accessor = rel.get_accessor_name()
-                related_obj = getattr(self, accessor, None)
-                if related_obj is not None:
-                    title = f"{accessor} ({str(related_obj)})"
-
-        return title or f"FloatType: {self.pk}"
-    
 from server.settings import DATETIME_FORMAT
     
 class DateType(BaseType):
@@ -247,18 +165,6 @@ class DateType(BaseType):
         else:
             self.save()
 
-    @property
-    def locked(self) -> bool:
-        return self._data.get("locked", False)
-    
-    def lock(self):
-        self._data["locked"] = True
-        self.save()
-
-    def unlock(self):
-        self._data["locked"] = False
-        self.save()
-
     def save(self, *args, **kwargs):
         self._data = {
             **DATE_DEFAULT,
@@ -266,18 +172,6 @@ class DateType(BaseType):
         }
         super().save(*args, **kwargs)
 
-    def __str__(self) -> str:
-        title = None
-
-        for rel in self._meta.related_objects:
-            if rel.one_to_one:
-                accessor = rel.get_accessor_name()
-                related_obj = getattr(self, accessor, None)
-                if related_obj is not None:
-                    title = f"{accessor} ({str(related_obj)})"
-
-        return title or f"DateType: {self.pk}"
-    
 from plugins.base import Formats, AgeRating, Status
     
 class FormatsEnumType(BaseType):
@@ -293,18 +187,6 @@ class FormatsEnumType(BaseType):
         self._data["value"] = new_value.value
         self.save()
 
-    @property
-    def locked(self) -> bool:
-        return self._data.get("locked", False)
-    
-    def lock(self):
-        self._data["locked"] = True
-        self.save()
-
-    def unlock(self):
-        self._data["locked"] = False
-        self.save()
-
     def save(self, *args, **kwargs):
         self._data = {
             **ENUM_DEFAULT,
@@ -312,18 +194,6 @@ class FormatsEnumType(BaseType):
         }
         super().save(*args, **kwargs)
 
-    def __str__(self) -> str:
-        title = None
-
-        for rel in self._meta.related_objects:
-            if rel.one_to_one:
-                accessor = rel.get_accessor_name()
-                related_obj = getattr(self, accessor, None)
-                if related_obj is not None:
-                    title = f"{accessor} ({str(related_obj)})"
-
-        return title or f"FormatsEnumType: {self.pk}"
-    
 class AgeRatingEnumType(BaseType):
     @property
     def value(self) -> AgeRating:
@@ -337,18 +207,6 @@ class AgeRatingEnumType(BaseType):
         self._data["value"] = new_value.value
         self.save()
 
-    @property
-    def locked(self) -> bool:
-        return self._data.get("locked", False)
-    
-    def lock(self):
-        self._data["locked"] = True
-        self.save()
-
-    def unlock(self):
-        self._data["locked"] = False
-        self.save()
-
     def save(self, *args, **kwargs):
         self._data = {
             **ENUM_DEFAULT,
@@ -356,18 +214,6 @@ class AgeRatingEnumType(BaseType):
         }
         super().save(*args, **kwargs)
 
-    def __str__(self) -> str:
-        title = None
-
-        for rel in self._meta.related_objects:
-            if rel.one_to_one:
-                accessor = rel.get_accessor_name()
-                related_obj = getattr(self, accessor, None)
-                if related_obj is not None:
-                    title = f"{accessor} ({str(related_obj)})"
-
-        return title or f"AgeRatingEnumType: {self.pk}"
-    
 class StatusEnumType(BaseType):
     @property
     def value(self) -> Status:
@@ -381,33 +227,9 @@ class StatusEnumType(BaseType):
         self._data["value"] = new_value.value
         self.save()
 
-    @property
-    def locked(self) -> bool:
-        return self._data.get("locked", False)
-    
-    def lock(self):
-        self._data["locked"] = True
-        self.save()
-
-    def unlock(self):
-        self._data["locked"] = False
-        self.save()
-
     def save(self, *args, **kwargs):
         self._data = {
             **ENUM_DEFAULT,
             **self._data
         }
         super().save(*args, **kwargs)
-
-    def __str__(self) -> str:
-        title = None
-
-        for rel in self._meta.related_objects:
-            if rel.one_to_one:
-                accessor = rel.get_accessor_name()
-                related_obj = getattr(self, accessor, None)
-                if related_obj is not None:
-                    title = f"{accessor} ({str(related_obj)})"
-
-        return title or f"StatusEnumType: {self.pk}"
