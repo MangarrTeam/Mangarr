@@ -7,6 +7,7 @@ import threading
 import os
 import shutil
 from server.settings import CACHE_FILE_PATH_ROOT
+from connectors.utils import notify_connectors
 
 from .models import MonitorManga, MonitorChapter, Manga
 
@@ -37,6 +38,7 @@ def monitoring_exists() -> bool:
 def monitoring():
     while not stop_event.is_set():
         try:
+            updated = False
             while monitoring_exists():
                 logger.debug("Monitoring check...")
                 clear_cache()
@@ -48,6 +50,8 @@ def monitoring():
                         break
                     try:
                         manga = MonitorManga.objects.get_or_create(plugin=manga.plugin, url=manga.url, arguments=manga.arguments)
+                        if not updated:
+                            updated = True
                     except Manga.DoesNotExist as e:
                         logger.warning(f"Manga missing - {e}")
                     except Exception as e:
@@ -62,6 +66,8 @@ def monitoring():
                         break
                     try:
                         manga_monitor.update()
+                        if not updated:
+                            updated = True
                     except MonitorManga.DoesNotExist as e:
                         logger.warning(f"Manga monitor missing - {e}")
                     except Exception as e:
@@ -72,6 +78,8 @@ def monitoring():
                         break
                     try:
                         chapter_monitor.update()
+                        if not updated:
+                            updated = True
                     except MonitorChapter.DoesNotExist as e:
                         logger.warning(f"Chapter monitor missing - {e}")
                     except Exception as e:
@@ -79,6 +87,9 @@ def monitoring():
                 
                 if stop_event.is_set():
                     break
+
+            if updated:
+                notify_connectors()
             
             if stop_event.is_set():
                 break

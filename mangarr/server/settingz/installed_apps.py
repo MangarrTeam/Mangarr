@@ -7,6 +7,7 @@ INSTALLED_APPS = [
     'daphne',
     'django.contrib.staticfiles',
     'channels',
+    'connectors',
     'plugins',
     'database.other',
     'database.users',

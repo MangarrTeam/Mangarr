@@ -105,6 +105,9 @@
                 <a href="{% url 'settings' %}" class="nav-link text-white d-flex flex-row my-auto">
                     <i class="fa fa-server text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.server_settings" context "Title for server settings" %}</p>
                 </a>
+                <a href="{% url 'settings_connectors' %}" class="nav-link text-white d-flex flex-row my-auto">
+                    <i class="fa fa-paper-plane text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.connectors_settings" context "Title for connectors settings" %}</p>
+                </a>
                 {% endif %}
                 {% if user|has_permition:'database.can_manage_plugins' %}
                 <a href="{% url 'plugin_manager' %}" class="nav-link text-white d-flex flex-row my-auto">

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mangarr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-25 15:18+0200\n"
-"PO-Revision-Date: 2025-05-25 13:33\n"
+"POT-Creation-Date: 2025-05-27 18:34+0200\n"
+"PO-Revision-Date: 2025-05-24 01:16\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "Language: cs_CZ\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Crowdin-File: /main/mangarr/locale/en/LC_MESSAGES/django.po\n"
 "X-Crowdin-File-ID: 12\n"
 
-#: .\database\data_types\models.py:27
+#: .\database\data_types\models.py:25
 msgctxt "Data field name for Type models"
 msgid "database.data_types.models.data"
 msgstr "Data"
@@ -310,17 +310,17 @@ msgstr "Manga"
 #: .\frontend\templates\base.html:77
 msgctxt "Title for monitored manga"
 msgid "frontend.base.monitored_manga"
-msgstr "Sledovaná manga"
+msgstr "Sledované"
 
 #: .\frontend\templates\base.html:81
 msgctxt "Title for manga search"
 msgid "frontend.base.manga_search"
-msgstr "Vyhledat mangu"
+msgstr "Vyhledat"
 
 #: .\frontend\templates\base.html:86
 msgctxt "Title for manga requests"
 msgid "frontend.base.manga_requests"
-msgstr "Vyžádané mangy"
+msgstr "Vyžádané"
 
 #: .\frontend\templates\base.html:98
 msgctxt "Title for settings"
@@ -335,49 +335,54 @@ msgstr "Profil"
 #: .\frontend\templates\base.html:107
 msgctxt "Title for server settings"
 msgid "frontend.base.server_settings"
-msgstr "Nastavení serveru"
+msgstr "Server"
 
-#: .\frontend\templates\base.html:112
+#: .\frontend\templates\base.html:110
+msgctxt "Title for connectors settings"
+msgid "frontend.base.connectors_settings"
+msgstr "Konektory"
+
+#: .\frontend\templates\base.html:115
 msgctxt "Title for plugin manager"
 msgid "frontend.base.plugin_manager"
-msgstr "Správce pluginů"
+msgstr "Pluginy"
 
-#: .\frontend\templates\base.html:117
+#: .\frontend\templates\base.html:120
 msgctxt "Title for users"
 msgid "frontend.base.users"
 msgstr "Uživatelé"
 
-#: .\frontend\templates\base.html:123
+#: .\frontend\templates\base.html:126
 msgctxt "Title for restart"
 msgid "frontend.base.restart"
 msgstr "Restartovat"
 
-#: .\frontend\templates\base.html:190
+#: .\frontend\templates\base.html:193
 msgctxt "Title for mangas in search bar"
 msgid "frontend.base.mangas"
 msgstr "Mangy"
 
-#: .\frontend\templates\base.html:204
+#: .\frontend\templates\base.html:207
 msgctxt "Title for volumes in search bar"
 msgid "frontend.base.volumes"
 msgstr "Svazky"
 
-#: .\frontend\templates\base.html:218
+#: .\frontend\templates\base.html:221
 msgctxt "Title for chapters in search bar"
 msgid "frontend.base.chapters"
 msgstr "Kapitoly"
 
-#: .\frontend\templates\base.html:260
+#: .\frontend\templates\base.html:263
 msgctxt "Number of mangas that are currently scanning"
 msgid "frontend.base.manga_scanning $MANGAS_NUMBER"
 msgstr "Mangy $MANGAS_NUMBER"
 
-#: .\frontend\templates\base.html:268
+#: .\frontend\templates\base.html:271
 msgctxt "Number of chapters that are currently scanning"
 msgid "frontend.base.chapter_scanning $CHAPTERS_NUMBER"
 msgstr "Kapitoly: $CHAPTERS_NUMBER"
 
-#: .\frontend\templates\base.html:280
+#: .\frontend\templates\base.html:283
 msgctxt "Which page is currently downloading of how many"
 msgid "frontend.base.page_downloading $CURRENT_PAGE/$OF_PAGES"
 msgstr "Strana $CURRENT_PAGE/$OF_PAGES"
@@ -536,18 +541,18 @@ msgctxt "Title for monitored mangas"
 msgid "frontend.manga_monitored.monitored_mangas"
 msgstr "Monitorované mangy"
 
-#: .\frontend\templates\manga\monitored.html:27
+#: .\frontend\templates\manga\monitored.html:28
 msgctxt "View manga button text"
 msgid "frontend.manga_monitored.view"
 msgstr "Zobrazit"
 
-#: .\frontend\templates\manga\monitored.html:30
+#: .\frontend\templates\manga\monitored.html:31
 msgctxt "View original manga button text"
 msgid "frontend.manga_monitored.view_original"
 msgstr "Zobrazit originál"
 
-#: .\frontend\templates\manga\monitored.html:43
-#: .\frontend\templates\manga\monitored.html:47
+#: .\frontend\templates\manga\monitored.html:44
+#: .\frontend\templates\manga\monitored.html:48
 msgctxt "No manga found text"
 msgid "frontend.manga_monitored.none_found"
 msgstr "Žádné mangy"
@@ -720,32 +725,32 @@ msgctxt "Save button text"
 msgid "frontend.profile.save"
 msgstr "Uložit"
 
-#: .\frontend\templates\profile.html:36 .\frontend\templates\profile.html:50
+#: .\frontend\templates\profile.html:36 .\frontend\templates\profile.html:53
 msgctxt "Token title in profile settings"
 msgid "frontend.profile.token"
 msgstr "Token"
 
-#: .\frontend\templates\profile.html:59
+#: .\frontend\templates\profile.html:62
 msgctxt "Password section title"
 msgid "frontend.profile.password"
 msgstr "Heslo"
 
-#: .\frontend\templates\profile.html:64
+#: .\frontend\templates\profile.html:67
 msgctxt "Old password label"
 msgid "frontend.profile.old_password"
 msgstr "Původní heslo"
 
-#: .\frontend\templates\profile.html:75
+#: .\frontend\templates\profile.html:78
 msgctxt "New password label"
 msgid "frontend.profile.new_password"
 msgstr "Nové heslo"
 
-#: .\frontend\templates\profile.html:86
+#: .\frontend\templates\profile.html:89
 msgctxt "Confirm password label"
 msgid "frontend.profile.confirm_password"
 msgstr "Potvrzení hesla"
 
-#: .\frontend\templates\profile.html:98
+#: .\frontend\templates\profile.html:101
 msgctxt "Change password button text"
 msgid "frontend.profile.change_password"
 msgstr "Změnit heslo"
@@ -756,15 +761,23 @@ msgid "frontend.settings.settings"
 msgstr "Nastavení"
 
 #: .\frontend\templates\settings.html:16
+#: .\frontend\templates\settings_connectors.html:16
 #: .\plugins\templates\plugins\manager.html:13
 msgctxt "Restart button text"
 msgid "frontend.settings.restart"
 msgstr "Restartovat"
 
 #: .\frontend\templates\settings.html:82
+#: .\frontend\templates\settings_connectors.html:90
 msgctxt "Save setting button text"
 msgid "frontend.settings.save_settings"
 msgstr "Uložit nastavení"
+
+#: .\frontend\templates\settings_connectors.html:9
+#: .\frontend\templates\settings_connectors.html:14
+msgctxt "Settings connectors title"
+msgid "frontend.settings.settings_connectors"
+msgstr "Nastavení konektorů"
 
 #: .\frontend\views.py:92 .\frontend\views.py:98 .\frontend\views.py:104
 msgctxt "Django section title"
@@ -831,7 +844,54 @@ msgctxt "Locale label"
 msgid "frontend.settings.locale"
 msgstr "Lokalita"
 
-#: .\frontend\views.py:226
+#: .\frontend\views.py:181 .\frontend\views.py:187 .\frontend\views.py:193
+#: .\frontend\views.py:199 .\frontend\views.py:205 .\frontend\views.py:211
+#: .\frontend\views.py:217
+msgctxt "Kavita section title"
+msgid "frontend.settings_connectors.kavita"
+msgstr "Kavita"
+
+#: .\frontend\views.py:182
+msgctxt "Address label"
+msgid "frontend.settings_connectors.address"
+msgstr "Adresa"
+
+#: .\frontend\views.py:188
+msgctxt "Port label"
+msgid "frontend.settings_connectors.port"
+msgstr "Port"
+
+#: .\frontend\views.py:194
+msgctxt "SSL label"
+msgid "frontend.settings_connectors.ssl"
+msgstr "SSL"
+
+#: .\frontend\views.py:200
+msgctxt "Username label"
+msgid "frontend.settings_connectors.username"
+msgstr "Uživatelské jméno"
+
+#: .\frontend\views.py:206
+msgctxt "Password label"
+msgid "frontend.settings_connectors.password"
+msgstr "Heslo"
+
+#: .\frontend\views.py:212
+msgctxt "Token label"
+msgid "frontend.settings_connectors.token"
+msgstr "Token"
+
+#: .\frontend\views.py:218
+msgctxt "Library ID label"
+msgid "frontend.settings_connectors.library_id"
+msgstr "ID knihovny"
+
+#: .\frontend\views.py:221
+msgctxt "Library ID tooltip"
+msgid "frontend.settings_connectors.library_id_tooltip"
+msgstr "Dá se naleznout v URL po rozkliknutí knihovny 'http(s)://KAVITA_IP/library/LIBRARY_ID'"
+
+#: .\frontend\views.py:302
 msgctxt "User unknown text"
 msgid "frontend.request_manga.user_unknown"
 msgstr "Neznámý uživatel"
@@ -976,4 +1036,3 @@ msgstr "Angličtina"
 msgctxt "Server localization name Czech"
 msgid "langs.czech"
 msgstr "Čeština"
-

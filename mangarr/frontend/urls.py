@@ -16,6 +16,7 @@ urlpatterns = [
 
 
     path("settings/", views.settings_view, name="settings"),
+    path("settings/connectors", views.settings_connectors_view, name="settings_connectors"),
 
 
     path("manga/search", views.manga_search, name="manga_search"),

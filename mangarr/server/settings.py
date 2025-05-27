@@ -2,6 +2,7 @@ from pathlib import Path
 import os
 
 
+from .settingz import connectors
 from .settingz.flags import *
 from .settingz.lazy_registries import *
 

@@ -173,6 +173,80 @@ def settings_view(request):
 
     return custom_render(request, "settings.html", {'settings': settings_dict, "config_changed": CONFIG.config_changed()})
 
+@permission_required("database.can_change_settings")
+def settings_connectors_view(request):
+    settings_dict = {
+        'Kavita': {
+            'address': {
+                'section_name': pgettext('Kavita section title', 'frontend.settings_connectors.kavita'),
+                'item_name': pgettext('Address label', 'frontend.settings_connectors.address'),
+                'value': CONFIG.get('Kavita', 'address'),
+                'type': 'text'
+            },
+            'port': {
+                'section_name': pgettext('Kavita section title', 'frontend.settings_connectors.kavita'),
+                'item_name': pgettext('Port label', 'frontend.settings_connectors.port'),
+                'value': CONFIG.get('Kavita', 'port'),
+                'type': 'number'
+            },
+            'ssl': {
+                'section_name': pgettext('Kavita section title', 'frontend.settings_connectors.kavita'),
+                'item_name': pgettext('SSL label', 'frontend.settings_connectors.ssl'),
+                'value': CONFIG.get('Kavita', 'ssl'),
+                'type': 'bool'
+            },
+            'username': {
+                'section_name': pgettext('Kavita section title', 'frontend.settings_connectors.kavita'),
+                'item_name': pgettext('Username label', 'frontend.settings_connectors.username'),
+                'value': CONFIG.get('Kavita', 'username'),
+                'type': 'text'
+            },
+            'password': {
+                'section_name': pgettext('Kavita section title', 'frontend.settings_connectors.kavita'),
+                'item_name': pgettext('Password label', 'frontend.settings_connectors.password'),
+                'value': CONFIG.get('Kavita', 'password'),
+                'type': 'pass'
+            },
+            'token': {
+                'section_name': pgettext('Kavita section title', 'frontend.settings_connectors.kavita'),
+                'item_name': pgettext('Token label', 'frontend.settings_connectors.token'),
+                'value': CONFIG.get('Kavita', 'token'),
+                'type': 'pass'
+            },
+            'library_id': {
+                'section_name': pgettext('Kavita section title', 'frontend.settings_connectors.kavita'),
+                'item_name': pgettext('Library ID label', 'frontend.settings_connectors.library_id'),
+                'value': CONFIG.getint('Kavita', 'library_id'),
+                'type': 'number',
+                'tooltip': pgettext('Library ID tooltip', 'frontend.settings_connectors.library_id_tooltip')
+            }
+        }
+    }
+
+    if request.method == "POST":
+        for section, value in settings_dict.items():
+            for ikey, item in value.items():
+                form_key = f"{section}.{ikey}"
+                if form_key in request.POST:
+                    values = request.POST.getlist(form_key)
+                    if item.get("type") == "choice":
+                        v = values[-1]
+                        if v not in [l.get("key", LANGUAGE_CODE) for l in item.get("choices", [])]:
+                            final_value = LANGUAGE_CODE
+                        else:
+                            final_value = v
+                    elif item.get("type") == "bool":
+                        final_value = values[-1]
+                    else:
+                        final_value = ",".join(values)
+
+                    logging.debug(f'Updating section "{section}" key "{ikey}" with value "{final_value}"')
+                    CONFIG.set(section, ikey, final_value)
+        CONFIG._write_with_comments()
+        return redirect("settings_connectors")
+
+    return custom_render(request, "settings_connectors.html", {'settings': settings_dict, "config_changed": CONFIG.config_changed()})
+
 from .forms import UserUpdateForm
 from django.contrib.auth.forms import PasswordChangeForm
 @login_required

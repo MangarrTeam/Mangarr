@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% load split_key %}
+{% load is_in %}
+{% load my_split %}
+
+{% block title %}{% trans "frontend.settings.settings_connectors" context "Settings connectors title" %}{% endblock %}
+
+
+{% block content %}
+<div class="d-flex mb-4">
+    <h1 class="my-auto text-white">{% trans "frontend.settings.settings_connectors" context "Settings connectors title" %}</h1>
+    {% if config_changed %}
+        <button type="button" id="restart" class="btn btn-danger my-auto ml-auto">{% trans "frontend.settings.restart" context "Restart button text" %}</button>
+    {% endif %}
+</div>
+
+<form method="post" id="setting-form">
+    {% csrf_token %}
+
+    {% for skey, section in settings.items %}
+        <div class="card mb-3 text-white border-0 rounded-2">
+            {% for ikey,item in section.items %}
+                {% if forloop.first %}
+            <div class="card-header background-middle h4">{{ item.section_name }}</div>
+            <div class="card-body background-light">    
+                {% endif %}
+                <div class="form-group">
+
+                    {% if item.type == 'bool' %}
+                        <div class="form-check form-switch mb-2 pl-0 d-flex flex-row">
+                            <input type="hidden" name="{{ skey }}.{{ ikey }}" value="False">
+                            <input type="checkbox" class="form-check-input bg-transparent border-white text-white mr-2" value="True" id="{{ skey }}.{{ ikey }}" name="{{ skey }}.{{ ikey }}" {% if item.value|is_in:"1,true,True,yes,on" %}checked{% endif %} data-reverse data-group-cls="btn-group-sm mr-2">
+                    {% elif item.type == 'pass' %}
+                        <div class="mb-2 d-flex flex-column-reverse">
+                            <div class="flex-row input-group">
+                                <input type="password" class="form-control flex-fill bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white" id="{{ ikey }}" name="{{ skey }}.{{ ikey }}" value="{{ item.value }}">
+                                <button class="btn btn-outline-secondary ml-2" type="button" onclick="togglePass('{{ ikey }}', this)"><i class="fa fa-eye-slash"></i></button>
+                            </div>
+                    {% elif item.type == 'number' %}
+                        <div class="mb-2 d-flex flex-column-reverse">
+                            <input type="number" min="0" class="form-control bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white" id="{{ ikey }}" name="{{ skey }}.{{ ikey }}" value="{{ item.value }}">
+                    {% elif item.type == 'choice' %}
+                        <div class="mb-2 d-flex flex-column-reverse">
+                            <select class="form-control custom-select bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white" style="box-shadow: none;" name="{{ skey }}.{{ ikey }}" id="{{ ikey }}">
+                                {% for choice in item.choices %}
+                                    <option class="background-dark" value="{{ choice.key }}" {% if item.value == choice.key %}selected{% endif %}>{{ choice.value }}</option>
+                                {% endfor %}
+                            </select>
+                    {% elif item.type == 'list' %}
+                        <div class="mb-2 d-flex flex-column-reverse">
+                            <div id="{{ ikey }}-container" class="flex-column">
+                                {% for host in item.value|my_split:',' %}
+                                    <div class="input-group mb-2 allowed-host-entry">
+                                    <input type="text" name="{{ skey }}.{{ ikey }}" class="form-control bg-transparent text-white border-white border-left-0 border-top-0 border-right-0 rounded-0" value="{{ host }}">
+                                    <button type="button" class="btn btn-outline-danger ml-2" onclick="removeHost(this)"><i class="fa fa-times"></i></button>
+                                    </div>
+                                {% endfor %}
+                                
+                                {% if not item.value %}
+                                <div class="input-group mb-2 allowed-host-entry">
+                                    <input type="text" name="{{ skey }}.{{ ikey }}" class="form-control bg-transparent text-white border-white border-left-0 border-top-0 border-right-0 rounded-0" value="">
+                                    <button type="button" class="btn btn-outline-danger ml-2" onclick="removeHost(this)"><i class="fa fa-times"></i></button>
+                                </div>
+                                {% endif %}
+
+                                <button type="button" class="btn btn-outline-success mt-2" onclick="addHost('{{ ikey }}-container', '{{ skey }}.{{ ikey }}')"><i class="fa fa-plus"></i></button>
+                            </div>
+                    {% else %}
+                        <div class="mb-2 d-flex flex-column-reverse">
+                            <input type="text" class="form-control bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white" id="{{ ikey }}" name="{{ skey }}.{{ ikey }}" value="{{ item.value }}">
+                    {% endif %}
+                        {% if item.tooltip %}
+                        <small class="text-muted">{{ item.tooltip }}</small>
+                        {% endif %}
+                        <label for="{{ ikey }}">
+                            {{ item.item_name }}
+                        </label>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+</form>
+<div class="text-start pb-2">
+    <button type="submit" class="btn btn-primary" form="setting-form">{% trans "frontend.settings.save_settings" context "Save setting button text" %}</button>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function togglePass(for_item, btn) {
+        const pass_input = document.getElementById(for_item);
+        const isPassword = pass_input.type === 'password';
+        pass_input.type = isPassword ? 'text' : 'password';
+        if(isPassword) {
+            btn.querySelector("i").classList.remove("fa-eye-slash");
+            btn.querySelector("i").classList.add("fa-eye");
+        } else {
+            btn.querySelector("i").classList.remove("fa-eye");
+            btn.querySelector("i").classList.add("fa-eye-slash");
+        }
+    }
+    $(':checkbox').checkboxpicker();
+
+    function addHost(id, key) {
+        const container = document.getElementById(id);
+        const inputGroup = document.createElement('div');
+        inputGroup.className = 'input-group mb-2 allowed-host-entry';
+
+        inputGroup.innerHTML = `
+            <input type="text" name=${key} class="form-control bg-transparent text-white border-white border-left-0 border-top-0 border-right-0 rounded-0" value="">
+            <button type="button" class="btn btn-outline-danger ml-2" onclick="removeHost(this)"><i class="fa fa-times"></i></button>
+        `;
+        // Insert before the "Add Host" button
+        container.insertBefore(inputGroup, container.querySelector('.btn.btn-outline-success'));
+    }
+
+    function removeHost(button) {
+        const entry = button.closest('.allowed-host-entry');
+        entry.remove();
+    }
+</script>
+{% endblock %}
