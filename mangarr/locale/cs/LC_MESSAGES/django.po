@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mangarr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-27 18:34+0200\n"
-"PO-Revision-Date: 2025-05-27 16:43\n"
+"PO-Revision-Date: 2025-05-27 16:55\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "Language: cs_CZ\n"
@@ -310,17 +310,17 @@ msgstr "Manga"
 #: .\frontend\templates\base.html:77
 msgctxt "Title for monitored manga"
 msgid "frontend.base.monitored_manga"
-msgstr "Sledovaná manga"
+msgstr "Sledované"
 
 #: .\frontend\templates\base.html:81
 msgctxt "Title for manga search"
 msgid "frontend.base.manga_search"
-msgstr "Vyhledat mangu"
+msgstr "Vyhledat"
 
 #: .\frontend\templates\base.html:86
 msgctxt "Title for manga requests"
 msgid "frontend.base.manga_requests"
-msgstr "Vyžádané mangy"
+msgstr "Vyžádané"
 
 #: .\frontend\templates\base.html:98
 msgctxt "Title for settings"
@@ -335,7 +335,7 @@ msgstr "Profil"
 #: .\frontend\templates\base.html:107
 msgctxt "Title for server settings"
 msgid "frontend.base.server_settings"
-msgstr "Nastavení serveru"
+msgstr "Server"
 
 #: .\frontend\templates\base.html:110
 msgctxt "Title for connectors settings"
@@ -345,7 +345,7 @@ msgstr "Konektory"
 #: .\frontend\templates\base.html:115
 msgctxt "Title for plugin manager"
 msgid "frontend.base.plugin_manager"
-msgstr "Správce pluginů"
+msgstr "Pluginy"
 
 #: .\frontend\templates\base.html:120
 msgctxt "Title for users"
