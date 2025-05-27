@@ -105,6 +105,7 @@ services:
     container_name: mangarr
     ports:
       - "80:80"
+      - "81:81"   # for admin page
     volumes:
       - ${PROJECT_ROOT}:/app/project_root
       - ${MANGA_FOLDER}:/manga/media
