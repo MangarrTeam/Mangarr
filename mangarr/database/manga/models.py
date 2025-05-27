@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import pgettext
 from database.data_types.models import StringType, BoolType, IntType, FloatType, DateType, FormatsEnumType, AgeRatingEnumType, StatusEnumType
 from datetime import datetime
+from django.utils import timezone
 from plugins.base import Formats, AgeRating
 from plugins.utils import get_downloaded_metadata
 from django.contrib.auth.models import User
@@ -114,6 +115,10 @@ class Manga(models.Model):
             alt_name.value = alternative_name
             alt_name.save()
             self.alternative_names.create(manga=self, alternative_names=alt_name)
+
+    def update_last_update(self) -> None:
+        self.last_update = timezone.now()
+        self.save()
 
     def update_fields(self, data:dict) -> None:
         if data.get("name"):

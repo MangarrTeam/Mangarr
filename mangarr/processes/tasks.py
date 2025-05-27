@@ -49,8 +49,8 @@ def monitoring():
                     if stop_event.is_set():
                         break
                     try:
-                        manga = MonitorManga.objects.get_or_create(plugin=manga.plugin, url=manga.url, arguments=manga.arguments)
-                        if not updated:
+                        monitor_manga, monitor_created = MonitorManga.objects.get_or_create(plugin=manga.plugin, url=manga.url, arguments=manga.arguments, manga=manga)
+                        if not updated and monitor_created:
                             updated = True
                     except Manga.DoesNotExist as e:
                         logger.warning(f"Manga missing - {e}")

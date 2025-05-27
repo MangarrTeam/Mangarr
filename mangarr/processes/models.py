@@ -63,6 +63,8 @@ def get_hash(text: str) -> str:
     return hashlib.sha256(text.encode()).hexdigest()
      
 class MonitorManga(ProcessBase):
+    manga = models.ForeignKey(Manga, on_delete=models.SET_NULL, blank=True, null=True, verbose_name=pgettext("Monitor manga manga name", "processes.models.monitor_manga.manga"))
+
     def update(self):
         try:
             plugin = self.get_plugin()
@@ -72,7 +74,6 @@ class MonitorManga(ProcessBase):
 
             if manga_created:
                 manga.choose_plugin(self.plugin)
-
 
             manga.update_fields({
                 **self.arguments,
@@ -114,6 +115,10 @@ class MonitorManga(ProcessBase):
             MonitorChapter.objects.bulk_create(new_chapters, batch_size=100)
 
             self.delete()
+
+            if self.manga is not None:
+                self.manga.update_last_update()
+
         except Exception as e:
             self.last_run = timezone.now()
             self.save()
