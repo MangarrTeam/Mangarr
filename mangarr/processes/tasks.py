@@ -9,7 +9,7 @@ import shutil
 from server.settings import CACHE_FILE_PATH_ROOT
 from connectors.utils import notify_connectors
 
-from .models import MonitorManga, MonitorChapter, Manga
+from .models import MonitorManga, MonitorChapter, Manga, ChapterDownloaded
 
 import logging
 logger = logging.getLogger(__name__)
@@ -72,7 +72,8 @@ def monitoring():
                         logger.warning(f"Manga monitor missing - {e}")
                     except Exception as e:
                         logger.error(f"Error - {e}")
-                
+
+                skipped_chapters = []
                 for chapter_monitor in MonitorChapter.objects.filter(Q(last_run__lt=one_hour_ago) | Q(last_run__isnull=True)):
                     if stop_event.is_set():
                         break
@@ -80,10 +81,15 @@ def monitoring():
                         chapter_monitor.update()
                         if not updated:
                             updated = True
+                    except ChapterDownloaded:
+                        logger.debug(f"Chapter already downloaded, skipping...")
+                        skipped_chapters.append(chapter_monitor.pk)
                     except MonitorChapter.DoesNotExist as e:
                         logger.warning(f"Chapter monitor missing - {e}")
                     except Exception as e:
                         logger.error(f"Error - {e}")
+
+                MonitorChapter.objects.filter(pk__in=skipped_chapters).delete()
                 
                 if stop_event.is_set():
                     break

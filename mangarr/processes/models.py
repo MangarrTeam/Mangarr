@@ -98,7 +98,6 @@ class MonitorManga(ProcessBase):
 
             # Step 3: Filter out existing and prepare new instances
             new_chapters = []
-
             for ch_data in unique_chapters:
                 url = ch_data["url"]
                 if url in existing_urls:
@@ -112,7 +111,6 @@ class MonitorManga(ProcessBase):
                 )
                 new_chapters.append(chapter)
 
-
             MonitorChapter.objects.bulk_create(new_chapters, batch_size=100)
 
             self.delete()
@@ -120,6 +118,9 @@ class MonitorManga(ProcessBase):
             self.last_run = timezone.now()
             self.save()
             logger.error(f"Error - {e}")
+
+class ChapterDownloaded(Exception):
+    pass
 
 class PageWasNone(Exception):
     pass
@@ -150,10 +151,7 @@ class MonitorChapter(ProcessBase):
             })
 
             if chapter.downloaded:
-                logger.debug(f"Chapter '{chapter.name.value}' already downloaded, skipping...")
-                self.delete()
-                time.sleep(1)
-                return
+                raise ChapterDownloaded
 
             chapter_cache_folder = f'{self.plugin} {self.manga.name.value} {self.url}'
             chapter_cache_file_path_name = CACHE_FILE_PATH_ROOT / f"{get_hash(chapter_cache_folder)}.cbz"
@@ -191,6 +189,9 @@ class MonitorChapter(ProcessBase):
 
             # Delay for 10 seconds
             time.sleep(10)
+
+        except ChapterDownloaded:
+            raise ChapterDownloaded
 
         except Exception as e:
             self.last_run = timezone.now()
