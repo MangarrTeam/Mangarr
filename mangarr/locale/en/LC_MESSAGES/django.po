@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mangarr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-27 18:34+0200\n"
+"POT-Creation-Date: 2025-05-28 00:26+0200\n"
 "PO-Revision-Date: 2025-05-24 01:16\n"
 "Last-Translator: \n"
 "Language-Team: English <LL@li.org>\n"
@@ -17,227 +17,227 @@ msgctxt "Data field name for Type models"
 msgid "database.data_types.models.data"
 msgstr "Data"
 
-#: .\database\manga\models.py:28
+#: .\database\manga\models.py:29
 msgctxt "Plugin field name for MangaRequest"
 msgid "database.models.manga_request.plugin"
 msgstr "Plugin"
 
-#: .\database\manga\models.py:29
+#: .\database\manga\models.py:30
 msgctxt "User FK field name for MangaRequest"
 msgid "database.models.manga_request.requested_by"
 msgstr "Requested by"
 
-#: .\database\manga\models.py:30
+#: .\database\manga\models.py:31
 msgctxt "Variables JSON field name for MangaRequest"
 msgid "database.models.manga_request.variables"
 msgstr "Variables"
 
-#: .\database\manga\models.py:77
+#: .\database\manga\models.py:78
 msgctxt "Plugin field name for Manga"
 msgid "database.models.manga_request.plugin"
 msgstr "Plugin"
 
-#: .\database\manga\models.py:78
+#: .\database\manga\models.py:79
 msgctxt "Name field name for Manga"
 msgid "database.models.manga.name"
 msgstr "Name"
 
-#: .\database\manga\models.py:79
+#: .\database\manga\models.py:80
 msgctxt "Localized name field name for Manga"
 msgid "database.models.manga.localized_name"
 msgstr "Localized name"
 
-#: .\database\manga\models.py:80
+#: .\database\manga\models.py:81
 msgctxt "Description field name for Manga"
 msgid "database.models.manga.description"
 msgstr "Description"
 
-#: .\database\manga\models.py:81
+#: .\database\manga\models.py:82
 msgctxt "Genres field name for Manga"
 msgid "database.models.manga.genres"
 msgstr "Genres"
 
-#: .\database\manga\models.py:82
+#: .\database\manga\models.py:83
 msgctxt "Tags field name for Manga"
 msgid "database.models.manga.tags"
 msgstr "Tags"
 
-#: .\database\manga\models.py:83
+#: .\database\manga\models.py:84
 msgctxt "Date added field name for Manga"
 msgid "database.models.manga.date_added"
 msgstr "Date added"
 
-#: .\database\manga\models.py:84
+#: .\database\manga\models.py:85
 msgctxt "Last update field name for Manga"
 msgid "database.models.manga.last_update"
 msgstr "Last update"
 
-#: .\database\manga\models.py:85
+#: .\database\manga\models.py:86
 msgctxt "Complete field name for Manga"
 msgid "database.models.manga.complete"
 msgstr "Complete"
 
-#: .\database\manga\models.py:86
+#: .\database\manga\models.py:87
 msgctxt "URL field name for Manga"
 msgid "database.models.manga.url"
 msgstr "URL"
 
-#: .\database\manga\models.py:87
+#: .\database\manga\models.py:88
 msgctxt "Arguments JSON field name for Manga"
 msgid "processes.models.manga.arguments"
 msgstr "Arguments"
 
-#: .\database\manga\models.py:178
+#: .\database\manga\models.py:183
 msgctxt "Alternative names field name for MangaANLink"
 msgid "database.models.manga.alternative_names"
 msgstr "Alternative names"
 
-#: .\database\manga\models.py:184
+#: .\database\manga\models.py:189
 msgctxt "Name field name for Volume"
 msgid "database.models.volume.name"
 msgstr "Name"
 
-#: .\database\manga\models.py:185
+#: .\database\manga\models.py:190
 msgctxt "Description field name for Volume"
 msgid "database.models.volume.description"
 msgstr "Description"
 
-#: .\database\manga\models.py:186
+#: .\database\manga\models.py:191
 msgctxt "Number field name for Volume"
 msgid "database.models.volume.number"
 msgstr "Number"
 
-#: .\database\manga\models.py:187
+#: .\database\manga\models.py:192
 msgctxt "Mange FK field name for Volume"
 msgid "processes.models.volume.manga"
 msgstr "Manga"
 
-#: .\database\manga\models.py:188
+#: .\database\manga\models.py:193
 msgctxt "Arguments JSON field name for Volume"
 msgid "processes.models.volume.arguments"
 msgstr "Arguments"
 
-#: .\database\manga\models.py:246
+#: .\database\manga\models.py:251
 msgctxt "Name field name for Chapter"
 msgid "database.models.chapter.name"
 msgstr "Name"
 
-#: .\database\manga\models.py:247
+#: .\database\manga\models.py:252
 msgctxt "Description field name for Chapter"
 msgid "database.models.chapter.description"
 msgstr "Description"
 
-#: .\database\manga\models.py:248
+#: .\database\manga\models.py:253
 msgctxt "Localization field name for Chapter"
 msgid "database.models.chapter.localization"
 msgstr "Localization"
 
-#: .\database\manga\models.py:249
+#: .\database\manga\models.py:254
 msgctxt "Publisher field name for Chapter"
 msgid "database.models.chapter.publisher"
 msgstr "Publisher"
 
-#: .\database\manga\models.py:250
+#: .\database\manga\models.py:255
 msgctxt "Imprint field name for Chapter"
 msgid "database.models.chapter.imprint"
 msgstr "Imprint"
 
-#: .\database\manga\models.py:251
+#: .\database\manga\models.py:256
 msgctxt "Release date field name for Chapter"
 msgid "database.models.chapter.release_date"
 msgstr "Release date"
 
-#: .\database\manga\models.py:252
+#: .\database\manga\models.py:257
 msgctxt "Writer field name for Chapter"
 msgid "database.models.chapter.writer"
 msgstr "Writer"
 
-#: .\database\manga\models.py:253
+#: .\database\manga\models.py:258
 msgctxt "Penciller field name for Chapter"
 msgid "database.models.chapter.penciller"
 msgstr "Penciller"
 
-#: .\database\manga\models.py:254
+#: .\database\manga\models.py:259
 msgctxt "Inker field name for Chapter"
 msgid "database.models.chapter.inker"
 msgstr "Inker"
 
-#: .\database\manga\models.py:255
+#: .\database\manga\models.py:260
 msgctxt "Colorist field name for Chapter"
 msgid "database.models.chapter.colorist"
 msgstr "Colorist"
 
-#: .\database\manga\models.py:256
+#: .\database\manga\models.py:261
 msgctxt "Letterer field name for Chapter"
 msgid "database.models.chapter.letterer"
 msgstr "Letterer"
 
-#: .\database\manga\models.py:257
+#: .\database\manga\models.py:262
 msgctxt "Cover artist field name for Chapter"
 msgid "database.models.chapter.cover_artist"
 msgstr "Cover artist"
 
-#: .\database\manga\models.py:258
+#: .\database\manga\models.py:263
 msgctxt "Editor field name for Chapter"
 msgid "database.models.chapter.editor"
 msgstr "Editor"
 
-#: .\database\manga\models.py:259
+#: .\database\manga\models.py:264
 msgctxt "Translator field name for Chapter"
 msgid "database.models.chapter.translator"
 msgstr "Translator"
 
-#: .\database\manga\models.py:260
+#: .\database\manga\models.py:265
 msgctxt "Page count field name for Chapter"
 msgid "database.models.chapter.page_count"
 msgstr "Page count"
 
-#: .\database\manga\models.py:261
+#: .\database\manga\models.py:266
 msgctxt "Format field name for Chapter"
 msgid "database.models.chapter.format"
 msgstr "Format"
 
-#: .\database\manga\models.py:262
+#: .\database\manga\models.py:267
 msgctxt "Age rating field name for Chapter"
 msgid "database.models.chapter.age_rating"
 msgstr "Age rating"
 
-#: .\database\manga\models.py:263
+#: .\database\manga\models.py:268
 msgctxt "ISBN field name for Chapter"
 msgid "database.models.chapter.isbn"
 msgstr "ISBN"
 
-#: .\database\manga\models.py:264
+#: .\database\manga\models.py:269
 msgctxt "Number field name for Chapter"
 msgid "database.models.chapter.number"
 msgstr "Number"
 
-#: .\database\manga\models.py:265
+#: .\database\manga\models.py:270
 msgctxt "Volume FK field name for Chapter"
 msgid "database.models.chapter.volume"
 msgstr "Volume"
 
-#: .\database\manga\models.py:266
+#: .\database\manga\models.py:271
 msgctxt "File field name for Chapter"
 msgid "database.models.chapter.file_path"
 msgstr "File path"
 
-#: .\database\manga\models.py:267
+#: .\database\manga\models.py:272
 msgctxt "URL field name for Chapter"
 msgid "database.models.chapter.url"
 msgstr "URL"
 
-#: .\database\manga\models.py:268
+#: .\database\manga\models.py:273
 msgctxt "Source URL field name for Chapter"
 msgid "database.models.chapter.source_url"
 msgstr "Source URL"
 
-#: .\database\manga\models.py:269
+#: .\database\manga\models.py:274
 msgctxt "Downloaded field name for Chapter"
 msgid "database.models.chapter.downloaded"
 msgstr "Downloaded"
 
-#: .\database\manga\models.py:270
+#: .\database\manga\models.py:275
 msgctxt "Arguments JSON field name for Chapter"
 msgid "processes.models.manga.arguments"
 msgstr "Arguments"
@@ -884,7 +884,9 @@ msgstr "Library ID"
 #: .\frontend\views.py:221
 msgctxt "Library ID tooltip"
 msgid "frontend.settings_connectors.library_id_tooltip"
-msgstr "Can be found in URL after openning the library 'http(s)://KAVITA_IP/library/LIBRARY_ID'"
+msgstr ""
+"Can be found in URL after openning the library 'http(s)://KAVITA_IP/library/"
+"LIBRARY_ID'"
 
 #: .\frontend\views.py:302
 msgctxt "User unknown text"
@@ -1017,7 +1019,12 @@ msgctxt "Arguments JSON field name"
 msgid "processes.models.process_base.arguments"
 msgstr "Arguments"
 
-#: .\processes\models.py:128
+#: .\processes\models.py:66
+msgctxt "Monitor manga manga name"
+msgid "processes.models.monitor_manga.manga"
+msgstr "Manga"
+
+#: .\processes\models.py:134
 msgctxt "Manga FK name"
 msgid "processes.models.monitor_chapter.manga"
 msgstr "Manga"
