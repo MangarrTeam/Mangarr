@@ -13,7 +13,7 @@ from django.dispatch import receiver
 from server.settings import FILE_PATH_ROOT
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
-from xml.sax.saxutils import escape
+from xml.sax.saxutils import unescape
 from .functions import make_valid_filename
 
 
@@ -425,7 +425,7 @@ class Chapter(models.Model):
         for tag, text in self.get_fields_values_for_xml().items():
             if text is None:
                 continue
-            ET.SubElement(root, tag).text = escape(str(text))
+            ET.SubElement(root, tag).text = unescape(str(text))
 
         xml_bytes = ET.tostring(root, encoding="utf-8", xml_declaration=True)
         reparsed = minidom.parseString(xml_bytes)
