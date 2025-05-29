@@ -135,6 +135,8 @@ Simply open your browser to `http://localhost` (or your device IP address) there
 - [x] Add Plugin manager
 - [x] Add ability to download manga parsed using plugins
 - [ ] Add metadata editor
+    - [x] Editor
+    - [ ] Saving
 - [ ] Multi-language Support
     - [x] Czech
     - [x] English
