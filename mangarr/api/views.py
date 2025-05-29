@@ -6,16 +6,18 @@ from server.functions import superuser_or_staff_required, superuser_required
 from database.users.models import UserProfile, RegisterToken
 from database.manga.models import Manga, Volume, Chapter
 from django.contrib.contenttypes.models import ContentType
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext
 from django.contrib.auth.decorators import permission_required
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 import json
-from .functions import manga_is_monitored, manga_is_requested, validate_token
+from .functions import manga_is_monitored, manga_is_requested, validate_token, require_DELETE, require_GET_PATCH
 from server.settings import NSFW_ALLOWED
 from processes.models import MonitorManga
 from django.db import IntegrityError
 from processes.tasks import trigger_monitor
+from django.utils.translation import override
+from server.settings import LANGUAGE_CODE
 import logging
 logger = logging.getLogger(__name__)
 
@@ -54,17 +56,30 @@ def regenerate_token_view(request):
 @superuser_or_staff_required
 def get_user_permissions(request, user_id):
     user = get_object_or_404(User, pk=user_id)
+
     user_permissions = user.user_permissions.all()
     userprofile_ct = ContentType.objects.get_for_model(UserProfile)
+
+    custom_codenames = user.profile.get_custom_permissions()
     custom_permissions = Permission.objects.filter(
         content_type=userprofile_ct,
-        codename__in=user.profile.get_custom_permissions()
+        codename__in=custom_codenames
     )
+
     all_permissions = set(list(custom_permissions) + list(user_permissions))
+
+    def get_translated_name(perm):
+        if perm.content_type == userprofile_ct and perm.codename in custom_codenames:
+            with override(LANGUAGE_CODE):
+                return pgettext(
+                    f"Permission value for '{perm.codename.replace('_', ' ').capitalize()}'",
+                    f"permission.{perm.codename}"
+                )
+        return perm.name
 
     return JsonResponse({
         "permissions": [
-            {"id": perm.id, "name": _(perm.name), "codename": perm.codename, "has": perm in user_permissions}
+            {"id": perm.id, "name": get_translated_name(perm), "codename": perm.codename, "has": perm in user_permissions}
             for perm in all_permissions
         ]
    })
@@ -100,24 +115,22 @@ def toggle_staff_user(request, user_id):
     return JsonResponse({"error": "Forbidden"}, status=400)
 
 @superuser_or_staff_required
+@require_DELETE
 def delete_user(request, user_id):
-    if request.method == 'POST':
-        user = get_object_or_404(User, id=user_id)
-        if user.is_superuser:
-            return JsonResponse({"error": "Forbidden"}, status=403)
-        user.delete()
-        return JsonResponse({'success': True})
-    return JsonResponse({"error": "Forbidden"}, status=400)
+    user = get_object_or_404(User, id=user_id)
+    if user.is_superuser:
+        return JsonResponse({"error": "Forbidden"}, status=403)
+    user.delete()
+    return JsonResponse({'success': True})
 
 @superuser_or_staff_required
+@require_DELETE
 def delete_token(request, token_id):
-    if request.method == 'POST':
-        token = get_object_or_404(RegisterToken, id=token_id)
-        token.delete()
-        return JsonResponse({'success': True})
-    return JsonResponse({"error": "Forbidden"}, status=400)
+    token = get_object_or_404(RegisterToken, id=token_id)
+    token.delete()
+    return JsonResponse({'success': True})
 
-@permission_required("database.can_manage_plugins")
+@permission_required("database_users.can_manage_plugins")
 def toggle_pause_downloads(request):
     from server.settings import toggle_download_pause, is_download_paused
     toggle_download_pause()
@@ -125,7 +138,7 @@ def toggle_pause_downloads(request):
 
 
 from plugins.functions import get_plugin, get_plugins_domains
-@permission_required("database.can_search")
+@permission_required("database_users.can_search")
 @require_POST
 def search_manga(request):
     try:
@@ -161,7 +174,7 @@ def search_manga(request):
 
 from database.manga.models import MangaRequest
 
-@permission_required("database.can_request")
+@permission_required("database_users.can_request")
 @require_POST
 def request_manga(request):
     try:
@@ -202,7 +215,7 @@ def request_manga(request):
         return JsonResponse({"error": f"Error - {e}"}, status=500)
     
 
-@permission_required("database.can_monitor")
+@permission_required("database_users.can_monitor")
 @require_POST
 def monitor_manga(request):
     try:
@@ -229,8 +242,93 @@ def monitor_manga(request):
         return JsonResponse({"success": True}, status=200)
     except Exception as e:
         return JsonResponse({"error": f"Error - {e}"}, status=500)
+    
+@permission_required("database_users.can_manage_metadata")
+@require_GET_PATCH
+def edit_manga(request, manga_id):
+    try:
+        manga = Manga.objects.get(id=manga_id)
+    except Manga.DoesNotExist:
+        return JsonResponse({'error': "Manga not found"}, status=404)
+    
+    if request.method == "GET":
+        with override(LANGUAGE_CODE):
+            return JsonResponse(manga.to_representation())
+    
+    # PATCH
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': "Invalid JSON."}, status=400)
+    
+    manga.update_fields(data, force=True)
 
-@permission_required("database.can_manage_requests")
+    with override(LANGUAGE_CODE):
+        return JsonResponse({
+            "success": True,
+            "updated": manga.to_representation()
+        })
+
+@permission_required("database_users.can_manage_metadata")
+@require_GET_PATCH
+def edit_volume(request, volume_id):
+    try:
+        volume = Volume.objects.get(id=volume_id)
+    except Volume.DoesNotExist:
+        return JsonResponse({'error': "Volume not found"}, status=404)
+
+    if request.method == "GET":
+        with override(LANGUAGE_CODE):
+            return JsonResponse(volume.to_representation())
+    
+    # PATCH
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': "Invalid JSON."}, status=400)
+    
+    volume.update_fields(data, force=True)
+
+    with override(LANGUAGE_CODE):
+        return JsonResponse({
+            "success": True,
+            "updated": volume.to_representation()
+        })
+
+@permission_required("database_users.can_manage_metadata")
+@require_GET_PATCH
+def edit_chapter(request, chapter_id):
+    try:
+        chapter = Chapter.objects.get(id=chapter_id)
+    except Chapter.DoesNotExist:
+        return JsonResponse({'error': "Chapter not found"}, status=404)
+
+    if request.method == "GET":
+        with override(LANGUAGE_CODE):
+            return JsonResponse(chapter.to_representation())
+    
+    # PATCH
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': "Invalid JSON."}, status=400)
+    
+    chapter.update_fields(data, force=True)
+
+    with override(LANGUAGE_CODE):
+        return JsonResponse({
+            "success": True,
+            "updated": chapter.to_representation()
+        })
+    
+@permission_required("database_users.can_manage_metadata")
+@require_DELETE
+def delete_manga(request, manga_id):
+    manga = get_object_or_404(Manga, id=manga_id)
+    manga.delete()
+    return JsonResponse({'success': True})
+
+@permission_required("database_users.can_manage_requests")
 @require_POST
 def approve_manga_request(request):
     pk = request.headers.get("pk")
@@ -254,7 +352,7 @@ def approve_manga_request(request):
     except Exception as e:
         return JsonResponse({"error": f"Error - {e}"}, status=500)
 
-@permission_required("database.can_manage_requests")
+@permission_required("database_users.can_manage_requests")
 @require_POST
 def deny_manga_request(request):
     pk = request.headers.get("pk")

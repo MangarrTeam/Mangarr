@@ -170,13 +170,13 @@ document.getElementById('search-form').addEventListener('submit', async (e) => {
         const buttonsContainer = document.createElement("div");
         buttonsContainer.className = "hover-buttons d-none";
 
-        {% if user|has_permition:'database.can_request' or user|has_permition:'database.can_download' %}
+        {% if user|has_permition:'database_users.can_request' or user|has_permition:'database_users.can_download' %}
         const r_mContainer = document.createElement("div");
         r_mContainer.className = "hover-buttons d-flex";
         {% endif %}
 
         // Request button
-        {% if user|has_permition:'database.can_request' %}
+        {% if user|has_permition:'database_users.can_request' %}
         const requestBtn = document.createElement("button");
         requestBtn.className = `btn btn-sm btn-primary mr-2 w-100 text-truncate ${manga["monitored"] ? "d-none" : ""}`;
         requestBtn.textContent = '{% trans "frontend.search.request" context "Request button text" %}';
@@ -235,7 +235,7 @@ document.getElementById('search-form').addEventListener('submit', async (e) => {
         {% endif %}
 
         // Monitor button
-        {% if user|has_permition:'database.can_download' %}
+        {% if user|has_permition:'database_users.can_download' %}
         const monitorBtn = document.createElement("button");
         monitorBtn.className = "btn btn-sm btn-secondary w-100 text-truncate";
         monitorBtn.textContent = '{% trans "frontend.search.monitor" context "Monitor button text" %}';
@@ -308,13 +308,13 @@ document.getElementById('search-form').addEventListener('submit', async (e) => {
             window.open(manga.url, "_blank", "noopener,noreferrer");
         };
 
-        {% if user|has_permition:'database.can_request' %}
+        {% if user|has_permition:'database_users.can_request' %}
         r_mContainer.appendChild(requestBtn);
         {% endif %}
-        {% if user|has_permition:'database.can_download' %}
+        {% if user|has_permition:'database_users.can_download' %}
         r_mContainer.appendChild(monitorBtn);
         {% endif %}
-        {% if user|has_permition:'database.can_request' or user|has_permition:'database.can_download' %}
+        {% if user|has_permition:'database_users.can_request' or user|has_permition:'database_users.can_download' %}
         buttonsContainer.appendChild(r_mContainer);
         {% endif %}
         buttonsContainer.appendChild(viewBtn);

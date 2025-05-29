@@ -42,7 +42,7 @@ def register(request):
         if not can_register(request):
             logger.debug("The register token does not exist in database")
             return redirect('login')
-
+        
     if request.method == "POST":
         if not can_register(request):
             logger.debug("The register token does not exist in database")
@@ -84,7 +84,7 @@ def login_view(request):
     return custom_render(request, "login.html", {"form": form})
 
 import pytz
-@permission_required("database.can_change_settings")
+@permission_required("database_users.can_change_settings")
 def settings_view(request):
     settings_dict = {
         'Django': {
@@ -173,7 +173,7 @@ def settings_view(request):
 
     return custom_render(request, "settings.html", {'settings': settings_dict, "config_changed": CONFIG.config_changed()})
 
-@permission_required("database.can_change_settings")
+@permission_required("database_users.can_change_settings")
 def settings_connectors_view(request):
     settings_dict = {
         'Kavita': {
@@ -281,7 +281,7 @@ def manager_user_list(request):
     register_tokens = RegisterToken.objects.all()
     return custom_render(request, "manager/user_list.html", {"users": users, "register_tokens": register_tokens})
 
-@permission_required("database.can_invite")
+@permission_required("database_users.can_invite")
 @superuser_or_staff_required
 def create_register_token(request):
     RegisterToken().save()
@@ -289,7 +289,7 @@ def create_register_token(request):
 
 from plugins.functions import get_plugins
 
-@permission_required("database.can_search")
+@permission_required("database_users.can_search")
 def manga_search(request):
     plugins = get_plugins()
     plugin_names = [name for _, _, name, _ in plugins]
@@ -297,7 +297,7 @@ def manga_search(request):
 
 from database.manga.models import MangaRequest, Manga
 
-@permission_required("database.can_manage_requests")
+@permission_required("database_users.can_manage_requests")
 def manga_requests(request):
     return custom_render(request, "manga/requests.html", {"manga_requests": [{"plugin": r.plugin, "manga": r.variables, "pk": r.pk, "user": r.user or pgettext("User unknown text", "frontend.request_manga.user_unknown")} for r in MangaRequest.objects.all()]})
 
@@ -310,5 +310,6 @@ def manga_view(request, pk):
     if not Manga.objects.filter(pk=pk).exists():
         return redirect("monitored_mangas")
     manga = Manga.objects.get(pk=pk)
-    volumes = sorted([{"chapters": sorted([{**model_field_to_dict(ch), "chapter": ch.chapter} for ch in v.chapters.all()], key=lambda a: a.get("chapter")), "volume": v.volume, "pages": {"downloaded": len(v.chapters.filter(downloaded=True)), "of": len(v.chapters.all())}} for v in manga.volumes.all()], key=lambda a: a.get("volume"))
+
+    volumes = sorted([{"chapters": sorted([{**model_field_to_dict(ch), "chapter": ch.chapter, "id": ch.id} for ch in v.chapters.all()], key=lambda a: a.get("chapter")), "volume": v.volume, "name": v.name.value, "pages": {"downloaded": len(v.chapters.filter(downloaded=True)), "of": len(v.chapters.all())}, "id": v.id} for v in manga.volumes.all()], key=lambda a: a.get("volume"))
     return custom_render(request, "manga/view.html", {"manga": {**model_field_to_dict(manga), "cover": manga.arguments.get("cover", NO_THUMBNAIL_URL)}, "volumes": volumes})

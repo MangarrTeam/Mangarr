@@ -240,7 +240,7 @@ function confirmDeleteUser(userId, username) {
 
 function deleteUser() {
     fetch("{% url 'delete_user' 0 %}".replace('0', deleteUserId), {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
             'X-CSRFToken': '{{ csrf_token }}'
         }
@@ -266,7 +266,7 @@ function confirmDeleteToken(TokenId, token) {
 
 function deleteToken() {
     fetch("{% url 'delete_token' 0 %}".replace('0', deleteTokenId), {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
             'X-CSRFToken': '{{ csrf_token }}'
         }

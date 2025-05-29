@@ -10,7 +10,7 @@
     <h1 class="my-auto text-white">{% trans "plugins.manager.plugin_manager" context "Plugin manager title" %}</h1>
     
     {% if plugin_changed %}
-        <button type="button" id="restart" class="btn btn-danger my-auto ml-auto" {% if not user|has_permition:'database.can_restart' %}disabled{% endif %}>{% trans "frontend.settings.restart" context "Restart button text" %}</button>
+        <button type="button" id="restart" class="btn btn-danger my-auto ml-auto" {% if not user|has_permition:'database_users.can_restart' %}disabled{% endif %}>{% trans "frontend.settings.restart" context "Restart button text" %}</button>
     {% endif %}
 </div>
     

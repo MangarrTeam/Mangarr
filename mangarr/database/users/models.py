@@ -3,6 +3,21 @@ from django.contrib.auth.models import User
 from django.utils.translation import pgettext
 
 # Create your models here.
+class PermissionCodename:
+    def __init__(self, codename):
+        self.codename = codename
+
+    def __str__(self):
+        return self.codename
+
+    @property
+    def name(self):
+        return pgettext(
+            f"Permission value for '{self.codename.replace('_', ' ').capitalize()}'",
+            f"permission.{self.codename}"
+        )
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     token = models.CharField(max_length=64, unique=True)
@@ -17,8 +32,9 @@ class UserProfile(models.Model):
             ('can_request', pgettext("Permission value for 'Can request'", 'permission.can_request')),
             ('can_manage_requests', pgettext("Permission value for 'Can manage requests'", 'permission.can_manage_requests')),
             ('can_download', pgettext("Permission value for 'Can download'", 'permission.can_download')),
+            ('can_manage_monitors', pgettext("Permission value for 'Can manage monitors'", 'permission.can_manage_monitors')),
+            ('can_manage_metadata', pgettext("Permission value for 'Can manage metadata'", 'permission.can_manage_metadata')),
         ]
-
 
     def __str__(self) -> str:
         return f'{self.user.username} Profile'

@@ -63,6 +63,9 @@ class StringType(BaseType):
     @value.setter
     @prevent_if_locked
     def value(self, new_value) -> None:
+        self.value_force(new_value)
+    
+    def value_force(self, new_value) -> None:
         if self.value == new_value:
             return
         self._data["value"] = new_value
@@ -83,6 +86,9 @@ class BoolType(BaseType):
     @value.setter
     @prevent_if_locked
     def value(self, new_value) -> None:
+        self.value_force(new_value)
+    
+    def value_force(self, new_value) -> None:
         if self.value == new_value:
             return
         self._data["value"] = new_value
@@ -103,6 +109,9 @@ class IntType(BaseType):
     @value.setter
     @prevent_if_locked
     def value(self, new_value) -> None:
+        self.value_force(new_value)
+    
+    def value_force(self, new_value) -> None:
         if self.value == int(new_value):
             return
         self._data["value"] = int(new_value)
@@ -123,6 +132,9 @@ class FloatType(BaseType):
     @value.setter
     @prevent_if_locked
     def value(self, new_value) -> None:
+        self.value_force(new_value)
+    
+    def value_force(self, new_value) -> None:
         if self.value == float(new_value):
             return
         self._data["value"] = float(new_value)
@@ -149,6 +161,9 @@ class DateType(BaseType):
     @value.setter
     @prevent_if_locked
     def value(self, new_value) -> None:
+        self.value_force(new_value)
+    
+    def value_force(self, new_value) -> None:
         try:
             if type(new_value) == str:
                 d = datetime.strptime(new_value, DATETIME_FORMAT).strftime(DATETIME_FORMAT)
@@ -182,6 +197,9 @@ class FormatsEnumType(BaseType):
     @value.setter
     @prevent_if_locked
     def value(self, new_value:Formats) -> None:
+        self.value_force(new_value)
+    
+    def value_force(self, new_value:Formats) -> None:
         if self.value == new_value.value:
             return
         self._data["value"] = new_value.value
@@ -202,6 +220,9 @@ class AgeRatingEnumType(BaseType):
     @value.setter
     @prevent_if_locked
     def value(self, new_value:AgeRating) -> None:
+        self.value_force(new_value)
+    
+    def value_force(self, new_value:AgeRating) -> None:
         if self.value == new_value.value:
             return
         self._data["value"] = new_value.value
@@ -226,6 +247,9 @@ class StatusEnumType(BaseType):
             return
         self._data["value"] = new_value.value
         self.save()
+    
+    def value_force(self, new_value:Status) -> None:
+        self.value_force(new_value)
 
     def save(self, *args, **kwargs):
         self._data = {

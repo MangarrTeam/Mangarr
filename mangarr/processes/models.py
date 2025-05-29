@@ -5,6 +5,7 @@ from plugins.base import MangaPluginBase
 from plugins.functions import get_plugin_by_key
 from server.settings import FILE_PATH_ROOT, CACHE_FILE_PATH_ROOT
 import hashlib
+from pathlib import Path
 import shutil
 import zipfile
 import time
@@ -63,7 +64,7 @@ def get_hash(text: str) -> str:
     return hashlib.sha256(text.encode()).hexdigest()
      
 class MonitorManga(ProcessBase):
-    manga = models.ForeignKey(Manga, on_delete=models.SET_NULL, blank=True, null=True, verbose_name=pgettext("Monitor manga manga name", "processes.models.monitor_manga.manga"))
+    manga = models.ForeignKey(Manga, on_delete=models.CASCADE, blank=True, null=True, verbose_name=pgettext("Monitor manga manga name", "processes.models.monitor_manga.manga"))
 
     def update(self):
         try:
@@ -178,7 +179,7 @@ class MonitorChapter(ProcessBase):
                 cbz.writestr("ComicInfo.xml", chapter.create_xml())
             on_download(0, 0)
 
-            chapter_file_folder = FILE_PATH_ROOT / f"{make_valid_filename(chapter.volume.manga.name.value)}"
+            chapter_file_folder = Path(chapter.volume.manga.folder)
             chapter_file_folder.mkdir(exist_ok=True)
             chapter_file_path_name = chapter_file_folder / chapter.get_file_name()
 

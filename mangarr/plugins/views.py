@@ -15,7 +15,7 @@ def get_plugin_by_domain(domain):
     print(plugin)
     return next(plugin, None)
 
-@permission_required("database.can_manage_plugins")
+@permission_required("database_users.can_manage_plugins")
 def plugin_manager(request):
     plugins = load_metadata()
     context = {
@@ -26,7 +26,7 @@ def plugin_manager(request):
 
     return custom_render(request, "plugins/manager.html", context)
 
-@permission_required("database.can_manage_plugins")
+@permission_required("database_users.can_manage_plugins")
 def download_plugin_view(request, domain):
     plugin = get_plugin_by_domain(domain)
     if not plugin:
@@ -42,7 +42,7 @@ def download_plugin_view(request, domain):
 
     return redirect("plugin_manager")
 
-@permission_required("database.can_manage_plugins")
+@permission_required("database_users.can_manage_plugins")
 def delete_plugin_view(request, domain):
     plugin = get_plugin_by_domain(domain)
     if not plugin:

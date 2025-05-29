@@ -1,6 +1,7 @@
 from database.manga.models import MangaRequest, Manga
 from database.users.models import UserProfile
 from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
 
 
 def manga_is_monitored(manga:dict) -> bool:
@@ -27,3 +28,10 @@ def validate_token(func):
         return func(request)
     
     return wrapper
+
+
+require_DELETE = require_http_methods(["DELETE"])
+require_DELETE.__doc__ = "Decorator to require that a view only accepts the DELETE method."
+
+require_GET_PATCH = require_http_methods(["GET", "PATCH"])
+require_GET_PATCH.__doc__ = "Decorator to require that a view only accepts the GET and PATCH method."

@@ -22,4 +22,9 @@ urlpatterns = [
     path("manga/request/approve", views.approve_manga_request, name="approve_manga_request"),
     path("manga/request/deny", views.deny_manga_request, name="deny_manga_request"),
     path("manga/monitor", views.monitor_manga, name="api_monitor_manga"),
+    path("manga/edit/<int:manga_id>", views.edit_manga, name="api_edit_manga"),
+    path("manga/delete/<int:manga_id>", views.delete_manga, name="api_delete_manga"),
+
+    path("volume/edit/<int:volume_id>", views.edit_volume, name="api_edit_volume"),
+    path("chapter/edit/<int:chapter_id>", views.edit_chapter, name="api_edit_chapter"),
 ]

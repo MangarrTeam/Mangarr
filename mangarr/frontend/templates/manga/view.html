@@ -2,6 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load int_or_float %}
+{% load has_permition %}
 {% load trim %}
 
 {% block title %}{{ manga.localized_name.value|default:manga.name.value }}{% endblock %}
@@ -50,9 +51,16 @@
   <!-- Details -->
   <div class="details col-12 col-md-10 text-light">
     <div class="d-flex align-items-start">
-      <h1 class="flex-grow-1 mb-2 mb-md-0 display-4">
+      <h1 class="flex-grow-1 pr-0 pr-md-5 mb-2 mb-md-0 display-4">
         {{ manga.localized_name.value|default:manga.name.value }}
       </h1>
+      {% if user|has_permition:'database_users.can_manage_monitors' %}
+        {% csrf_token %}
+        <button type="button" id="delete" class="btn btn-danger ml-auto mr-2" onclick="confirmDeleteManga({{ manga.id }}, '{{ manga.name.value }}')">{% trans "frontend.manga_view.delete" context "Delete button text" %}</button>
+      {% endif %}
+      {% if user|has_permition:'database_users.can_manage_metadata' %}
+      <button type="button" class="btn bg-transparent text-white" onclick="openEditModal(`{% url 'api_edit_manga' manga.id %}`)"><i class="fas fa-cog"></i></button>
+      {% endif %}
       <a href="{{ manga.url }}" target="_blank" class="text-white ml-2 h3">
         <i class="fa fa-external-link-alt fa-lg"></i>
       </a>
@@ -94,9 +102,16 @@
          aria-controls="volume-{{ forloop.counter }}"
          style="cursor: pointer;">
       <h5 class="mb-0 text-truncate" style="max-width: 90%;">
+        {% if volume.name %}
+        {{ volume.pages.downloaded }}/{{ volume.pages.of }} {{ volume.name }}
+        {% else %}
         {% blocktrans with volume=volume.volume pages=volume.pages.downloaded of_pages=volume.pages.of context "How many chapters from total is downloaded from which volume" %}{{pages}}/{{of_pages}} frontend.manga_view.volume {{ volume }}{% endblocktrans %}
+        {% endif %}
       </h5>
-      <i class="fas {% if forloop.first %}fa-chevron-up{% else %}fa-chevron-down{% endif %} transition"></i>
+      {% if user|has_permition:'database_users.can_manage_metadata' %}
+      <button type="button" class="btn bg-transparent text-white ml-auto" onclick="openEditModal(`{% url 'api_edit_volume' volume.id %}`)"><i class="fas fa-cog" onclick="openEditModal(`{% url 'api_edit_volume' volume.id %}"></i></button>
+      {% endif %}
+      <i class="fas {% if forloop.first %}fa-chevron-up{% else %}fa-chevron-down{% endif %} transition ml-2"></i>
     </div>
 
     <!-- Collapsible Table with responsive wrapper -->
@@ -110,7 +125,10 @@
               <th class="text-center border-0 py-2 col-2">{% trans "frontend.manga_view.isbn" context "Caption for ISBN column" %}</th>
               <th class="text-center border-0 py-2 col-2">{% trans "frontend.manga_view.localization" context "Caption for localization column" %}</th>
               <th class="text-center border-0 py-2 col-1">{% trans "frontend.manga_view.page_count" context "Caption for page count column" %}</th>
-              <th class="text-center border-0 py-2 col-1">{% trans "frontend.manga_view.downloaded" context "Caption for downloaded column" %}</th>
+              <th class="text-center border-0 px-0 py-2"><i class="fa fa-download"></i></th>
+              {% if user|has_permition:'database_users.can_manage_metadata' %}
+              <th class="text-center border-0 px-0 py-2"><i class="fa fa-wrench"></i></th>
+              {% endif %}
             </tr>
           </thead>
           <tbody class="chapter-table background-dark">
@@ -125,9 +143,14 @@
               <td class="text-center border-0 py-2">{{ chapter.isbn.value|default:"?" }}</td>
               <td class="text-center border-0 py-2">{{ chapter.localization.value }}</td>
               <td class="text-center border-0 py-2">{{ chapter.page_count.value }}</td>
-              <td class="text-center border-0 py-2">
+              <td class="text-center border-0 p-2">
                 <i class="fa {% if chapter.downloaded %}fa-check{% else %}fa-times{% endif %}"></i>
               </td>
+              {% if user|has_permition:'database_users.can_manage_metadata' %}
+              <td class="text-center border-0 p-2">
+                <button type="button" class="btn bg-transparent text-white ml-auto p-0" onclick="openEditModal(`{% url 'api_edit_chapter' chapter.id %}`)"><i class="fas fa-cog"></i></button>
+              </td>
+              {% endif %}
             </tr>
             {% empty %}
             <tr>
@@ -140,6 +163,44 @@
     </div>
   </div>
   {% endfor %}
+</div>
+
+{% if user|has_permition:'database_users.can_manage_monitors' %}
+<div class="modal fade" id="deleteMangaModal" tabindex="-1" role="dialog" aria-labelledby="deleteMangaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-white">
+      <div class="modal-header background-light border-0">
+        <h5 class="modal-title">{% trans "frontend.manga_view.confirm_delete_title" context "Confirm delete title" %}</h5>
+        <button type="button" class="btn-close" data-dismiss="modal"></button>
+      </div>
+      <div class="modal-body background-light border-0">
+        <p>{% blocktrans with name="<strong id='deleteManga'></strong>" context "Confirm delete of 'user' title" %}frontend.manga_view.confirm_delete_manga_text {{ name }}{% endblocktrans %}</p>
+      </div>
+      <div class="modal-footer background-light border-0">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "frontend.manga_view.cancel" context "Cancel button text" %}</button>
+        <button type="button" class="btn btn-danger" onclick="deleteManga()">{% trans "frontend.manga_view.confirm" context "Confirm button text" %}</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- Modal TEMP -->
+<div class="modal fade" id="EditModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content text-white">
+      <div class="modal-header background-light border-0">
+        <h5 class="modal-title">{% trans "frontend.view.edit_metadata_modal_title" context "Edit modal metadata title" %}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body background-light border-0">
+        <form id="DynamicForm"></form>
+      </div>
+      <div class="modal-footer background-light border-0">
+        <button type="button" onclick="submitDynamicForm()" class="btn btn-primary">{% trans "frontend.view.save" context "Save button text" %}</button>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
 
@@ -178,5 +239,295 @@
     }
   });
 });
+
+let deletemangaId = null;
+
+function confirmDeleteManga(mangaId, name) {
+    deletemangaId = mangaId;
+    document.getElementById('deleteManga').textContent = name;
+    $('#deleteMangaModal').modal('show');
+}
+
+function deleteManga() {
+    fetch("{% url 'api_delete_manga' 0 %}".replace('0', deletemangaId), {
+        method: 'DELETE',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    })
+    .then(res => {
+        if (res.ok) {
+            location.reload();
+        } else {
+            alert('Failed to delete manga.');
+        }
+    })
+    .catch(err => console.error(err));
+}
+
+
+
+
+
+
+function openEditModal(url) {
+  document.getElementById('EditModal').dataset.submitUrl = url;
+  const form = document.getElementById('DynamicForm');
+  form.innerHTML = '<p>{% trans "frontend.view.loading" context "Loading text for modal" %}</p>';
+
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      form.innerHTML = '';
+
+      for (const [key, field] of Object.entries(data)) {
+        const labelText = field.label;
+        const group = document.createElement('div');
+        group.className = 'mb-3';
+
+        const label = document.createElement('label');
+        label.className = 'form-label d-flex justify-content-between align-items-center';
+
+        const span = document.createElement('span');
+        span.textContent = labelText;
+
+        const lockBtn = document.createElement('button');
+        lockBtn.type = 'button';
+        lockBtn.className = 'btn btn-sm ml-auto';
+        lockBtn.dataset.locked = field.locked;
+        lockBtn.id = `lock-${key}`;
+        updateLockIcon(lockBtn);
+
+        lockBtn.addEventListener('click', () => {
+          lockBtn.dataset.locked = lockBtn.dataset.locked === 'true' ? 'false' : 'true';
+          updateLockIcon(lockBtn);
+          const inputs = group.querySelectorAll('input, select, textarea, button[data-action="remove"]');
+        });
+
+        
+        label.appendChild(span);
+        //group.appendChild(lockBtn);
+
+        const labelDiv = document.createElement('div');
+        labelDiv.classList.add('d-flex', 'mb-2')
+        labelDiv.appendChild(label);
+        labelDiv.appendChild(lockBtn);
+
+        group.appendChild(labelDiv);
+
+        // Field input generation
+        const value = field.value;
+        let input;
+
+        switch (field.type) {
+          case 'string':
+            input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'form-control border-top-0 border-left-0 border-right-0 rounded-0 bg-transparent text-white';
+            input.value = value;
+            input.name = key;
+            break;
+
+          case 'long_string':
+            input = document.createElement('textarea');
+            input.rows = 5;
+            input.className = 'form-control border-top-0 border-left-0 border-right-0 rounded-0 bg-transparent text-white';
+            input.style.resize = "none";
+            input.value = value;
+            input.name = key;
+            break;
+
+          case 'int':
+            input = document.createElement('input');
+            input.type = 'number';
+            input.step = '1';
+            input.className = 'form-control border-top-0 border-left-0 border-right-0 rounded-0 bg-transparent text-white';
+            input.value = value;
+            input.name = key;
+            break;
+
+          case 'float':
+            input = document.createElement('input');
+            input.type = 'number';
+            input.step = 'any';
+            input.className = 'form-control border-top-0 border-left-0 border-right-0 rounded-0 bg-transparent text-white';
+            input.value = value;
+            input.name = key;
+            break;
+
+          case 'date':
+            input = document.createElement('input');
+            input.type = 'datetime-local';
+            input.className = 'form-control border-top-0 border-left-0 border-right-0 rounded-0 bg-transparent text-white';
+            input.value = value;
+            input.name = key;
+            break;
+
+          case 'choice':
+            input = document.createElement('select');
+            input.className = 'form-control custom-select bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white';
+            input.name = key;
+
+            field.choices.forEach(({ value: v, text }) => {
+              const opt = document.createElement('option');
+              opt.className = 'background-dark';
+              opt.value = v;
+              opt.textContent = text;
+              if (v === value) opt.selected = true;
+              input.appendChild(opt);
+            });
+            break;
+
+          case 'list':
+            const listContainer = document.createElement('div');
+            listContainer.id = `list-${key}`;
+
+            value.forEach(item => {
+              const itemGroup = createListItem(item, key);
+              listContainer.appendChild(itemGroup);
+            });
+
+            const addBtn = document.createElement('button');
+            addBtn.type = 'button';
+            addBtn.className = 'btn btn-sm btn-success mt-2';
+            addBtn.textContent = '{% trans "frontend.view.add" context "Add button text" %}';
+            addBtn.onclick = () => {
+              const itemGroup = createListItem('', key);
+              listContainer.appendChild(itemGroup);
+            };
+
+            group.appendChild(listContainer);
+            group.appendChild(addBtn);
+            break;
+        }
+
+        if (field.type !== 'list') {
+          group.appendChild(input);
+        }
+
+        form.appendChild(group);
+      }
+
+      new bootstrap.Modal(document.getElementById('EditModal')).show();
+    });
+}
+
+function updateLockIcon(btn) {
+  const locked = btn.dataset.locked === 'true';
+  btn.innerHTML = locked ? '<i class="fas fa-lock"></i>' : '<i class="fas fa-lock-open"></i>';
+  btn.className = locked ? 'btn btn-sm btn-warning ml-auto' : 'btn btn-sm btn-outline-secondary ml-auto';
+}
+
+
+function createListItem(value, key) {
+  const itemGroup = document.createElement('div');
+  itemGroup.className = 'input-group mb-2';
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'form-control border-top-0 border-left-0 border-right-0 rounded-0 bg-transparent text-white';
+  input.name = `${key}[]`;
+  input.value = value;
+
+  const btnWrap = document.createElement('div');
+  btnWrap.className = 'input-group-append';
+
+  const removeBtn = document.createElement('button');
+  removeBtn.className = 'btn btn-danger';
+  removeBtn.type = 'button';
+  removeBtn.innerHTML = '&times;';
+  removeBtn.dataset.action = 'remove';
+  removeBtn.onclick = () => itemGroup.remove();
+
+  btnWrap.appendChild(removeBtn);
+  itemGroup.appendChild(input);
+  itemGroup.appendChild(btnWrap);
+
+  return itemGroup;
+}
+
+function submitDynamicForm() {
+  const form = document.getElementById('DynamicForm');
+  const modal = document.getElementById('EditModal');
+  const url = modal.dataset.submitUrl;
+
+  if (!url) {
+    console.error("Submit URL is not set!");
+    return;
+  }
+
+  const data = {};
+
+  const inputs = form.querySelectorAll('input[name], select[name], textarea[name]');
+
+  const lists = {};
+  inputs.forEach(input => {
+    const name = input.name;
+
+    if (name.endsWith('[]')) {
+      const base = name.replace(/\[\]$/, '');
+      if (!lists[base]) lists[base] = [];
+      lists[base].push(input.value);
+    } else {
+      if (input.type === 'datetime-local') {
+        const localValue = input.value;
+        if (localValue) {
+          const date = new Date(localValue);
+          const pad = (n) => n.toString().padStart(2, '0');
+          const tzOffset = -date.getTimezoneOffset();
+          const sign = tzOffset >= 0 ? '+' : '-';
+          const offsetHours = pad(Math.floor(Math.abs(tzOffset) / 60));
+          const offsetMinutes = pad(Math.abs(tzOffset) % 60);
+          const offset = `${sign}${offsetHours}${offsetMinutes}`;
+
+          const iso = date.getFullYear() + '-' +
+                      pad(date.getMonth() + 1) + '-' +
+                      pad(date.getDate()) + 'T' +
+                      pad(date.getHours()) + ':' +
+                      pad(date.getMinutes()) + ':' +
+                      pad(date.getSeconds()) + offset;
+
+          data[name] = iso;
+        } else {
+          data[name] = null;
+        }
+      } else {
+        data[name] = input.value;
+      }
+    }
+  });
+
+  for (const key in lists) {
+    data[key] = lists[key];
+  }
+
+  const allListFields = Array.from(form.querySelectorAll('[id^="list-"]')).map(el => el.id.replace(/^list-/, ''));
+  allListFields.forEach(listKey => {
+    if (!data.hasOwnProperty(listKey)) {
+      data[listKey] = [];
+    }
+  });
+
+  // Add locked states
+  const locks = form.querySelectorAll('button[id^="lock-"]');
+  locks.forEach(btn => {
+    const key = btn.id.replace('lock-', '');
+    data[`${key}_lock`] = btn.dataset.locked === 'true';
+  });
+
+  console.log("Submitting:", data);
+
+  fetch(url, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': '{{ csrf_token }}'
+    },
+    body: JSON.stringify(data)
+  }).then(res => res.json()).then(d => {
+    console.log(d);
+    location.reload();
+  });
+}
 </script>
 {% endblock %}

@@ -75,12 +75,12 @@
                 <a href="{% url 'monitored_mangas' %}" class="nav-link text-white d-flex flex-row my-auto">
                     <i class="fa fa-eye text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.monitored_manga" context "Title for monitored manga" %}</p>
                 </a>
-                {% if user|has_permition:'database.can_search' %}
+                {% if user|has_permition:'database_users.can_search' %}
                 <a href="{% url 'manga_search' %}" class="nav-link text-white d-flex flex-row my-auto">
                     <i class="fa fa-search text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.manga_search" context "Title for manga search" %}</p>
                 </a>
                 {% endif %}
-                {% if user|has_permition:'database.can_manage_requests' %}
+                {% if user|has_permition:'database_users.can_manage_requests' %}
                 <a href="{% url 'manga_requests' %}" class="nav-link text-white d-flex flex-row my-auto">
                     <i class="fa fa-inbox text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.manga_requests" context "Title for manga requests" %}</p>
                 </a>
@@ -101,7 +101,7 @@
                 <a href="{% url 'profile' %}" class="nav-link text-white d-flex flex-row my-auto">
                     <i class="fa fa-user text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.profile" context "Title for profile" %}</p>
                 </a>
-                {% if user|has_permition:'database.can_change_settings' %}
+                {% if user|has_permition:'database_users.can_change_settings' %}
                 <a href="{% url 'settings' %}" class="nav-link text-white d-flex flex-row my-auto">
                     <i class="fa fa-server text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.server_settings" context "Title for server settings" %}</p>
                 </a>
@@ -109,7 +109,7 @@
                     <i class="fa fa-paper-plane text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.connectors_settings" context "Title for connectors settings" %}</p>
                 </a>
                 {% endif %}
-                {% if user|has_permition:'database.can_manage_plugins' %}
+                {% if user|has_permition:'database_users.can_manage_plugins' %}
                 <a href="{% url 'plugin_manager' %}" class="nav-link text-white d-flex flex-row my-auto">
                     <i class="fa fa-plug text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.plugin_manager" context "Title for plugin manager" %}</p>
                 </a>
@@ -120,7 +120,7 @@
                 </a>
                 {% endif %}
                 
-                {% if user|has_permition:'database.can_restart' %}
+                {% if user|has_permition:'database_users.can_restart' %}
                 <div class="nav-link text-danger d-flex flex-row my-auto" id="restart" style="cursor: pointer;">
                     <i class="fa fa-undo my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.restart" context "Title for restart" %}</p>
                 </div>
