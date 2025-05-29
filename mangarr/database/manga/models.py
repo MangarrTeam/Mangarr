@@ -108,7 +108,6 @@ class Manga(models.Model):
             name = get_hash(self.url)
 
         self.folder = FILE_PATH_ROOT / f"{make_valid_filename(name)}"
-        self.save()
 
     def choose_plugin(self, key:str) -> None:
         if self.plugin is not None and len(self.plugin) > 0:

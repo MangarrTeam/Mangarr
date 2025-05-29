@@ -74,6 +74,7 @@ class MonitorManga(ProcessBase):
             manga, manga_created = Manga.objects.get_or_create(url=manga_data.get("url"))
 
             if manga_created:
+                manga.set_folder_path(self.arguments.get("name"))
                 manga.choose_plugin(self.plugin)
 
             manga.update_fields({
