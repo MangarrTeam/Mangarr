@@ -1,4 +1,5 @@
 from database.manga.models import MangaRequest, Manga
+from processes.models import MonitorManga
 from database.users.models import UserProfile
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
@@ -6,7 +7,7 @@ from django.views.decorators.http import require_http_methods
 
 def manga_is_monitored(manga:dict) -> bool:
     url = manga.get("url")
-    if url is not None and Manga.monitor_exist(url):
+    if url is not None and (Manga.monitor_exist(url) or MonitorManga.objects.filter(url=url).exists()):
         return True
     return False
 
