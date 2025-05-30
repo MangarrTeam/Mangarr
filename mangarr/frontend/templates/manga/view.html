@@ -220,10 +220,16 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         $('.collapse').on('show.bs.collapse', function () {
-            $(this).prev().find('i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+            const item = $(this).prev().find('i');
+            if(!item.hasClass("sidebar-icon")) {
+              $(this).prev().find('i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+            }
         });
         $('.collapse').on('hide.bs.collapse', function () {
-            $(this).prev().find('i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+            const item = $(this).prev().find('i');
+            if(!item.hasClass("sidebar-icon")) {
+              $(this).prev().find('i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+            }
         });
     });
     $(function(){
