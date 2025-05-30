@@ -13,7 +13,7 @@ from django.views.decorators.http import require_POST
 import json
 from .functions import manga_is_monitored, manga_is_requested, validate_token, require_DELETE, require_GET_PATCH
 from server.settings import NSFW_ALLOWED
-from processes.models import MonitorManga
+from processes.models import MonitorManga, EditChapter
 from django.db import IntegrityError
 from processes.tasks import trigger_monitor
 from django.utils.translation import override
@@ -268,6 +268,33 @@ def edit_manga(request, manga_id):
             "success": True,
             "updated": manga.to_representation()
         })
+    
+    
+@permission_required("database_users.can_manage_metadata")
+@require_POST
+def request_edit_manga(request, manga_id):
+    try:
+        manga = Manga.objects.get(id=manga_id)
+    except Manga.DoesNotExist:
+        return JsonResponse({'error': "Chapter not found"}, status=404)
+    
+    if all([EditChapter.edit_exist(chapter) for volume in manga.volumes.all() for chapter in volume.chapters.all()]):
+        return JsonResponse({'error': "Chapter already requested"}, status=400)
+    
+    try:
+        new_edit_requests = []
+        for volume in manga.volumes.all():
+            for chapter in volume.chapters.all():
+                new_edit_request = EditChapter(chapter=chapter)
+                new_edit_requests.append(new_edit_request)
+        EditChapter.objects.bulk_create(new_edit_requests, batch_size=100)
+
+        trigger_monitor()
+    except Exception as e:
+        logger.error(f"Error - {e}")
+        return JsonResponse({"error": e}, status=500)
+    
+    return JsonResponse({"success": True}, status=200)
 
 @permission_required("database_users.can_manage_metadata")
 @require_GET_PATCH
@@ -294,6 +321,31 @@ def edit_volume(request, volume_id):
             "success": True,
             "updated": volume.to_representation()
         })
+    
+    
+@permission_required("database_users.can_manage_metadata")
+@require_POST
+def request_edit_volume(request, volume_id):
+    try:
+        volume = Volume.objects.get(id=volume_id)
+    except Volume.DoesNotExist:
+        return JsonResponse({'error': "Chapter not found"}, status=404)
+    
+    if all([EditChapter.edit_exist(chapter) for chapter in volume.chapters.all()]):
+        return JsonResponse({'error': "Chapter already requested"}, status=400)
+    
+    try:
+        new_edit_requests = []
+        for chapter in volume.chapters.all():
+            new_edit_request = EditChapter(chapter=chapter)
+            new_edit_requests.append(new_edit_request)
+        EditChapter.objects.bulk_create(new_edit_requests, batch_size=100)
+        trigger_monitor()
+    except Exception as e:
+        logger.error(f"Error - {e}")
+        return JsonResponse({"error": e}, status=500)
+    
+    return JsonResponse({"success": True}, status=200)
 
 @permission_required("database_users.can_manage_metadata")
 @require_GET_PATCH
@@ -320,6 +372,27 @@ def edit_chapter(request, chapter_id):
             "success": True,
             "updated": chapter.to_representation()
         })
+
+@permission_required("database_users.can_manage_metadata")
+@require_POST
+def request_edit_chapter(request, chapter_id):
+    try:
+        chapter = Chapter.objects.get(id=chapter_id)
+    except Chapter.DoesNotExist:
+        return JsonResponse({'error': "Chapter not found"}, status=404)
+    
+    if EditChapter.edit_exist(chapter):
+        return JsonResponse({'error': "Chapter already requested"}, status=400)
+    
+    try:
+        EditChapter.objects.create(chapter=chapter)
+        trigger_monitor()
+    except Exception as e:
+        logger.error(f"Error - {e}")
+        return JsonResponse({"error": e}, status=500)
+    
+    return JsonResponse({"success": True}, status=200)
+        
     
 @permission_required("database_users.can_manage_metadata")
 @require_DELETE
