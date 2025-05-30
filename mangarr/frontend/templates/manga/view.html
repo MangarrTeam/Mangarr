@@ -51,15 +51,21 @@
   <!-- Details -->
   <div class="details col-12 col-md-10 text-light">
     <div class="d-flex align-items-start">
-      <h1 class="flex-grow-1 pr-0 pr-md-5 mb-2 mb-md-0 display-4">
+      <h1 class="flex-grow-1 pr-2 pr-md-5 mb-2 mb-md-0 display-4">
         {{ manga.localized_name.value|default:manga.name.value }}
       </h1>
-      {% if user|has_permition:'database_users.can_manage_monitors' %}
-        {% csrf_token %}
-        <button type="button" id="delete" class="btn btn-danger ml-auto mr-2" onclick="confirmDeleteManga({{ manga.id }}, '{{ manga.name.value }}')">{% trans "frontend.manga_view.delete" context "Delete button text" %}</button>
-      {% endif %}
-      {% if user|has_permition:'database_users.can_manage_metadata' %}
-      <button type="button" class="btn bg-transparent text-white" onclick="openEditModal(`{% url 'api_edit_manga' manga.id %}`)"><i class="fas fa-cog"></i></button>
+      {% if user|has_permition:'database_users.can_manage_monitors' or user|has_permition:'database_users.can_manage_metadata' %}
+        <div class="d-flex flex-column flex-md-row mr-4">
+          {% if user|has_permition:'database_users.can_manage_monitors' %}
+          <button type="button" id="delete" class="btn btn-danger ml-auto mr-0 mr-md-2" onclick="confirmDeleteManga({{ manga.id }}, '{{ manga.name.value }}')">{% trans "frontend.manga_view.delete" context "Delete button text" %}</button>
+          {% endif %}
+          {% if user|has_permition:'database_users.can_manage_metadata' %}
+          <div class="d-flex flex-row mt-2 mt-md-0">
+            <button type="button" class="btn bg-transparent text-white" onclick="openEditModal(`{% url 'api_edit_manga' manga.id %}`)"><i class="fas fa-cog"></i></button>
+            <button type="button" class="btn bg-transparent text-white" onclick="requestChapterEdit(`{% url 'api_request_edit_manga' manga.id %}`)"><i class="fa fa-paper-plane"></i></button>
+          </div>
+          {% endif %}
+        </div>
       {% endif %}
       <a href="{{ manga.url }}" target="_blank" class="text-white ml-2 h3">
         <i class="fa fa-external-link-alt fa-lg"></i>
@@ -110,6 +116,7 @@
       </h5>
       {% if user|has_permition:'database_users.can_manage_metadata' %}
       <button type="button" class="btn bg-transparent text-white ml-auto" onclick="openEditModal(`{% url 'api_edit_volume' volume.id %}`)"><i class="fas fa-cog" onclick="openEditModal(`{% url 'api_edit_volume' volume.id %}"></i></button>
+      <button type="button" class="btn bg-transparent text-white" onclick="requestChapterEdit(`{% url 'api_request_edit_volume' volume.id %}`)"><i class="fa fa-paper-plane"></i></button>
       {% endif %}
       <i class="fas {% if forloop.first %}fa-chevron-up{% else %}fa-chevron-down{% endif %} transition ml-2"></i>
     </div>
@@ -128,6 +135,7 @@
               <th class="text-center border-0 px-0 py-2"><i class="fa fa-download"></i></th>
               {% if user|has_permition:'database_users.can_manage_metadata' %}
               <th class="text-center border-0 px-0 py-2"><i class="fa fa-wrench"></i></th>
+              <th class="text-center border-0 px-0 py-2"><i class="fa fa-refresh"></i></th>
               {% endif %}
             </tr>
           </thead>
@@ -149,6 +157,9 @@
               {% if user|has_permition:'database_users.can_manage_metadata' %}
               <td class="text-center border-0 p-2">
                 <button type="button" class="btn bg-transparent text-white ml-auto p-0" onclick="openEditModal(`{% url 'api_edit_chapter' chapter.id %}`)"><i class="fas fa-cog"></i></button>
+              </td>
+              <td class="text-center border-0 p-2">
+                <button type="button" class="btn bg-transparent text-white ml-auto p-0" onclick="requestChapterEdit(`{% url 'api_request_edit_chapter' chapter.id %}`)"><i class="fa fa-paper-plane"></i></button>
               </td>
               {% endif %}
             </tr>
@@ -529,5 +540,19 @@ function submitDynamicForm() {
     location.reload();
   });
 }
+
+function requestChapterEdit(url) {
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': '{{ csrf_token }}'
+    },
+  }).then(res => res.json()).then(d => {
+    console.log(d);
+    location.reload();
+  });
+}
+
 </script>
 {% endblock %}
