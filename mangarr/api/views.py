@@ -279,14 +279,15 @@ def request_edit_manga(request, manga_id):
         return JsonResponse({'error': "Chapter not found"}, status=404)
     
     if all([EditChapter.edit_exist(chapter) for volume in manga.volumes.all() for chapter in volume.chapters.all()]):
-        return JsonResponse({'error': "Chapter already requested"}, status=400)
+        return JsonResponse({'error': "All chapters already requested"}, status=400)
     
     try:
         new_edit_requests = []
         for volume in manga.volumes.all():
             for chapter in volume.chapters.all():
-                new_edit_request = EditChapter(chapter=chapter)
-                new_edit_requests.append(new_edit_request)
+                if not EditChapter.edit_exist(chapter):
+                    new_edit_request = EditChapter(chapter=chapter)
+                    new_edit_requests.append(new_edit_request)
         EditChapter.objects.bulk_create(new_edit_requests, batch_size=100)
 
         trigger_monitor()
@@ -332,13 +333,14 @@ def request_edit_volume(request, volume_id):
         return JsonResponse({'error': "Chapter not found"}, status=404)
     
     if all([EditChapter.edit_exist(chapter) for chapter in volume.chapters.all()]):
-        return JsonResponse({'error': "Chapter already requested"}, status=400)
+        return JsonResponse({'error': "All chapters already requested"}, status=400)
     
     try:
         new_edit_requests = []
         for chapter in volume.chapters.all():
-            new_edit_request = EditChapter(chapter=chapter)
-            new_edit_requests.append(new_edit_request)
+            if not EditChapter.edit_exist(chapter):
+                new_edit_request = EditChapter(chapter=chapter)
+                new_edit_requests.append(new_edit_request)
         EditChapter.objects.bulk_create(new_edit_requests, batch_size=100)
         trigger_monitor()
     except Exception as e:
