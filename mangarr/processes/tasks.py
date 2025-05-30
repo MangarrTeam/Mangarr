@@ -9,7 +9,7 @@ import shutil
 from server.settings import CACHE_FILE_PATH_ROOT
 from connectors.utils import notify_connectors
 
-from .models import MonitorManga, MonitorChapter, Manga, ChapterDownloaded
+from .models import MonitorManga, MonitorChapter, Manga, ChapterDownloaded, EditChapter
 
 import logging
 logger = logging.getLogger(__name__)
@@ -31,15 +31,16 @@ def clear_cache():
             shutil.rmtree(file_path)
     logger.debug("Cache folder cleared")
 
-def monitoring_exists() -> bool:
+def process_exists() -> bool:
     one_hour_ago = timezone.now() - timedelta(hours=1)
-    return MonitorChapter.objects.filter(Q(last_run__lt=one_hour_ago) | Q(last_run__isnull=True)).exists() or MonitorManga.objects.filter(Q(last_run__lt=one_hour_ago) | Q(last_run__isnull=True)).exists()
+    threshold = timezone.now() - timedelta(hours=24)
+    return Manga.objects.filter(last_update__lt=threshold).exists() or MonitorChapter.objects.filter(Q(last_run__lt=one_hour_ago) | Q(last_run__isnull=True)).exists() or MonitorManga.objects.filter(Q(last_run__lt=one_hour_ago) | Q(last_run__isnull=True)).exists() or EditChapter.objects.all().exists()
 
 def monitoring():
     while not stop_event.is_set():
         try:
             updated = False
-            while monitoring_exists():
+            while process_exists():
                 logger.debug("Monitoring check...")
                 clear_cache()
                 one_hour_ago = timezone.now() - timedelta(hours=1)
@@ -72,6 +73,9 @@ def monitoring():
                         logger.warning(f"Manga monitor missing - {e}")
                     except Exception as e:
                         logger.error(f"Error - {e}")
+                
+                if stop_event.is_set():
+                    break
 
                 skipped_chapters = []
                 for chapter_monitor in MonitorChapter.objects.filter(Q(last_run__lt=one_hour_ago) | Q(last_run__isnull=True)):
@@ -90,6 +94,19 @@ def monitoring():
                         logger.error(f"Error - {e}")
 
                 MonitorChapter.objects.filter(pk__in=skipped_chapters).delete()
+                
+                if stop_event.is_set():
+                    break
+
+                for editChapter in EditChapter.objects.all():
+                    if stop_event.is_set():
+                        break
+                    try:
+                        editChapter.update()
+                        if not updated:
+                            updated = True
+                    except Exception as e:
+                        logger.error(f"Error - {e}")
                 
                 if stop_event.is_set():
                     break

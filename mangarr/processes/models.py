@@ -205,18 +205,84 @@ class MonitorChapter(ProcessBase):
             self.save()
             logger.error(f"Error - {e}")
 
+class EditChapter(models.Model):
+    chapter = models.OneToOneField(Chapter, on_delete=models.CASCADE, verbose_name=pgettext("Chapter FK name", "processes.models.edit_chapter.chapter"), related_name="chapter_edit")
+
+    @staticmethod
+    def edit_exist(chapter:Chapter) -> bool:
+        return EditChapter.objects.filter(chapter__pk=chapter.pk).exists()
+    
+    def update(self) -> None:
+        logger.debug("Updating chapter...")
+        chapter = self.chapter
+        original_path = Path(chapter.file)
+        if not original_path.is_file():
+            logger.error("Error path is not file")
+            self.delete()
+            return
+        cache_folder_hash = get_hash(chapter.url)
+
+        cache_dir = Path(CACHE_FILE_PATH_ROOT) / cache_folder_hash
+        cache_dir.mkdir(parents=True, exist_ok=True)
+
+        temp_cbz_path = cache_dir / f"{cache_folder_hash}.cbz"
+
+        with zipfile.ZipFile(original_path, 'r') as original_cbz:
+            logger.debug("Extracting chapter...")
+            original_cbz.extractall(cache_dir)
+
+        comic_info_path = cache_dir / "ComicInfo.xml"
+        if comic_info_path.exists():
+            logger.debug("Unlinking ComicInfo.xml...")
+            comic_info_path.unlink()
+
+        logger.debug("Creating new ComicInfo.xml...")
+        comic_info_path.write_text(chapter.create_xml(), encoding="utf-8")
+
+        with zipfile.ZipFile(temp_cbz_path, "w", zipfile.ZIP_DEFLATED) as new_cbz:
+            logger.debug("Making new cbz...")
+            for file_path in cache_dir.rglob('*'):
+                if file_path.is_file() and not file_path.samefile(temp_cbz_path):
+                    arcname = file_path.relative_to(cache_dir)
+                    new_cbz.write(file_path, arcname)
+
+        chapter_file_folder = Path(chapter.volume.manga.folder)
+        chapter_file_folder.mkdir(exist_ok=True)
+        chapter_file_path_name = chapter_file_folder / chapter.get_file_name()
+
+        try:
+            logger.debug("Moving cbz...")
+            move_file(temp_cbz_path, chapter_file_path_name)
+            chapter.file = f"{chapter_file_path_name}"
+            chapter.save()
+            if original_path.exists() and original_path.is_file():
+                logger.debug("Removing old cbz...")
+                original_path.unlink()
+        except Exception as e:
+            logger.error(f"Error - {e}")
+
+        self.delete()
+        # Delay for 1 second
+        time.sleep(1)
+
+    def __str__(self) -> str:
+        return f"{self.chapter}"
+
 from websockets.consumers import notify_clients
 
 @receiver(post_save, sender=MonitorManga)
 @receiver(post_delete, sender=MonitorManga)
 @receiver(post_save, sender=MonitorChapter)
 @receiver(post_delete, sender=MonitorChapter)
+@receiver(post_delete, sender=EditChapter)
 def monitor_changed(sender, instance, **kwargs):
     one_hour_ago = timezone.now() - timedelta(hours=1)
     data = {
         "scanning": {
             "manga": len(MonitorManga.objects.filter(Q(last_run__lt=one_hour_ago) | Q(last_run__isnull=True))),
             "chapters": len(MonitorChapter.objects.filter(Q(last_run__lt=one_hour_ago) | Q(last_run__isnull=True)))
+        },"editing": {
+            "chapters": len(EditChapter.objects.all())
         },
     }
     notify_clients(data)
