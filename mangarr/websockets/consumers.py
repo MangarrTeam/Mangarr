@@ -37,6 +37,9 @@ def default_datas() -> dict:
                 "manga": 0,
                 "chapters": 0
             },
+            "editing": {
+                "chapters": 0
+            },
             "downloading": {
                 "current": 0,
                 "of": 0

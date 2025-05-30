@@ -131,6 +131,7 @@
             <div class="d-flex flex-column w-100">
                 <span id="mangaMonitoring" class="text-muted small w-100"></span>
                 <span id="chapterMonitoring" class="text-muted small w-100"></span>
+                <span id="chapterEditing" class="text-muted small w-100"></span>
                 <span id="pagesDownloading" class="text-muted small w-100"></span>
             </div>
         </li>
@@ -264,12 +265,23 @@ socket.onmessage = function(event) {
             mangaSpan.style.display = "none";
         }
         const chaptersScanning = scanning["chapters"];
-        const chapterSpan = document.getElementById("chapterMonitoring");
+        const chapterSpanScan = document.getElementById("chapterMonitoring");
         if(!!chaptersScanning) {
-            chapterSpan.style.display = "initial";
-            chapterSpan.innerText = "{% blocktrans context 'Number of chapters that are currently scanning' %}frontend.base.chapter_scanning $CHAPTERS_NUMBER{% endblocktrans %}".replace("$CHAPTERS_NUMBER", chaptersScanning);
+            chapterSpanScan.style.display = "initial";
+            chapterSpanScan.innerText = "{% blocktrans context 'Number of chapters that are currently scanning' %}frontend.base.chapter_scanning $CHAPTERS_NUMBER{% endblocktrans %}".replace("$CHAPTERS_NUMBER", chaptersScanning);
         } else {
-            chapterSpan.style.display = "none";
+            chapterSpanScan.style.display = "none";
+        }
+    }
+    const editing = data["editing"];
+    if(!!editing) {
+        const chaptersEditing = editing["chapters"];
+        const chapterSpanEdit = document.getElementById("chapterEditing");
+        if(!!chaptersEditing) {
+            chapterSpanEdit.style.display = "initial";
+            chapterSpanEdit.innerText = "{% blocktrans context 'Number of chapters that are currently editing' %}frontend.base.chapter_editing $CHAPTERS_NUMBER{% endblocktrans %}".replace("$CHAPTERS_NUMBER", chaptersEditing);
+        } else {
+            chapterSpanEdit.style.display = "none";
         }
     }
     const downloading = data["downloading"];
