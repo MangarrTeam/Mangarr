@@ -255,7 +255,7 @@ class EditChapter(models.Model):
             move_file(temp_cbz_path, chapter_file_path_name)
             chapter.file = f"{chapter_file_path_name}"
             chapter.save()
-            if original_path.exists() and original_path.is_file():
+            if original_path.exists() and original_path.is_file() and not original_path.samefile(chapter_file_path_name):
                 logger.debug("Removing old cbz...")
                 original_path.unlink()
         except Exception as e:
@@ -274,6 +274,7 @@ from websockets.consumers import notify_clients
 @receiver(post_delete, sender=MonitorManga)
 @receiver(post_save, sender=MonitorChapter)
 @receiver(post_delete, sender=MonitorChapter)
+@receiver(post_save, sender=EditChapter)
 @receiver(post_delete, sender=EditChapter)
 def monitor_changed(sender, instance, **kwargs):
     one_hour_ago = timezone.now() - timedelta(hours=1)

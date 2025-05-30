@@ -13,7 +13,7 @@ from django.views.decorators.http import require_POST
 import json
 from .functions import manga_is_monitored, manga_is_requested, validate_token, require_DELETE, require_GET_PATCH
 from server.settings import NSFW_ALLOWED
-from processes.models import MonitorManga, EditChapter
+from processes.models import MonitorManga, MonitorChapter, EditChapter
 from django.db import IntegrityError
 from processes.tasks import trigger_monitor
 from django.utils.translation import override
@@ -167,7 +167,6 @@ def search_manga(request):
             manga = plugin.search_manga(query)
         return JsonResponse([{**m, "monitored": manga_is_monitored(m), "requested": manga_is_requested(m)} for m in manga], safe=False)
     except Exception as e:
-        print(f"Can't print manga - {e}")
         return JsonResponse({"error": f"Error - {e}"}, status=500)
 
     
@@ -388,6 +387,36 @@ def request_edit_chapter(request, chapter_id):
     
     try:
         EditChapter.objects.create(chapter=chapter)
+        trigger_monitor()
+    except Exception as e:
+        logger.error(f"Error - {e}")
+        return JsonResponse({"error": e}, status=500)
+    
+    return JsonResponse({"success": True}, status=200)
+
+@permission_required("database_users.can_manage_monitors")
+@require_POST
+def request_redownload_chapter(request, chapter_id):
+    try:
+        chapter = Chapter.objects.get(id=chapter_id)
+    except Chapter.DoesNotExist:
+        return JsonResponse({'error': "Chapter not found"}, status=404)
+    
+    manga = chapter.volume.manga
+
+    if MonitorChapter.objects.filter(url=chapter.url).exists():
+        return JsonResponse({'error': "Chapter redownload already requested"}, status=400)
+    
+    try:
+        monitor = MonitorChapter(
+            url=chapter.url,
+            manga=manga,
+            plugin=manga.plugin,
+            arguments=chapter.arguments
+            )
+        chapter.downloaded = False
+        chapter.save()
+        monitor.save()
         trigger_monitor()
     except Exception as e:
         logger.error(f"Error - {e}")

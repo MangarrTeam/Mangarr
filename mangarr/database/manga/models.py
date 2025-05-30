@@ -339,8 +339,6 @@ class Volume(models.Model):
             else:
                 self.number.lock()
 
-        print(self.name.value)
-
         self.arguments = {**self.arguments, **data}
         self.save()
 

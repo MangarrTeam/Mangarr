@@ -134,8 +134,11 @@
               <th class="text-center border-0 py-2 col-1">{% trans "frontend.manga_view.page_count" context "Caption for page count column" %}</th>
               <th class="text-center border-0 px-0 py-2"><i class="fa fa-download"></i></th>
               {% if user|has_permition:'database_users.can_manage_metadata' %}
-              <th class="text-center border-0 px-0 py-2"><i class="fa fa-wrench"></i></th>
+              <th class="text-center border-0 px-0 py-2"><i class="fa fa-pen-nib"></i></th>
               <th class="text-center border-0 px-0 py-2"><i class="fa fa-refresh"></i></th>
+              {% endif %}
+              {% if user|has_permition:'database_users.can_manage_monitors' %}
+              <th class="text-center border-0 px-0 py-2"><i class="fa fa-redo"></i></th>
               {% endif %}
             </tr>
           </thead>
@@ -156,11 +159,16 @@
               </td>
               {% if user|has_permition:'database_users.can_manage_metadata' %}
               <td class="text-center border-0 p-2">
-                <button type="button" class="btn bg-transparent text-white ml-auto p-0" onclick="openEditModal(`{% url 'api_edit_chapter' chapter.id %}`)"><i class="fas fa-cog"></i></button>
+                <button type="button" class="btn bg-transparent text-white ml-auto p-0" onclick="openEditModal(`{% url 'api_edit_chapter' chapter.id %}`)"><i class="fas fa-pen"></i></button>
               </td>
               <td class="text-center border-0 p-2">
-                <button type="button" class="btn bg-transparent text-white ml-auto p-0" onclick="requestChapterEdit(`{% url 'api_request_edit_chapter' chapter.id %}`)"><i class="fa fa-paper-plane"></i></button>
+                <button type="button" class="btn bg-transparent text-white ml-auto p-0" onclick="requestChapterEdit(`{% url 'api_request_edit_chapter' chapter.id %}`)" {% if chapter.will_edit %}disabled{% endif %}><i class="fa fa-sync-alt"></i></button>
               </td>
+              {% endif %}
+              {% if user|has_permition:'database_users.can_manage_monitors' %}
+              <td class="text-center border-0 p-2">
+                <button type="button" class="btn bg-transparent text-white ml-auto p-0" onclick="requestChapterRedownload(`{% url 'api_request_redownload_chapter' chapter.id %}`)" {% if chapter.will_download %}disabled{% endif %}><i class="fa fa-cloud-download-alt"></i></button>
+              </td></th>
               {% endif %}
             </tr>
             {% empty %}
@@ -343,6 +351,10 @@ function openEditModal(url) {
             input.className = 'form-control border-top-0 border-left-0 border-right-0 rounded-0 bg-transparent text-white';
             input.value = value;
             input.name = key;
+            input.addEventListener('input', function(event) {
+              lockBtn.dataset.locked = true;
+              updateLockIcon(lockBtn);
+            })
             break;
 
           case 'long_string':
@@ -352,6 +364,10 @@ function openEditModal(url) {
             input.style.resize = "none";
             input.value = value;
             input.name = key;
+            input.addEventListener('input', function(event) {
+              lockBtn.dataset.locked = true;
+              updateLockIcon(lockBtn);
+            })
             break;
 
           case 'int':
@@ -361,6 +377,10 @@ function openEditModal(url) {
             input.className = 'form-control border-top-0 border-left-0 border-right-0 rounded-0 bg-transparent text-white';
             input.value = value;
             input.name = key;
+            input.addEventListener('input', function(event) {
+              lockBtn.dataset.locked = true;
+              updateLockIcon(lockBtn);
+            })
             break;
 
           case 'float':
@@ -370,20 +390,37 @@ function openEditModal(url) {
             input.className = 'form-control border-top-0 border-left-0 border-right-0 rounded-0 bg-transparent text-white';
             input.value = value;
             input.name = key;
+            input.addEventListener('input', function(event) {
+              lockBtn.dataset.locked = true;
+              updateLockIcon(lockBtn);
+            })
             break;
 
           case 'date':
             input = document.createElement('input');
             input.type = 'datetime-local';
             input.className = 'form-control border-top-0 border-left-0 border-right-0 rounded-0 bg-transparent text-white';
-            input.value = value;
+            let utcDateString = value;
+            let utcDate = new Date(utcDateString);
+            let localDatetime = utcDate.toISOString().slice(0, 16);
+            let offsetDate = new Date(utcDate.getTime() - utcDate.getTimezoneOffset() * 60000);
+            let formatted = offsetDate.toISOString().slice(0, 16);
+            input.value = formatted;
             input.name = key;
+            input.addEventListener('input', function(event) {
+              lockBtn.dataset.locked = true;
+              updateLockIcon(lockBtn);
+            })
             break;
 
           case 'choice':
             input = document.createElement('select');
             input.className = 'form-control custom-select bg-transparent border-left-0 border-top-0 border-right-0 rounded-0 text-white';
             input.name = key;
+            input.addEventListener('change', function(event) {
+              lockBtn.dataset.locked = true;
+              updateLockIcon(lockBtn);
+            })
 
             field.choices.forEach(({ value: v, text }) => {
               const opt = document.createElement('option');
@@ -400,7 +437,7 @@ function openEditModal(url) {
             listContainer.id = `list-${key}`;
 
             value.forEach(item => {
-              const itemGroup = createListItem(item, key);
+              const itemGroup = createListItem(item, key, lockBtn);
               listContainer.appendChild(itemGroup);
             });
 
@@ -409,7 +446,7 @@ function openEditModal(url) {
             addBtn.className = 'btn btn-sm btn-success mt-2';
             addBtn.textContent = '{% trans "frontend.view.add" context "Add button text" %}';
             addBtn.onclick = () => {
-              const itemGroup = createListItem('', key);
+              const itemGroup = createListItem('', key, lockBtn);
               listContainer.appendChild(itemGroup);
             };
 
@@ -436,7 +473,7 @@ function updateLockIcon(btn) {
 }
 
 
-function createListItem(value, key) {
+function createListItem(value, key, lockBtn) {
   const itemGroup = document.createElement('div');
   itemGroup.className = 'input-group mb-2';
 
@@ -445,6 +482,10 @@ function createListItem(value, key) {
   input.className = 'form-control border-top-0 border-left-0 border-right-0 rounded-0 bg-transparent text-white';
   input.name = `${key}[]`;
   input.value = value;
+  input.addEventListener('input', function(event) {
+    lockBtn.dataset.locked = true;
+    updateLockIcon(lockBtn);
+  })
 
   const btnWrap = document.createElement('div');
   btnWrap.className = 'input-group-append';
@@ -548,6 +589,19 @@ function submitDynamicForm() {
 }
 
 function requestChapterEdit(url) {
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': '{{ csrf_token }}'
+    },
+  }).then(res => res.json()).then(d => {
+    console.log(d);
+    location.reload();
+  });
+}
+
+function requestChapterRedownload(url) {
   fetch(url, {
     method: 'POST',
     headers: {

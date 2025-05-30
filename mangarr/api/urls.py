@@ -30,4 +30,5 @@ urlpatterns = [
     path("volume/edit/<int:volume_id>/request", views.request_edit_volume, name="api_request_edit_volume"),
     path("chapter/edit/<int:chapter_id>", views.edit_chapter, name="api_edit_chapter"),
     path("chapter/edit/<int:chapter_id>/request", views.request_edit_chapter, name="api_request_edit_chapter"),
+    path("chapter/redownload/<int:chapter_id>/request", views.request_redownload_chapter, name="api_request_redownload_chapter"),
 ]
