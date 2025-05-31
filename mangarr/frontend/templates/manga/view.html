@@ -57,7 +57,7 @@
       {% if user|has_permition:'database_users.can_manage_monitors' or user|has_permition:'database_users.can_manage_metadata' %}
         <div class="d-flex flex-column flex-md-row mr-4">
           {% if user|has_permition:'database_users.can_manage_monitors' %}
-          <button type="button" id="delete" class="btn btn-danger ml-auto mr-0 mr-md-2" onclick="confirmDeleteManga({{ manga.id }}, '{{ manga.name.value }}')">{% trans "frontend.manga_view.delete" context "Delete button text" %}</button>
+          <button type="button" id="delete" class="btn btn-danger ml-auto mr-0 mr-md-2" onclick="confirmDeleteManga({{ manga.id }}, '{{ manga.name.value|escapejs }}')">{% trans "frontend.manga_view.delete" context "Delete button text" %}</button>
           {% endif %}
           {% if user|has_permition:'database_users.can_manage_metadata' %}
           <div class="d-flex flex-row mt-2 mt-md-0">
