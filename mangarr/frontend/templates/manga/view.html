@@ -61,8 +61,8 @@
           {% endif %}
           {% if user|has_permition:'database_users.can_manage_metadata' %}
           <div class="d-flex flex-row mt-2 mt-md-0">
-            <button type="button" class="btn bg-transparent text-white" onclick="openEditModal(`{% url 'api_edit_manga' manga.id %}`)"><i class="fas fa-cog"></i></button>
-            <button type="button" class="btn bg-transparent text-white" onclick="requestChapterEdit(`{% url 'api_request_edit_manga' manga.id %}`)"><i class="fa fa-paper-plane"></i></button>
+            <button type="button" class="btn bg-transparent text-white" onclick="openEditModal(`{% url 'api_edit_manga' manga.id %}`)"><i class="fas fa-pen"></i></button>
+            <button type="button" class="btn bg-transparent text-white" onclick="requestChapterEdit(`{% url 'api_request_edit_manga' manga.id %}`)"><i class="fa fa-sync-alt"></i></button>
           </div>
           {% endif %}
         </div>
@@ -115,8 +115,8 @@
         {% endif %}
       </h5>
       {% if user|has_permition:'database_users.can_manage_metadata' %}
-      <button type="button" class="btn bg-transparent text-white ml-auto" onclick="openEditModal(`{% url 'api_edit_volume' volume.id %}`)"><i class="fas fa-cog" onclick="openEditModal(`{% url 'api_edit_volume' volume.id %}"></i></button>
-      <button type="button" class="btn bg-transparent text-white" onclick="requestChapterEdit(`{% url 'api_request_edit_volume' volume.id %}`)"><i class="fa fa-paper-plane"></i></button>
+      <button type="button" class="btn bg-transparent text-white ml-auto" onclick="openEditModal(`{% url 'api_edit_volume' volume.id %}`)"><i class="fas fa-pen" onclick="openEditModal(`{% url 'api_edit_volume' volume.id %}"></i></button>
+      <button type="button" class="btn bg-transparent text-white" onclick="requestChapterEdit(`{% url 'api_request_edit_volume' volume.id %}`)"><i class="fa fa-sync-alt"></i></button>
       {% endif %}
       <i class="fas {% if forloop.first %}fa-chevron-up{% else %}fa-chevron-down{% endif %} transition ml-2"></i>
     </div>
