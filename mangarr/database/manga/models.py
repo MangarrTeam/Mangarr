@@ -247,6 +247,7 @@ class Manga(models.Model):
         return {
             "Series": self.name.value,
             "LocalizedSeries": self.localized_name.value,
+            "Summary": self.description.value,
             "Genre": self.genres.value,
             "Tags": self.tags.value,
             "Web": self.url,
@@ -352,6 +353,7 @@ class Volume(models.Model):
     def get_fields_values_for_xml(self) -> dict:
         return {
             **self.manga.get_fields_values_for_xml(),
+            **({"Summary": self.description.value} if len(self.description.value) > 0 else {}),
             "Volume": self.volume,
         }
 
@@ -748,7 +750,7 @@ class Chapter(models.Model):
             **self.volume.get_fields_values_for_xml(),
             "Title": self.name.value,
             "Number": self.chapter,
-            "Summary": self.description.value,
+            **({"Summary": self.description.value} if len(self.description.value) > 0 else {}),
             "Publisher": self.publisher.value,
             "Imprint": self.imprint.value,
             "Year": date.year,
