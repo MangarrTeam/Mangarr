@@ -16,6 +16,9 @@ LOGOUT_REDIRECT_URL = LOGIN_URL
 # Configs
 from .settingz.config import *
 
+# Cookies
+from .settingz.cookies import *
+
 # CSRF
 from .settingz.csrf import *
 

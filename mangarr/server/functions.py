@@ -6,6 +6,7 @@ import secrets
 import logging
 from django.db import models
 from django.contrib.auth.decorators import user_passes_test
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -30,3 +31,9 @@ def staff_required(view_func):
 
 def superuser_or_staff_required(view_func):
     return user_passes_test(lambda u: u.is_superuser or u.is_staff)(view_func)
+
+def sanitize_ascii(input_string: str) -> str:
+    sanitized = input_string.replace(' ', '_')
+    sanitized = ''.join(c if ord(c) < 128 else '_' for c in sanitized)
+    sanitized = re.sub(r'[^A-Za-z0-9_-]', '_', sanitized)
+    return sanitized
