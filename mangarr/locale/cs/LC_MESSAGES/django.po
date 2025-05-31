@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mangarr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-31 00:40+0200\n"
-"PO-Revision-Date: 2025-05-24 01:16\n"
+"PO-Revision-Date: 2025-05-31 20:01\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "Language: cs_CZ\n"
@@ -950,9 +950,7 @@ msgstr "ID knihovny"
 #: .\frontend\views.py:222
 msgctxt "Library ID tooltip"
 msgid "frontend.settings_connectors.library_id_tooltip"
-msgstr ""
-"Dá se naleznout v URL po rozkliknutí knihovny 'http(s)://KAVITA_IP/library/"
-"LIBRARY_ID'"
+msgstr "Dá se naleznout v URL po rozkliknutí knihovny 'http(s)://KAVITA_IP/library/LIBRARY_ID'"
 
 #: .\frontend\views.py:303
 msgctxt "User unknown text"
@@ -1112,4 +1110,5 @@ msgstr "Čeština"
 
 #~ msgctxt "Caption for downloaded column"
 #~ msgid "frontend.manga_view.downloaded"
-#~ msgstr "Staženo"
+#~ msgstr "Downloaded"
+
