@@ -733,8 +733,8 @@ class Chapter(models.Model):
             "editor": {"type": "list", "label": pgettext("Editor field name for Chapter", "database.models.chapter.editor"),"value": self.editor.value.split(", "), "locked": self.editor.locked},
             "translator": {"type": "list", "label": pgettext("Translator field name for Chapter", "database.models.chapter.translator"),"value": self.translator.value.split(", "), "locked": self.translator.locked},
             "page_count": {"type": "int", "label": pgettext("Page count field name for Chapter", "database.models.chapter.page_count"),"value": self.page_count.value, "locked": self.page_count.locked},
-            "format": {"type": "choice", "label": pgettext("Format field name for Chapter", "database.models.chapter.format"),"value": self.format.value, "locked": self.format.locked, "choices": [{"value": v, "text": n }for v, n in Formats.get_members(Formats)]},
-            "age_rating": {"type": "choice", "label": pgettext("Age rating field name for Chapter", "database.models.chapter.age_rating"),"value": self.age_rating.value, "locked": self.age_rating.locked, "choices": [{"value": v, "text": n }for v, n in AgeRating.get_members(AgeRating)]},
+            "format": {"type": "choice", "label": pgettext("Format field name for Chapter", "database.models.chapter.format"),"value": self.format.value, "locked": self.format.locked, "choices": [{"value": v, "text": l or n.title() }for v, n, l in Formats.get_members(Formats)]},
+            "age_rating": {"type": "choice", "label": pgettext("Age rating field name for Chapter", "database.models.chapter.age_rating"),"value": self.age_rating.value, "locked": self.age_rating.locked, "choices": [{"value": v, "text": l or n.title() }for v, n, l in AgeRating.get_members(AgeRating)]},
             "isbn": {"type": "string", "label": pgettext("ISBN field name for Chapter", "database.models.chapter.isbn"),"value": self.isbn.value.split(", "), "locked": self.isbn.locked},
             "chapter_number": {"type": "float", "label": pgettext("Number field name for Chapter", "database.models.chapter.number"),"value": self.number.value, "locked": self.number.locked},
         }
@@ -764,8 +764,8 @@ class Chapter(models.Model):
             "Translator": self.translator.value,
             "PageCount": self.page_count.value,
             "LanguageISO": self.localization.value,
-            "Format": "",
-            "AgeRating": "",
+            "Format": self.format.value.label,
+            "AgeRating": self.age_rating.value.label,
             "GTIN": self.isbn.value,
         }
 

@@ -51,48 +51,54 @@ class EnforceStructureMeta(type(ABC)):
     
 @unique
 class BaseEnum(int, Enum):
+    def __new__(cls, value: int, label: str = None):
+        obj = int.__new__(cls, value)
+        obj._value_ = value
+        obj.label = label
+        return obj
+
     @staticmethod
     def get_members(enum:Enum) -> list:
-        return list(map(lambda x: (x.value, x.name), enum._member_map_.values()))
+        return list(map(lambda x: (x.value, x.name, x.label), enum._member_map_.values()))
 
 class Formats(BaseEnum):
-    NORMAL:int = 1
-    SPECIAL:int = 2
-    REFERENCE:int = 3
-    DIRECTORS_CUT:int = 4
-    BOX_SET:int = 5
-    BOX__SET:int = 6
-    ANNUAL:int = 7
-    ANTHOLOGY:int = 8
-    EPILOGUE:int = 9
-    ONE_SHOT:int = 10
-    ONE__SHOT:int = 11
-    PROLOGUE:int = 12
-    TPB:int = 13
-    TRADE_PAPER_BACK:int = 14
-    OMNIBUS:int = 15
-    COMPENDIUM:int = 16
-    ABSOLUTE:int = 17
-    GRAPHIC_NOVEL:int = 18
-    GN:int = 19
-    FCBD:int = 20
+    NORMAL:int = 1, ""
+    SPECIAL:int = 2, "Special"
+    REFERENCE:int = 3, "Reference"
+    DIRECTORS_CUT:int = 4, "Director's Cut"
+    BOX_SET:int = 5, "Box Set"
+    BOX__SET:int = 6, "Box Set"
+    ANNUAL:int = 7, "Annual"
+    ANTHOLOGY:int = 8, "Anthology"
+    EPILOGUE:int = 9, "Epilogue"
+    ONE_SHOT:int = 10, "One-Shot"
+    ONE__SHOT:int = 11, "One-Shot"
+    PROLOGUE:int = 12, "Prologue"
+    TPB:int = 13, "TPB"
+    TRADE_PAPER_BACK:int = 14, "Trade Paper Back"
+    OMNIBUS:int = 15, "Omnibus"
+    COMPENDIUM:int = 16, "Compendium"
+    ABSOLUTE:int = 17, "Absolute"
+    GRAPHIC_NOVEL:int = 18, "Graphic Novel"
+    GN:int = 19, "GN"
+    FCBD:int = 20, "FCB"
 
 class AgeRating(BaseEnum):
-    UNKNOWN:int = 1
-    RATING_PENDING:int = 2
-    EARLY_CHILDHOOD:int = 3
-    EVERYONE:int = 4
-    G:int = 5
-    EVERYONE_10_PLUS:int = 6
-    PG:int = 7
-    KIDS_TO_ADULTS:int = 8
-    TEEN:int = 9
-    MA_15_PLUS:int = 10
-    MATURE_17_PLUS:int = 11
-    M:int = 12
-    R18_PLUS:int = 13
-    ADULTS_ONLY_18_PLUS:int = 14
-    X_18_PLUS:int = 15
+    UNKNOWN:int = 1, ""
+    RATING_PENDING:int = 2, "Rating Pending"
+    EARLY_CHILDHOOD:int = 3, "Early Childhood"
+    EVERYONE:int = 4, "Everyone"
+    G:int = 5, "G"
+    EVERYONE_10_PLUS:int = 6, "Everyone 10+"
+    PG:int = 7, "PG"
+    KIDS_TO_ADULTS:int = 8, "Kids to Adults"
+    TEEN:int = 9, "Teen"
+    MA_15_PLUS:int = 10, "MA15+"
+    MATURE_17_PLUS:int = 11, "Mature 17+"
+    M:int = 12, "M"
+    R18_PLUS:int = 13, "R18+"
+    ADULTS_ONLY_18_PLUS:int = 14, "Adults Only 18+"
+    X_18_PLUS:int = 15, "X18+"
 
 class Status(BaseEnum):
     UNKNOWN = 1
