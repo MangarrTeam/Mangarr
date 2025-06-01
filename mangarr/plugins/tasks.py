@@ -1,7 +1,7 @@
 import json
 import time
 from plugins.manager import update_metadata
-from server.settings import PLUGIN_REGISTRY
+from server.settings import PLUGIN_REGISTRY, plugins_loaded
 import logging
 logger = logging.getLogger(__name__)
 
@@ -32,6 +32,8 @@ def load_downloaded_plugins():
     for metadata in metadatas:
         if metadata["downloaded_version"] is not None:
             load_and_register_plugin(metadata["category"], metadata["domain"])
+
+    plugins_loaded.set()
 
 import threading
 _registry_lock = threading.Lock()
