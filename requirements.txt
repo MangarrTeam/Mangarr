@@ -11,3 +11,4 @@ packaging
 channels
 channels_redis
 daphne
+selenium

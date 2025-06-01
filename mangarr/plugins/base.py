@@ -7,6 +7,7 @@ logger = logging.getLogger(__name__)
 
 NO_THUMBNAIL_URL = "/uploads/static/no_thumbnail.png"
 from server.settingz.config import DATETIME_FORMAT
+from .driver_setup import DRIVER
 
 def enforce_structure(required_keys):
     def decorator(func):
@@ -112,7 +113,26 @@ class MangaPluginBase(ABC, metaclass=EnforceStructureMeta):
 
     def __init__(self, nsfw_allowed = False, *args, **kwargs):
         self.nsfw_allowed = nsfw_allowed
+        self.driver = DRIVER
+
         super().__init__(*args, **kwargs)
+
+    @final
+    @staticmethod
+    def close_driver() -> None:
+        """
+        Closes all the tabs of driver except one
+        """
+        try:
+            if len(DRIVER.window_handles) > 1:
+                while len(DRIVER.window_handles) > 1:
+                    DRIVER.switch_to.window(DRIVER.window_handles[-1])
+                    DRIVER.close()
+                DRIVER.switch_to.window(DRIVER.window_handles[0])
+            else:
+                DRIVER.delete_all_cookies()
+        except Exception as e:
+            logger.error(f"Error - {e}")
 
     @final
     @classmethod
