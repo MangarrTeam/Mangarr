@@ -48,7 +48,13 @@
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
+    <li>
+      <a href="#contributing">Contributing</a>
+      <ul>
+        <li><a href="#plugin-contributing">Plugin</a></li>
+        <li><a href="#language-contributing">Language</a></li>
+      </ul>
+    </li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -170,6 +176,9 @@ Mangarr supports extending pages compatibility through plugins. If you want to c
 - follow the provided [**plugin template**](https://github.com/MangarrTeam/mangarr-plugin) to create your plugin code.
 - Visit the [plugin list repo](https://github.com/MangarrTeam/mangarr-plugins) and open issue requesting new plugin
 
+### Language contributing
+
+you can contribute/request language here on [Crowdin](https://crowdin.com/project/mangarr)
 
 ### Top contributors:
 
