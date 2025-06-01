@@ -131,6 +131,9 @@ class ChapterDownloaded(Exception):
 
 class PageWasNone(Exception):
     pass
+
+class ChapterHadNoPages(Exception):
+    pass
    
 class MonitorChapter(ProcessBase):
     manga = models.ForeignKey(Manga, on_delete=models.CASCADE, verbose_name=pgettext("Manga FK name", "processes.models.monitor_chapter.manga"))
@@ -164,6 +167,12 @@ class MonitorChapter(ProcessBase):
             chapter_cache_file_path_name = CACHE_FILE_PATH_ROOT / f"{get_hash(chapter_cache_folder)}.cbz"
 
             chapter_pages = plugin.get_pages(self.arguments)
+
+            if len(chapter_pages) == 0:
+                raise ChapterHadNoPages
+
+            chapter.page_count.value = len(chapter_pages)
+            chapter.page_count.save()
 
             with zipfile.ZipFile(chapter_cache_file_path_name, 'w', zipfile.ZIP_DEFLATED) as cbz:
                 width = len(str(len(chapter_pages)))
@@ -199,6 +208,9 @@ class MonitorChapter(ProcessBase):
 
         except ChapterDownloaded:
             raise ChapterDownloaded
+
+        except ChapterHadNoPages:
+            raise ChapterHadNoPages
 
         except Exception as e:
             self.last_run = timezone.now()
