@@ -32,3 +32,61 @@
   toggleBtn.addEventListener('click', () => {
     sidebar.classList.toggle('show');
   });
+
+
+function fetchInit(loadingId, buttonId) {
+  const loadingEl = document.getElementById(loadingId);
+  const buttonEl = document.getElementById(buttonId);
+  if (loadingEl) {
+    loadingEl.classList.remove('hidden');
+  }
+  if (buttonEl) {
+    buttonEl.disabled = true;
+  }
+}
+
+function fetchSuccess(loadingId, successId, buttonId) {
+  const loadingEl = document.getElementById(loadingId);
+  const successEl = document.getElementById(successId);
+  const buttonEl = document.getElementById(buttonId);
+
+  if (loadingEl) loadingEl.classList.add('hidden');
+  if (successEl) {
+    successEl.classList.remove('hidden');
+    successEl.style.opacity = 1;
+    setTimeout(() => {
+      successEl.classList.add('fade-out');
+      setTimeout(() => {
+        successEl.classList.add('hidden');
+        successEl.classList.remove('fade-out');
+        successEl.style.opacity = 1;
+      }, 500);
+    }, 2000);
+  }
+  if (buttonEl) {
+    buttonEl.disabled = false;
+  }
+}
+
+function fetchFail(loadingId, failId, buttonId) {
+  const loadingEl = document.getElementById(loadingId);
+  const failEl = document.getElementById(failId);
+  const buttonEl = document.getElementById(buttonId);
+
+  if (loadingEl) loadingEl.classList.add('hidden');
+  if (failEl) {
+    failEl.classList.remove('hidden');
+    failEl.style.opacity = 1;
+    setTimeout(() => {
+      failEl.classList.add('fade-out');
+      setTimeout(() => {
+        failEl.classList.add('hidden');
+        failEl.classList.remove('fade-out');
+        failEl.style.opacity = 1;
+      }, 500);
+    }, 2000);
+  }
+  if (buttonEl) {
+    buttonEl.disabled = false;
+  }
+}
