@@ -17,7 +17,8 @@ urlpatterns = [
     path('manager/downloads/toggle/', views.toggle_pause_downloads, name='download_toggle'),
 
 
-    path("manga/search", views.search_manga, name="api_search_manga"),
+    path("manga/search/start", views.search_manga_start, name="api_search_manga_start"),
+    path("manga/search/status/<uuid:task_id>", views.search_manga_status, name="api_search_manga_status"),
     path("manga/request", views.request_manga, name="api_request_manga"),
     path("manga/request/approve", views.approve_manga_request, name="approve_manga_request"),
     path("manga/request/deny", views.deny_manga_request, name="deny_manga_request"),

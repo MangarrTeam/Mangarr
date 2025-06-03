@@ -9,9 +9,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _, pgettext
 from django.contrib.auth.decorators import permission_required
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 import json
-from .functions import manga_is_monitored, manga_is_requested, validate_token, require_DELETE, require_GET_PATCH
+from .functions import manga_is_monitored, manga_is_requested, validate_token, require_DELETE, require_GET_PATCH, start_background_search
 from server.settings import NSFW_ALLOWED
 from processes.models import MonitorManga, MonitorChapter, EditChapter
 from django.db import IntegrityError
@@ -19,6 +19,8 @@ from processes.tasks import trigger_monitor
 from django.utils.translation import override
 from server.settings import LANGUAGE_CODE
 import logging
+import threading
+import uuid
 logger = logging.getLogger(__name__)
 
 
@@ -136,11 +138,12 @@ def toggle_pause_downloads(request):
     toggle_download_pause()
     return JsonResponse({'success': True, 'paused': is_download_paused()})
 
+from .search_cache import get_result
 
-from plugins.functions import get_plugin, get_plugins_domains
+from plugins.functions import get_plugins_domains
 @permission_required("database_users.can_search")
 @require_POST
-def search_manga(request):
+def search_manga_start(request):
     try:
         data = json.loads(request.body)
     except Exception as e:
@@ -152,24 +155,30 @@ def search_manga(request):
     if category is None:
         return JsonResponse({"error": "Missing parameter 'category'"}, status=400)
     if category not in ["core", "community"]:
-        return JsonResponse({"error": "Category needs to be 'core' or 'cummunity'"}, status=400)
+        return JsonResponse({"error": "Category needs to be 'core' or 'community'"}, status=400)
     domain = data.get("domain")
     if domain is None:
         return JsonResponse({"error": "Missing parameter 'domain'"}, status=400)
     if domain not in get_plugins_domains(category):
         return JsonResponse({"error": "Domain does not exist"}, status=403)
-    try:
-        plugin = get_plugin(category, domain)
-        language = data.get("language")
-        if language is not None and language in plugin.get_languages():
-            manga = plugin.search_manga(query, language)
-        else:
-            manga = plugin.search_manga(query)
-        return JsonResponse([{**m, "monitored": manga_is_monitored(m), "requested": manga_is_requested(m)} for m in manga], safe=False)
-    except Exception as e:
-        return JsonResponse({"error": f"Error - {e}"}, status=500)
-
+    language = data.get("language")
     
+    task_id = start_background_search(query, category, domain, language)
+    
+    return JsonResponse({"task_id": task_id})
+
+@permission_required("database_users.can_search")
+@require_GET
+def search_manga_status(request, task_id):
+    result = get_result(task_id)
+
+    if result is None:
+        return JsonResponse({"error": "Not found"}, status=404)
+
+    if result.get("status") == "processing":
+        return JsonResponse({"processing": True})
+
+    return JsonResponse({"processing": False, "result": result["data"]})
 
 from database.manga.models import MangaRequest
 

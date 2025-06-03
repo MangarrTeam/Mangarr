@@ -3,7 +3,10 @@ from processes.models import MonitorManga
 from database.users.models import UserProfile
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
-
+from uuid import uuid4
+import threading
+from .search_cache import mark_processing, store_result
+from plugins.functions import get_plugin
 
 def manga_is_monitored(manga:dict) -> bool:
     url = manga.get("url")
@@ -36,3 +39,23 @@ require_DELETE.__doc__ = "Decorator to require that a view only accepts the DELE
 
 require_GET_PATCH = require_http_methods(["GET", "PATCH"])
 require_GET_PATCH.__doc__ = "Decorator to require that a view only accepts the GET and PATCH method."
+
+
+def start_background_search(query, category, domain, language=None):
+    task_id = str(uuid4())
+    mark_processing(task_id)
+
+    def worker():
+        try:
+            plugin = get_plugin(category, domain)
+            if language and language in plugin.get_languages():
+                manga = plugin.search_manga(query, language)
+            else:
+                manga = plugin.search_manga(query)
+            result = [{**m, "monitored": manga_is_monitored(m), "requested": manga_is_requested(m)} for m in manga]
+            store_result(task_id, result)
+        except Exception as e:
+            store_result(task_id, {"error": f"Error - {e}"})
+
+    threading.Thread(target=worker, daemon=True).start()
+    return task_id

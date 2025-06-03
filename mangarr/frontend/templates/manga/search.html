@@ -95,9 +95,9 @@ document.getElementById('search-form').addEventListener('submit', async (e) => {
     const payload = { query, category, domain, language };
 
     fetchInit('loader', 'searchBtn');
-    var response;
+    var startResponse;
     try {
-        response = await fetch("{% url 'api_search_manga' %}", {
+        startResponse = await fetch("{% url 'api_search_manga_start' %}", {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',
@@ -105,19 +105,36 @@ document.getElementById('search-form').addEventListener('submit', async (e) => {
             },
             body: JSON.stringify(payload)
         });
-
-        if (response.ok) {
-            fetchSuccess('loader', 'successIcon', 'searchBtn');
-        } else {
-            fetchFail('loader', 'failIcon', 'searchBtn');
-            return;
-        }
     } catch {
         fetchFail('loader', 'failIcon', 'searchBtn');
         return;
     }
 
-    const data = Array.from(await response.json());
+    const { task_id } = await startResponse.json();
+    if (!task_id) {
+        fetchFail('loader', 'failIcon', 'searchBtn');
+        return;
+    }
+
+    var data;
+    const statusUrl = `{% url 'api_search_manga_status' '00000000-0000-0000-0000-000000000000' %}`.replace("00000000-0000-0000-0000-000000000000", task_id);
+    try {
+        for (let i = 0; i < 600; i++) {
+            const statusRes = await fetch(statusUrl);
+            const status = await statusRes.json();
+
+            if (!status.processing) {
+                data = Array.from(await status.result);
+                fetchSuccess('loader', 'successIcon', 'searchBtn');
+                break;
+            }
+            await new Promise(r => setTimeout(r, 1000));
+        }
+    } catch {
+        fetchFail('loader', 'failIcon', 'searchBtn');
+        return;
+    }
+    
     const grid = document.getElementById('manga-grid');
     grid.innerHTML = '';
 
