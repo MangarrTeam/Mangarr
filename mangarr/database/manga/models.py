@@ -482,7 +482,7 @@ class Chapter(models.Model):
             if force:
                 self.publisher.value_force(", ".join(data.get("publisher")))
             else:
-                self.publisher.value = data.get("publisher")
+                self.publisher.value = ", ".join(data.get("publisher"))
 
         if data.get("publisher_lock") is not None:
             if not data.get("publisher_lock", False):
@@ -496,7 +496,7 @@ class Chapter(models.Model):
             if force:
                 self.imprint.value_force(", ".join(data.get("imprint")))
             else:
-                self.imprint.value = data.get("imprint")
+                self.imprint.value = ", ".join(data.get("imprint"))
 
         if data.get("imprint_lock") is not None:
             if not data.get("imprint_lock", False):
@@ -525,7 +525,7 @@ class Chapter(models.Model):
             if force:
                 self.writer.value_force(", ".join(data.get("writer")))
             else:
-                self.writer.value = data.get("writer")
+                self.writer.value = ", ".join(data.get("writer"))
 
         if data.get("writer_lock") is not None:
             if not data.get("writer_lock", False):
@@ -540,7 +540,7 @@ class Chapter(models.Model):
             if force:
                 self.penciller.value_force(", ".join(data.get("penciller")))
             else:
-                self.penciller.value = data.get("penciller")
+                self.penciller.value = ", ".join(data.get("penciller"))
 
         if data.get("penciller_lock") is not None:
             if not data.get("penciller_lock", False):
@@ -555,7 +555,7 @@ class Chapter(models.Model):
             if force:
                 self.inker.value_force(", ".join(data.get("inker")))
             else:
-                self.inker.value = data.get("inker")
+                self.inker.value = ", ".join(data.get("inker"))
 
         if data.get("inker_lock") is not None:
             if not data.get("inker_lock", False):
@@ -570,7 +570,7 @@ class Chapter(models.Model):
             if force:
                 self.colorist.value_force(", ".join(data.get("colorist")))
             else:
-                self.colorist.value = data.get("colorist")
+                self.colorist.value = ", ".join(data.get("colorist"))
 
         if data.get("colorist_lock") is not None:
             if not data.get("colorist_lock", False):
@@ -585,7 +585,7 @@ class Chapter(models.Model):
             if force:
                 self.letterer.value_force(", ".join(data.get("letterer")))
             else:
-                self.letterer.value = data.get("letterer")
+                self.letterer.value = ", ".join(data.get("letterer"))
 
         if data.get("letterer_lock") is not None:
             if not data.get("letterer_lock", False):
@@ -600,7 +600,7 @@ class Chapter(models.Model):
             if force:
                 self.cover_artist.value_force(", ".join(data.get("cover_artist")))
             else:
-                self.cover_artist.value = data.get("cover_artist")
+                self.cover_artist.value = ", ".join(data.get("cover_artist"))
 
         if data.get("cover_artist_lock") is not None:
             if not data.get("cover_artist_lock", False):
@@ -615,7 +615,7 @@ class Chapter(models.Model):
             if force:
                 self.editor.value_force(", ".join(data.get("editor")))
             else:
-                self.editor.value = data.get("editor")
+                self.editor.value = ", ".join(data.get("editor"))
 
         if data.get("editor_lock") is not None:
             if not data.get("editor_lock", False):
@@ -630,7 +630,7 @@ class Chapter(models.Model):
             if force:
                 self.translator.value_force(", ".join(data.get("translator")))
             else:
-                self.translator.value = data.get("translator")
+                self.translator.value = ", ".join(data.get("translator"))
 
         if data.get("translator_lock") is not None:
             if not data.get("translator_lock", False):
