@@ -728,6 +728,8 @@ class Chapter(models.Model):
             "publisher": {"type": "list", "label": pgettext("Publisher field name for Chapter", "database.models.chapter.publisher"),"value": self.publisher.value.split(", "), "locked": self.publisher.locked},
             "imprint": {"type": "list", "label": pgettext("Imprint field name for Chapter", "database.models.chapter.imprint"),"value": self.imprint.value.split(", "), "locked": self.imprint.locked},
             "release_date": {"type": "date", "label": pgettext("Release date field name for Chapter", "database.models.chapter.release_date"),"value": self.release_date.value, "locked": self.release_date.locked},
+            "writer": {"type": "list", "label": pgettext("Writer field name for Chapter", "database.models.chapter.writer"),"value": self.writer.value.split(", "), "locked": self.writer.locked},
+            "penciller": {"type": "list", "label": pgettext("Penciller field name for Chapter", "database.models.chapter.penciller"),"value": self.penciller.value.split(", "), "locked": self.penciller.locked},
             "inker": {"type": "list", "label": pgettext("Inker field name for Chapter", "database.models.chapter.inker"),"value": self.inker.value.split(", "), "locked": self.inker.locked},
             "colorist": {"type": "list", "label": pgettext("Colorist field name for Chapter", "database.models.chapter.colorist"),"value": self.colorist.value.split(", "), "locked": self.colorist.locked},
             "letterer": {"type": "list", "label": pgettext("Letterer field name for Chapter", "database.models.chapter.letterer"),"value": self.letterer.value.split(", "), "locked": self.letterer.locked},
