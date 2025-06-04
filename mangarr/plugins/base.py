@@ -295,10 +295,17 @@ class MangaPluginBase(ABC, metaclass=EnforceStructureMeta):
         Raises:
             requests.exceptions.RequestException: If the download fails.
         """
-        try:
-            response = requests.get(url, headers=arguments.get("headers"), cookies=arguments.get("cookies"), timeout=arguments.get("timeout", 10))
-            response.raise_for_status()
-            return BytesIO(response.content)
-        except Exception as e:
-            logger.error(f"Error occured while trying to download page - {e}")
-            return None
+        retries = arguments.get("retries", 5)
+        for retry in range(1, retries + 1):
+            try:
+                response = requests.get(url, headers=arguments.get("headers"), cookies=arguments.get("cookies"), timeout=((arguments.get("retry_timeout", 5) * retry) + arguments.get("timeout", 10)))
+                response.raise_for_status()
+                return BytesIO(response.content)
+            except Exception as e:
+                if retry >= retries:
+                    logger.error(f"Error occured while trying to download page - {e}")
+                    return None
+                logger.debug(f"Downloading page errored - {e}")
+                logger.debug("Retrying download...")
+                logger.debug(f"Retry {retry} of {retries}")
+        return None
