@@ -7,7 +7,10 @@ ENV PYTHONUNBUFFERED=1
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies (e.g., SQLite)
+# Accept build argument for architecture
+ARG ARCH=amd64
+
+# Install system dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         sqlite3 \
@@ -30,8 +33,8 @@ RUN apt-get update && \
         libxdamage1 \
         libxrandr2 \
         xdg-utils \
-        ca-certificates \
-    && if [ "$ARCH" = "arm64" ]; then \
+        ca-certificates && \
+    if [ "$ARCH" = "arm64" ]; then \
         apt-get install -y --no-install-recommends chromium-browser chromium-chromedriver; \
     else \
         apt-get install -y --no-install-recommends chromium chromium-driver; \
@@ -41,33 +44,28 @@ RUN apt-get update && \
 # Upgrade pip
 RUN pip install --upgrade pip
 
-# Copy the requirements file to the container and install Python dependencies
+# Copy Python dependencies and install
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the Django project into the container
+# Copy Django project
 COPY ./mangarr /app/
 
-# Expose the port the app will run on
+# Expose port
 EXPOSE 80
 
+# Copy configuration files
 COPY supervisord.conf /etc/supervisord.conf
-
-# Copy Nginx configuration file
 COPY nginx.conf /etc/nginx/nginx.conf
-
 COPY ./static /uploads/static/
-
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
-
 COPY monitor_gunicorn.sh /app/monitor_gunicorn.sh
 RUN chmod +x /app/monitor_gunicorn.sh
-
 COPY maintenance.html /mangarr_static/maintenance.html
 
-RUN mkdir -p /manga/cache
-RUN mkdir -p /manga/media
+# Create necessary directories
+RUN mkdir -p /manga/cache /manga/media
 
-# Entry point to run migrations and start Django server with custom configurations
+# Default entrypoint
 CMD ["/app/entrypoint.sh"]
