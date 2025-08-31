@@ -8,33 +8,63 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Install system dependencies (e.g., SQLite)
+ARG ARCH
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    sqlite3 \
-    nginx \
-    gettext \
-    supervisor \
-    redis-server \
-    chromium \
-    chromium-driver \
-    fonts-liberation \
-    libasound2 \
-    libatk-bridge2.0-0 \
-    libatk1.0-0 \
-    libcups2 \
-    libdrm2 \
-    libgbm1 \
-    libgtk-3-0 \
-    libnspr4 \
-    libnss3 \
-    libx11-xcb1 \
-    libxcomposite1 \
-    libxdamage1 \
-    libxrandr2 \
-    xdg-utils \
-    ca-certificates \
-    --no-install-recommends && \
+    if [ "$ARCH" = "arm64" ]; then \
+        apt-get install -y --no-install-recommends \
+            sqlite3 \
+            nginx \
+            gettext \
+            supervisor \
+            redis-server \
+            chromium-browser \
+            chromium-chromedriver \
+            fonts-liberation \
+            libasound2 \
+            libatk-bridge2.0-0 \
+            libatk1.0-0 \
+            libcups2 \
+            libdrm2 \
+            libgbm1 \
+            libgtk-3-0 \
+            libnspr4 \
+            libnss3 \
+            libx11-xcb1 \
+            libxcomposite1 \
+            libxdamage1 \
+            libxrandr2 \
+            xdg-utils \
+            ca-certificates \
+            --no-install-recommends; \
+    else \
+        apt-get install -y --no-install-recommends \
+            sqlite3 \
+            nginx \
+            gettext \
+            supervisor \
+            redis-server \
+            chromium \
+            chromium-driver \
+            fonts-liberation \
+            libasound2 \
+            libatk-bridge2.0-0 \
+            libatk1.0-0 \
+            libcups2 \
+            libdrm2 \
+            libgbm1 \
+            libgtk-3-0 \
+            libnspr4 \
+            libnss3 \
+            libx11-xcb1 \
+            libxcomposite1 \
+            libxdamage1 \
+            libxrandr2 \
+            xdg-utils \
+            ca-certificates \
+            --no-install-recommends; \
+    fi && \
     rm -rf /var/lib/apt/lists/*
+
 
 # Upgrade pip
 RUN pip install --upgrade pip

@@ -10,6 +10,9 @@ on:
 jobs:
   containerise:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [amd64, arm64]   # define architectures
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -58,10 +61,11 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/${{ matrix.arch }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           provenance: false
           build-args: |
             IMAGE_NAME=${{ env.IMAGE_NAME }}
+            ARCH=${{ matrix.arch }}
