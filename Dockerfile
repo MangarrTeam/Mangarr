@@ -7,9 +7,6 @@ ENV PYTHONUNBUFFERED=1
 # Set working directory
 WORKDIR /app
 
-# Accept build argument for architecture
-ARG ARCH=amd64
-
 # Install system dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
