@@ -1,11 +1,9 @@
-from server.settings import connectors as C
-from .connectors import kavita
+from database.manga.models import Library
+import logging
+logger = logging.getLogger(__name__)
 
-kavita_connector = kavita.KavitaConnector(C.KAVITA_USERNAME, C.KAVITA_PASSWORD, C.KAVITA_TOKEN, C.KAVITA_ADDRESS, C.KAVITA_PORT)
-
-def run_kavita():
-    kavita_connector.notify(C.KAVITA_LIBRARY_ID)
-
-
-def notify_connectors():
-    run_kavita()
+def notify_connectors(library:Library):
+    connectors = library.connectors.all()
+    for connector in connectors:
+        if not connector.notify():
+            logger.warning(f"Connector {connector.name} failed to run notify")

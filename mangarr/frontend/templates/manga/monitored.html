@@ -17,6 +17,7 @@
                 {% if manga.plugin %}
                 <span class="position-absolute bg-success text-white px-2 py-1 mr-1 mt-1 d-inline-block text-center multi-line-title" style="top: 0; right: 0; border-radius: 50rem; max-width: 75%; font-size: clamp(0.5rem, 0.75vw, 1rem)">{{ manga.plugin }}</span>
                 {% endif %}
+                <span class="position-absolute bg-warning text-white px-2 py-1 mr-1 mt-1 d-inline-block text-center multi-line-title" style="top: calc(2 * clamp(0.5rem, 0.75vw, 1rem)); right: 0; border-radius: 50rem; max-width: 75%; font-size: clamp(0.5rem, 0.75vw, 1rem)">{{ manga.library }}</span>
                 <img class="card-img"
                     src="{{ manga.cover }}"
                     alt="{{ manga.name }}"
@@ -26,7 +27,7 @@
                     <h6 class="card-title mb-1 w-100 multi-line-title"
                         title="{{ manga.name }}">{{ manga.name }}</h6>
                     <div class="hover-buttons d-none">
-                        <a href="{% url 'manga_view' manga.pk %}">
+                        <a href="{% url 'manga_view' manga.id %}">
                             <button class="btn btn-sm btn-success mr-2 w-100 text-truncate">{% trans "frontend.manga_monitored.view" context "View manga button text" %}</button>
                         </a>
                         <a href="{{ manga.url }}" target="_blank">

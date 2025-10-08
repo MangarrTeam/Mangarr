@@ -1,19 +1,21 @@
 import json
 import time
 from plugins.manager import update_metadata
-from server.settings import PLUGIN_REGISTRY, plugins_loaded
+from core.settings import PLUGIN_REGISTRY, PLUGINS_METADATA_PATH, plugins_loaded
+from datetime import datetime, timedelta
 import logging
 logger = logging.getLogger(__name__)
 
-stop_event = None
-
 def background_update():
+    from core.thread_manager import stop_event
+    next_update = None
     while not stop_event.is_set():
-        logger.info("Updating plugin metadata...")
-        update_metadata()
-        time.sleep(86400)  # 24h
+        if next_update is None or next_update <= datetime.now():
+            logger.info("Updating plugin metadata...")
+            update_metadata()
+            next_update = datetime.now() + timedelta(days=1)    # Set the next update to next day
+        time.sleep(10)  # 10 seconds
 
-from server.settings import PLUGINS_METADATA_PATH
 from .loader import load_plugin
 from .base import MangaPluginBase
 def load_downloaded_plugins():
@@ -27,12 +29,13 @@ def load_downloaded_plugins():
         metadatas = []
     except Exception as e:
         logger.error(f'Error while reading {PLUGINS_METADATA_PATH} - {e}')
-        metadata = []
+        metadatas = []
 
     for metadata in metadatas:
         if metadata["downloaded_version"] is not None:
             load_and_register_plugin(metadata["category"], metadata["domain"])
 
+    logger.info("Plugins loaded!")
     plugins_loaded.set()
 
 import threading

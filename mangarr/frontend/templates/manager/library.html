@@ -1,0 +1,570 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load has_permition %}
+
+{% block title %}{% trans "frontend.library_panel.library_panel" context "Title for library panel" %}{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/user_list.css' %}">
+<style>
+.library-item {
+    background: var(--background-light);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    padding: 1rem;
+}
+
+.library-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.library-header:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.library-name {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.connector-list {
+    margin-top: 1rem;
+    padding-left: 2rem;
+}
+
+.connector-item {
+    background: rgba(0, 0, 0, 0.2);
+    border-left: 3px solid #0d6efd;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.connector-info {
+    flex: 1;
+}
+
+.connector-parameters {
+    font-size: 0.875rem;
+    color: #adb5bd;
+}
+
+.collapse-icon {
+    transition: transform 0.3s;
+}
+
+.collapsed .collapse-icon {
+    transform: rotate(-90deg);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #6c757d;
+    font-style: italic;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="text-white mb-0">{% trans "frontend.library_panel.library_management" context "Title for library management" %}</h1>
+  <button class="btn btn-success" onclick="openAddLibraryModal()">
+    <i class="fa fa-plus"></i> {% trans "frontend.library_panel.add_library" context "Add library button" %}
+  </button>
+</div>
+
+<div id="librariesContainer">
+  {% for library in libraries %}
+  <div class="library-item text-white" data-library-id="{{ library.id }}">
+    <div class="library-header" onclick="toggleLibrary('{{ library.id }}')">
+      <div class="d-flex align-items-center">
+        <i class="fa fa-chevron-down collapse-icon mr-3"></i>
+        <span class="library-name">{{ library.name }}<small class="ml-1 text-white-50"><small>({{ library.folder }})</small></small></span>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); openEditLibraryModal('{{ library.id }}', '{{ library.name }}')">
+          <i class="fa fa-edit"></i> {% trans "frontend.library_panel.edit" context "Edit button" %}
+        </button>
+        <button class="btn btn-sm btn-danger" onclick="event.stopPropagation(); confirmDeleteLibrary('{{ library.id }}', '{{ library.name }}')">
+          <i class="fa fa-trash"></i> {% trans "frontend.library_panel.delete" context "Delete button" %}
+        </button>
+      </div>
+    </div>
+    
+    <div class="connector-list collapse show" id="library-{{ library.id }}">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h6 class="mb-0">{% trans "frontend.library_panel.connectors" context "Connectors section title" %}</h6>
+        <button class="btn btn-sm btn-info" onclick="openAddConnectorModal('{{ library.id }}')">
+          <i class="fa fa-plus"></i> {% trans "frontend.library_panel.add_connector" context "Add connector button" %}
+        </button>
+      </div>
+      
+      <div class="connectors-container" id="connectors-{{ library.id }}">
+        {% if library.connectors %}
+          {% for connector in library.connectors.all %}
+          <div class="connector-item">
+            <div class="connector-info">
+              <div class="connector-name">{{ connector.name }}</div>
+              <div class="connector-parameters">
+                {% for key,item in connector.parameters.items %}
+                  {{ key }}: {{ item }} </br>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-sm btn-warning" onclick="openEditConnectorModal('{{ connector.id }}', '{{ library.id }}', '{{ connector.name|lower }}', '{{ connector.connector_library_id|default:'' }}')">
+                <i class="fa fa-edit"></i>
+              </button>
+              <button class="btn btn-sm btn-danger" onclick="confirmDeleteConnector('{{ connector.id }}', '{{ connector.name }}')">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="empty-state">
+            {% trans "frontend.library_panel.no_connectors" context "No connectors message" %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="empty-state text-white">
+    {% trans "frontend.library_panel.no_libraries" context "No libraries message" %}
+  </div>
+  {% endfor %}
+</div>
+
+<!-- Add/Edit Library Modal -->
+<div class="modal fade" id="libraryModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-white">
+      <div class="modal-header background-dark border-0">
+        <h5 class="modal-title" id="libraryModalLabel">{% trans "frontend.library_panel.add_library" context "Add library title" %}</h5>
+        <button type="button" class="btn-close" data-dismiss="modal"></button>
+      </div>
+      <div class="modal-body background-light">
+        <form id="libraryForm">
+          <input type="hidden" id="libraryId" name="library_id">
+          <div class="mb-3">
+            <label for="libraryName" class="form-label">{% trans "frontend.library_panel.library_name" context "Library name label" %}</label>
+            <input type="text" class="form-control" id="libraryName" name="name" required>
+          </div>
+          <div class="mb-3" id="libraryPathContainer">
+            <label for="libraryPath" class="form-label">{% trans "frontend.library_panel.library_path" context "Library path label" %}</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="libraryPath" name="path" required readonly>
+              <button type="button" class="btn btn-outline-secondary" onclick="resetPath()">
+                <i class="fa fa-folder-open"></i> {% trans "frontend.library_panel.browse" context "Browse button" %}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer background-light border-0">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "frontend.library_panel.cancel" context "Cancel button" %}</button>
+        <button type="button" class="btn btn-success" onclick="submitLibrary()">{% trans "frontend.library_panel.save" context "Save button" %}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Connector Modal -->
+<div class="modal fade" id="connectorModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-white">
+      <div class="modal-header background-dark border-0">
+        <h5 class="modal-title" id="connectorModalLabel">{% trans "frontend.library_panel.add_connector" context "Add connector title" %}</h5>
+        <button type="button" class="btn-close" data-dismiss="modal"></button>
+      </div>
+      <div class="modal-body background-light">
+        <form id="connectorForm">
+          <input type="hidden" id="connectorId" name="connector_id">
+          <input type="hidden" id="connectorLibraryId" name="library_id">
+          <div class="mb-3">
+            <label for="connectorType" class="form-label">{% trans "frontend.library_panel.connector_type" context "Connector type label" %}</label>
+            <select class="form-control" id="connectorType" name="type" required>
+              <option value="" disabled>{% trans "frontend.library_panel.select_type" context "Select type option" %}</option>
+              {% for value, label in connectors %}
+                <option value="{{ value }}">{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="connectorLibraryIdField" class="form-label">{% trans "frontend.library_panel.connector_library_id" context "Connector library ID label" %}</label>
+            <input type="text" class="form-control" id="connectorLibraryIdField" name="connector_library_id" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer background-light border-0">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "frontend.library_panel.cancel" context "Cancel button" %}</button>
+        <button type="button" class="btn btn-success" onclick="submitConnector()">{% trans "frontend.library_panel.save" context "Save button" %}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Library Modal -->
+<div class="modal fade" id="deleteLibraryModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-white">
+      <div class="modal-header background-light border-0">
+        <h5 class="modal-title">{% trans "frontend.library_panel.confirm_delete_title" context "Confirm delete title" %}</h5>
+        <button type="button" class="btn-close" data-dismiss="modal"></button>
+      </div>
+      <div class="modal-body background-light">
+        <p>{% blocktrans with name="<strong id='deleteLibraryName'></strong>" context "Confirm delete library text" %}frontend.library_panel.confirm_delete_library {{ name }}{% endblocktrans %}</p>
+      </div>
+      <div class="modal-footer background-light border-0">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "frontend.library_panel.cancel" context "Cancel button" %}</button>
+        <button type="button" class="btn btn-danger" onclick="deleteLibrary()">{% trans "frontend.library_panel.confirm" context "Confirm button" %}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Connector Modal -->
+<div class="modal fade" id="deleteConnectorModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-white">
+      <div class="modal-header background-light border-0">
+        <h5 class="modal-title">{% trans "frontend.library_panel.confirm_delete_title" context "Confirm delete title" %}</h5>
+        <button type="button" class="btn-close" data-dismiss="modal"></button>
+      </div>
+      <div class="modal-body background-light">
+        <p>{% blocktrans with type="<strong id='deleteConnectorType'></strong>" context "Confirm delete connector text" %}frontend.library_panel.confirm_delete_connector {{ type }}{% endblocktrans %}</p>
+      </div>
+      <div class="modal-footer background-light border-0">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "frontend.library_panel.cancel" context "Cancel button" %}</button>
+        <button type="button" class="btn btn-danger" onclick="deleteConnector()">{% trans "frontend.library_panel.confirm" context "Confirm button" %}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Path Browser Modal -->
+<div class="modal fade" id="pathBrowserModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content text-white">
+      <div class="modal-header background-dark border-0">
+        <h5 class="modal-title">{% trans "frontend.library_panel.select_folder" context "Select folder title" %}</h5>
+        <button type="button" class="btn-close" data-dismiss="modal"></button>
+      </div>
+      <div class="modal-body background-light">
+        <div class="mb-3">
+          <label class="form-label">{% trans "frontend.library_panel.current_path" context "Current path label" %}</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="currentPath" readonly>
+            <button type="button" class="btn btn-outline-secondary" onclick="navigateUp()" title="{% trans 'frontend.library_panel.go_up' context 'Go up button title' %}">
+              <i class="fa fa-chevron-up"></i>
+            </button>
+            <button type="button" class="btn btn-outline-warning ml-1" onclick="resetPath()" title="{% trans 'frontend.library_panel.reset_path' context 'Reset browse path button title' %}">
+              <i class="fa fa-sync-alt"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div id="folderList" class="border rounded p-2" style="max-height: 400px; overflow-y: auto; background: rgba(0,0,0,0.2);">
+          <div class="text-center py-3">
+            <div class="spinner-border text-light" role="status">
+              <span class="visually-hidden">{% trans "frontend.library_panel.loading" context "Loading text" %}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer background-light border-0">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "frontend.library_panel.cancel" context "Cancel button" %}</button>
+        <button type="button" class="btn btn-success" onclick="selectCurrentPath()">{% trans "frontend.library_panel.select" context "Select button" %}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+const FILE_PATH_ROOT = "{{ FILE_PATH_ROOT }}";
+let currentBrowserPath = FILE_PATH_ROOT;
+function toggleLibrary(libraryId) {
+    const element = document.getElementById(`library-${libraryId}`);
+    const header = element.closest('.library-item').querySelector('.library-header');
+    
+    $(element).collapse('toggle');
+    header.classList.toggle('collapsed');
+}
+
+// Library Management
+let currentLibraryId = null;
+
+function openAddLibraryModal() {
+    currentLibraryId = null;
+    document.getElementById('libraryId').value = '';
+    document.getElementById('libraryName').value = '';
+    document.getElementById('libraryPathContainer').classList.remove("d-none");
+    document.getElementById('libraryPath').value = '';
+    document.getElementById('libraryModalLabel').textContent = '{% trans "frontend.library_panel.add_library" context "Add library title" %}';
+    $('#libraryModal').modal('show');
+}
+
+function openEditLibraryModal(libraryId, libraryName) {
+    currentLibraryId = libraryId;
+    document.getElementById('libraryId').value = libraryId;
+    document.getElementById('libraryName').value = libraryName;
+    document.getElementById('libraryPathContainer').classList.add("d-none");
+    document.getElementById('libraryModalLabel').textContent = '{% trans "frontend.library_panel.edit_library" context "Edit library title" %}';
+    $('#libraryModal').modal('show');
+}
+
+function submitLibrary() {
+    const name = document.getElementById('libraryName').value;
+    const libraryId = document.getElementById('libraryId').value;
+    const path = document.getElementById('libraryPath').value;
+    const isEdit = libraryId ? true : false
+    
+    if (!path && !isEdit) {
+        alert('{% trans "frontend.library_panel.path_required" context "Path required message" %}');
+        return;
+    }
+    
+    const url = isEdit 
+        ? "{% url 'api_library_edit' uuid_placeholder %}".replace('{{uuid_placeholder}}', libraryId)
+        : "{% url 'api_library_add' %}";
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+          name: name,
+          path: path
+        })
+    })
+    .then(res => {
+        if (res.ok) {
+            $('#libraryModal').modal('hide');
+            location.reload();
+        } else {
+            alert('{% trans "frontend.library_panel.failed_save_library" context "Failed to save library message" %}');
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert('{% trans "frontend.library_panel.error_occurred" context "Error occurred message" %}');
+    });
+}
+
+let deleteLibraryId = null;
+
+function confirmDeleteLibrary(libraryId, libraryName) {
+    deleteLibraryId = libraryId;
+    document.getElementById('deleteLibraryName').textContent = libraryName;
+    $('#deleteLibraryModal').modal('show');
+}
+
+function deleteLibrary() {
+    fetch("{% url 'api_library_delete' uuid_placeholder %}".replace('{{uuid_placeholder}}', deleteLibraryId), {
+        method: 'DELETE',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    })
+    .then(res => {
+        if (res.ok) {
+            $('#deleteLibraryModal').modal('hide');
+            location.reload();
+        } else {
+            alert('{% trans "frontend.library_panel.failed_delete_library" context "Failed to delete library message" %}');
+        }
+    })
+    .catch(err => console.error(err));
+}
+
+// Connector Management
+let currentConnectorId = null;
+let currentConnectorLibraryId = null;
+
+function openAddConnectorModal(libraryId) {
+    currentConnectorId = null;
+    currentConnectorLibraryId = libraryId;
+    document.getElementById('connectorId').value = '';
+    document.getElementById('connectorLibraryId').value = libraryId;
+    document.getElementById('connectorType').value = '';
+    document.getElementById('connectorType').disabled = false;
+    document.getElementById('connectorLibraryIdField').value = '';
+    document.getElementById('connectorModalLabel').textContent = '{% trans "frontend.library_panel.add_connector" context "Add connector title" %}';
+    $('#connectorModal').modal('show');
+}
+
+function openEditConnectorModal(connectorId, libraryId, connectorType, connectorLibraryIdValue) {
+    currentConnectorId = connectorId;
+    currentConnectorLibraryId = libraryId;
+    document.getElementById('connectorId').value = connectorId;
+    document.getElementById('connectorLibraryId').value = libraryId;
+    document.getElementById('connectorType').disabled = true;
+    for (const option of document.getElementById('connectorType').options) {
+      option.selected = option.value === connectorType;
+    }
+    document.getElementById('connectorLibraryIdField').value = connectorLibraryIdValue;
+    document.getElementById('connectorModalLabel').textContent = '{% trans "frontend.library_panel.edit_connector" context "Edit connector title" %}';
+    $('#connectorModal').modal('show');
+}
+
+function submitConnector() {
+    const connectorId = document.getElementById('connectorId').value;
+    const libraryId = document.getElementById('connectorLibraryId').value;
+    const type = document.getElementById('connectorType').value;
+    const connectorLibraryIdValue = document.getElementById('connectorLibraryIdField').value;
+    
+    const url = connectorId 
+        ? "{% url 'api_connector_edit' uuid_placeholder %}".replace('{{uuid_placeholder}}', connectorId)
+        : "{% url 'api_connector_add' %}";
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+            library_id: libraryId,
+            type: type,
+            parameters: {
+              connector_library_id: connectorLibraryIdValue
+            }
+        })
+    })
+    .then(res => {
+        if (res.ok) {
+            $('#connectorModal').modal('hide');
+            location.reload();
+        } else {
+            alert('{% trans "frontend.library_panel.failed_save_connector" context "Failed to save connector message" %}');
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert('{% trans "frontend.library_panel.error_occurred" context "Error occurred message" %}');
+    });
+}
+
+let deleteConnectorId = null;
+
+function confirmDeleteConnector(connectorId, connectorType) {
+    deleteConnectorId = connectorId;
+    document.getElementById('deleteConnectorType').textContent = connectorType;
+    $('#deleteConnectorModal').modal('show');
+}
+
+function deleteConnector() {
+    fetch("{% url 'api_connector_delete' uuid_placeholder %}".replace('{{uuid_placeholder}}', deleteConnectorId), {
+        method: 'DELETE',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    })
+    .then(res => {
+        if (res.ok) {
+            $('#deleteConnectorModal').modal('hide');
+            location.reload();
+        } else {
+            alert('{% trans "frontend.library_panel.failed_delete_connector" context "Failed to delete connector message" %}');
+        }
+    })
+    .catch(err => console.error(err));
+}
+
+function navigateUp() {
+  let tempPath = currentBrowserPath.split("/");
+  tempPath.pop();
+  currentBrowserPath = tempPath.join("/");
+  openPathBrowser();
+}
+
+function resetPath() {
+  currentBrowserPath = FILE_PATH_ROOT;
+  openPathBrowser();
+}
+
+function selectCurrentPath() {
+  document.getElementById('libraryPath').value = currentBrowserPath;
+  $('#pathBrowserModal').modal('hide');
+}
+
+function openPathBrowser() {
+    // Reset or initialize current path
+    document.getElementById('currentPath').value = currentBrowserPath || FILE_PATH_ROOT;
+
+    // Load folder list (basic stub – replace with real API fetch)
+    const folderList = document.getElementById('folderList');
+    folderList.innerHTML = `
+        <div class="text-center py-3">
+            <div class="spinner-border text-light" role="status">
+                <span class="visually-hidden">{% trans "frontend.library_panel.loading" context "Loading text" %}</span>
+            </div>
+        </div>
+    `;
+
+    // Example fetch to your backend endpoint
+    fetch(
+        `{% url 'api_library_browse' %}`,
+        {
+          method: "POST",
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+          },
+          body: JSON.stringify({
+            "path": currentBrowserPath
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+            folderList.innerHTML = '';
+            if (data.folders && data.folders.length > 0) {
+                data.folders.forEach(folder => {
+                    const div = document.createElement('div');
+                    div.className = 'p-2 border-bottom folder-item';
+                    div.style.cursor = 'pointer';
+                    div.textContent = folder.name;
+                    div.onclick = () => {
+                        currentBrowserPath = `${currentBrowserPath}/${folder.name}`;
+                        openPathBrowser();
+                    };
+                    folderList.appendChild(div);
+                });
+            } else {
+                folderList.innerHTML = `
+                    <div class="text-center py-3 text-muted">
+                        {% trans "frontend.library_panel.no_folders" context "No folders message" %}
+                    </div>
+                `;
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            folderList.innerHTML = `
+                <div class="text-center py-3 text-danger">
+                    {% trans "frontend.library_panel.failed_load_folders" context "Failed to load folders" %}
+                </div>
+            `;
+        });
+
+    // Finally, open the modal
+    $('#pathBrowserModal').modal('show');
+}
+</script>
+{% endblock %}

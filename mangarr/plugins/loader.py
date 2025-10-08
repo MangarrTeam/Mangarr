@@ -1,17 +1,10 @@
 import importlib.util
 import inspect
 from .base import MangaPluginBase
-from server.settings import PLUGINS_DIR
+from core.settings import PLUGINS_DIR
 
 class PluginNotAvailable(Exception): pass
 class PluginMissingMethods(Exception): pass
-
-"""
-from .loader import load_plugin
-plugin = load_plugin("core", "mangarr-test-plugin")
-manga = plugin.get_manga()
-print(manga)
-"""
 
 def load_plugin(category: str, domain: str) -> MangaPluginBase:
     plugin_path = PLUGINS_DIR / category / domain / "__init__.py"

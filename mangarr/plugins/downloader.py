@@ -3,7 +3,7 @@ import tempfile
 import shutil
 import zipfile
 import requests
-from server.settings import PLUGINS_DIR
+from core.settings import PLUGINS_DIR
 from .manager import update_downloaded_metadata
 
 import logging

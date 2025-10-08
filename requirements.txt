@@ -1,14 +1,14 @@
-Django==5.2.3
+Django==5.2.7
 djangorestframework
+django-polymorphic
 whitenoise
 requests
 beautifulsoup4
 lxml
 Pillow
-gunicorn
 pytz
 packaging
 channels
 channels_redis
-daphne
+hypercorn
 selenium

@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Optional
 from io import BytesIO
 from enum import Enum, unique
 import requests
@@ -6,7 +7,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 NO_THUMBNAIL_URL = "/uploads/static/no_thumbnail.png"
-from server.settingz.config import DATETIME_FORMAT
+from core.settingz.config import DATETIME_FORMAT
 from .driver_setup import DRIVER
 
 def enforce_structure(required_keys):
@@ -52,6 +53,8 @@ class EnforceStructureMeta(type(ABC)):
     
 @unique
 class BaseEnum(int, Enum):
+    label: Optional[str]
+
     def __new__(cls, value: int, label: str = None):
         obj = int.__new__(cls, value)
         obj._value_ = value

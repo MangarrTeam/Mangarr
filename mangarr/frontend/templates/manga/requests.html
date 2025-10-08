@@ -16,6 +16,10 @@
         <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
             <div class="card bg-dark text-white border-0 overflow-hidden position-relative hover-buttons-container"
                 style="aspect-ratio: 2 / 3;">
+                {% if manga_request.plugin and manga_request.plugin.name %}
+                <span class="position-absolute bg-success text-white px-2 py-1 mr-1 mt-1 d-inline-block text-center multi-line-title" style="top: 0; right: 0; border-radius: 50rem; max-width: 75%; font-size: clamp(0.5rem, 0.75vw, 1rem)">{{ manga_request.plugin.name }}</span>
+                {% endif %}
+                <span class="position-absolute bg-warning text-white px-2 py-1 mr-1 mt-1 d-inline-block text-center multi-line-title" style="top: calc(2 * clamp(0.5rem, 0.75vw, 1rem)); right: 0; border-radius: 50rem; max-width: 75%; font-size: clamp(0.5rem, 0.75vw, 1rem)">{{ manga_request.library.name }}</span>
                 <img class="card-img"
                     src="{{ manga_request.manga.cover }}"
                     alt="{{ manga_request.manga.name }}"
@@ -28,8 +32,8 @@
                     </h7>
                     <div class="hover-buttons d-none">
                         <div class="hover-buttons d-flex">
-                            <button class="btn btn-sm btn-success mr-1 w-100 text-truncate" onclick="approve_manga({{ manga_request.pk }})">{% trans "frontend.manga_requests.approve" context "Approve button text" %}</button>
-                            <button class="btn btn-sm btn-danger ml-1 w-100 text-truncate" onclick="deny_manga({{ manga_request.pk }})">{% trans "frontend.manga_requests.deny" context "Deny button text" %}</button>
+                            <button class="btn btn-sm btn-success mr-1 w-100 text-truncate" onclick="approve_manga('{{ manga_request.pk }}', '{{ manga_request.library.id }}')">{% trans "frontend.manga_requests.approve" context "Approve button text" %}</button>
+                            <button class="btn btn-sm btn-danger ml-1 w-100 text-truncate" onclick="deny_manga('{{ manga_request.pk }}')">{% trans "frontend.manga_requests.deny" context "Deny button text" %}</button>
                         </div>
                         <a href="{{ manga_request.manga.url }}" target="_blank"><button class="btn btn-sm btn-outline-light mt-2 w-100 text-truncate">{% trans "frontend.manga_requests.view" context "View button text" %}</button></a>
                     </div>
@@ -53,6 +57,34 @@
         {% endfor %}
     </div>
 </div>
+
+
+<!-- Approve Verification Modal -->
+<div class="modal fade" id="approveModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title">{% trans "frontend.manga_requests.approve_confirmation" context "Approve confirmation title" %}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>{% trans "frontend.manga_requests.select_library_before_approve" context "Select library before approve text" %}</p>
+        <input type="hidden" id="approveMangaPk">
+        <div class="form-group">
+          <select class="form-control bg-dark text-white" id="approveLibrarySelect">
+            {% for lib_value, lib_name in libraries %}
+            <option value="{{ lib_value }}">{{ lib_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "frontend.manga_requests.cancel" context "Cancel button text" %}</button>
+        <button type="button" class="btn btn-success" id="confirmApproveBtn">{% trans "frontend.manga_requests.approve" context "Approve button text" %}</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
@@ -70,8 +102,15 @@
             });
         }
     })
+    const approveModal = new bootstrap.Modal(document.getElementById('approveModal'));
 
-    async function approve_manga(pk) {
+    async function approve_manga(pk, library) {
+        // Store the current manga request ID in hidden input
+        document.getElementById("approveMangaPk").value = pk;
+        // Show modal
+        document.getElementById("approveLibrarySelect").value = library;
+        approveModal.show();
+        /*
         await fetch("{% url 'approve_manga_request' %}", {
             method: "POST",
             headers: {
@@ -82,7 +121,29 @@
         }).then((res) => {
             location.reload();
         });
+        */
     }
+
+    document.getElementById("confirmApproveBtn").addEventListener("click", async () => {
+        const pk = document.getElementById("approveMangaPk").value;
+        const library = document.getElementById("approveLibrarySelect").value;
+
+        await fetch("{% url 'approve_manga_request' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ pk, library })
+        });
+
+        // Hide modal
+        approveModal.hide();
+
+        // Reload the page
+        location.reload();
+    });
+
 
     async function deny_manga(pk) {
         await fetch("{% url 'deny_manga_request' %}", {

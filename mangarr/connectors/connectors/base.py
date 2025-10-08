@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from core.settings import connectors
 import socket
 import logging
 logger = logging.getLogger(__name__)

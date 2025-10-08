@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path('manager/users/', views.manager_user_list, name='manager_user_list'),
+    path("manager/library/", views.libraries, name="manager_library"),
     path('manager/tokens/register/create', views.create_register_token, name='create_register_token'),
 
 
@@ -21,6 +22,6 @@ urlpatterns = [
 
     path("manga/search", views.manga_search, name="manga_search"),
     path("manga/requests", views.manga_requests, name="manga_requests"),
-    path("manga/<int:pk>", views.manga_view, name="manga_view"),
+    path("manga/<uuid:id>", views.manga_view, name="manga_view"),
     path("manga", views.manga_monitored, name="monitored_mangas"),
 ]

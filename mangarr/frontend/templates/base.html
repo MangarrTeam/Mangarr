@@ -109,6 +109,11 @@
                     <i class="fa fa-paper-plane text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.connectors_settings" context "Title for connectors settings" %}</p>
                 </a>
                 {% endif %}
+                {% if user|has_permition:'database_users.can_manage_libraries' %}
+                <a href="{% url 'manager_library' %}" class="nav-link text-white d-flex flex-row my-auto">
+                    <i class="fa fa-layer-group text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.libraries_settings" context "Title for libraries settings" %}</p>
+                </a>
+                {% endif %}
                 {% if user|has_permition:'database_users.can_manage_plugins' %}
                 <a href="{% url 'plugin_manager' %}" class="nav-link text-white d-flex flex-row my-auto">
                     <i class="fa fa-plug text-white my-auto"></i><p class="my-auto w-100 pl-2">{% trans "frontend.base.plugin_manager" context "Title for plugin manager" %}</p>
@@ -192,7 +197,7 @@ document.getElementById('tableFilter').addEventListener('input', function(e) {
             if (data.mangas.length > 0) {
                 html += '<strong class="background-lightest px-2 pt-2 d-block">{% trans "frontend.base.mangas" context "Title for mangas in search bar" %}</strong>';
                 data.mangas.forEach(manga => {
-                    const url = "{% url 'manga_view' 0 %}".replace("0", manga.id);
+                    const url = "{% url 'manga_view' uuid_placeholder %}".replace("{{ uuid_placeholder }}", manga.id);
                     const cover = manga.cover;
                     html += `
                         <a href="${url}" class="highlighted dropdown-item d-flex align-items-center gap-2 py-2">
@@ -206,7 +211,7 @@ document.getElementById('tableFilter').addEventListener('input', function(e) {
             if (data.volumes.length > 0) {
                 html += '<strong class="background-lightest px-2 pt-2 d-block">{% trans "frontend.base.volumes" context "Title for volumes in search bar" %}</strong>';
                 data.volumes.forEach(volume => {
-                    const url = "{% url 'manga_view' 0 %}".replace("0", volume.manga_id);
+                    const url = "{% url 'manga_view' uuid_placeholder %}".replace("{{ uuid_placeholder }}", volume.manga_id);
                     const cover = volume.cover;
                     html += `
                         <a href="${url}" class="highlighted dropdown-item d-flex align-items-center gap-2 py-2">
@@ -220,7 +225,7 @@ document.getElementById('tableFilter').addEventListener('input', function(e) {
             if (data.chapters.length > 0) {
                 html += '<strong class="background-lightest px-2 pt-2 d-block">{% trans "frontend.base.chapters" context "Title for chapters in search bar" %}</strong>';
                 data.chapters.forEach(chapter => {
-                    const url = "{% url 'manga_view' 0 %}".replace("0", chapter.manga_id);
+                    const url = "{% url 'manga_view' uuid_placeholder %}".replace("{{ uuid_placeholder }}", chapter.manga_id);
                     const cover = chapter.cover;
                     html += `
                         <a href="${url}" class="highlighted dropdown-item d-flex align-items-center gap-2 py-2">

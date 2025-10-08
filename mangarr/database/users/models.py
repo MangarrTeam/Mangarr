@@ -34,6 +34,8 @@ class UserProfile(models.Model):
             ('can_download', pgettext("Permission value for 'Can download'", 'permission.can_download')),
             ('can_manage_monitors', pgettext("Permission value for 'Can manage monitors'", 'permission.can_manage_monitors')),
             ('can_manage_metadata', pgettext("Permission value for 'Can manage metadata'", 'permission.can_manage_metadata')),
+            ('can_manage_libraries', pgettext("Permission value for 'Can manage libraries'", 'permission.can_manage_libraries')),
+            ('can_manage_connectors', pgettext("Permission value for 'Can manage connectors'", 'permission.can_manage_connectors')),
         ]
 
     def __str__(self) -> str:
@@ -43,7 +45,7 @@ class UserProfile(models.Model):
         return [permission[0] for permission in self._meta.permissions]
     
     def regenerate_token(self) -> str:
-        from server.functions import generate_unique_token
+        from core.utils import generate_unique_token
         self.token = generate_unique_token(UserProfile)
         self.save()
         return self.token
@@ -55,11 +57,11 @@ class RegisterToken(models.Model):
         return self.token
     
     def regenerate_token(self) -> None:
-        from server.functions import generate_unique_token
+        from core.utils import generate_unique_token
         self.token = generate_unique_token(RegisterToken)
         self.save()
 
     def save(self):
-        from server.functions import generate_unique_token
+        from core.utils import generate_unique_token
         self.token = generate_unique_token(RegisterToken)
         super().save()

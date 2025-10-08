@@ -57,9 +57,9 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY ./static /uploads/static/
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
-COPY monitor_gunicorn.sh /app/monitor_gunicorn.sh
-RUN chmod +x /app/monitor_gunicorn.sh
 COPY maintenance.html /mangarr_static/maintenance.html
+COPY restart_mangarr.py /app/restart_mangarr.py
+RUN chmod +x /app/restart_mangarr.py
 
 # Create necessary directories
 RUN mkdir -p /manga/cache /manga/media

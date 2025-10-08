@@ -1,9 +1,9 @@
 from django.db import models
 from django.utils.translation import pgettext
-from database.manga.models import Manga, Volume, Chapter
+from database.manga.models import Manga, Volume, Chapter, Library
 from plugins.base import MangaPluginBase
-from plugins.functions import get_plugin_by_key
-from server.settings import FILE_PATH_ROOT, CACHE_FILE_PATH_ROOT
+from plugins.utils import get_plugin_by_key
+from core.settings import FILE_PATH_ROOT, CACHE_FILE_PATH_ROOT
 import hashlib
 from pathlib import Path
 import shutil
@@ -15,8 +15,8 @@ from datetime import timedelta
 import datetime
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-from database.manga.functions import make_valid_filename
-from .functions import convert_datetime, move_file
+from database.manga.utils import make_valid_filename
+from .utils import convert_datetime, move_file
 from django.db.models import Q
 import logging
 logger = logging.getLogger(__name__)
@@ -64,6 +64,7 @@ def get_hash(text: str) -> str:
     return hashlib.sha256(text.encode()).hexdigest()
      
 class MonitorManga(ProcessBase):
+    library = models.ForeignKey(Library, on_delete=models.CASCADE, blank=False, null=False, verbose_name=pgettext("Library field name for Manga monitor", "database.models.manga_monitor.library"))
     manga = models.ForeignKey(Manga, on_delete=models.CASCADE, blank=True, null=True, verbose_name=pgettext("Monitor manga manga name", "processes.models.monitor_manga.manga"))
 
     def update(self):
@@ -71,15 +72,15 @@ class MonitorManga(ProcessBase):
             plugin = self.get_plugin()
             manga_data = plugin.get_manga(self.arguments)
 
-            manga, manga_created = Manga.objects.get_or_create(url=manga_data.get("url"))
+            manga, manga_created = Manga.objects.get_or_create(url=manga_data.get("url"), library=self.library)
 
             if manga_created:
-                manga.set_folder_path(self.arguments.get("name"))
+                manga.set_file_folder_path(self.arguments.get("name"))
                 manga.choose_plugin(self.plugin)
 
             manga.update_fields({
                 **self.arguments,
-                **manga_data
+                **manga_data,
             })
 
             seen_urls = set()
@@ -150,11 +151,12 @@ class MonitorChapter(ProcessBase):
                     break
 
             if volume is None:
-                volume = Volume.objects.create(manga=self.manga)
+                volume = Volume()
+                volume.manga = self.manga
                 volume.number.value = volume_number
+                volume.save()
 
             chapter, created = Chapter.objects.get_or_create(url=chapter_data.get("url"), volume=volume)
-            
             chapter.update_fields({
                 **self.arguments,
                 **chapter_data

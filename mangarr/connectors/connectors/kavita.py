@@ -1,4 +1,4 @@
-from .base import BaseConnector, skip_if_errored
+from .base import BaseConnector, skip_if_errored, connectors
 import requests
 import logging
 logger = logging.getLogger(__name__)
@@ -41,3 +41,12 @@ class KavitaConnector(BaseConnector):
             res_scan.raise_for_status()
 
         logger.debug(f"Notification succesfull")
+
+
+connector = KavitaConnector(
+                connectors.KAVITA_USERNAME,
+                connectors.KAVITA_PASSWORD,
+                connectors.KAVITA_TOKEN,
+                connectors.KAVITA_ADDRESS,
+                connectors.KAVITA_PORT,
+            )

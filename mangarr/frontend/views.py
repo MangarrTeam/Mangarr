@@ -1,15 +1,17 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required, permission_required
-from .functions import custom_render, model_field_to_dict
+from .utils import custom_render, model_field_to_dict
 from django.contrib.auth.models import User
 from .forms import RegisterForm, LoginForm
 from django.contrib.auth import login
 import logging
 from plugins.base import NO_THUMBNAIL_URL
-from server.settings import CONFIG, LANGUAGE_CODE
-from server.settings import LANGUAGES, LANGUAGES_KEYS
+from core.settings import CONFIG, LANGUAGE_CODE
+from core.settings import LANGUAGES, LANGUAGES_KEYS
 from database.users.models import User, UserProfile, RegisterToken
+from database.manga.models import Library
+from connectors.models import ConnectorBase
 from processes.models import EditChapter, MonitorChapter
 from django.utils.translation import pgettext
 
@@ -213,13 +215,6 @@ def settings_connectors_view(request):
                 'item_name': pgettext('Token label', 'frontend.settings_connectors.token'),
                 'value': CONFIG.get('Kavita', 'token'),
                 'type': 'pass'
-            },
-            'library_id': {
-                'section_name': pgettext('Kavita section title', 'frontend.settings_connectors.kavita'),
-                'item_name': pgettext('Library ID label', 'frontend.settings_connectors.library_id'),
-                'value': CONFIG.getint('Kavita', 'library_id'),
-                'type': 'number',
-                'tooltip': pgettext('Library ID tooltip', 'frontend.settings_connectors.library_id_tooltip')
             }
         }
     }
@@ -274,7 +269,7 @@ def change_password(request):
     return redirect('profile')
 
 
-from server.functions import superuser_or_staff_required
+from core.utils import superuser_or_staff_required
 
 @superuser_or_staff_required
 def manager_user_list(request):
@@ -288,29 +283,58 @@ def create_register_token(request):
     RegisterToken().save()
     return redirect('manager_user_list')
 
-from plugins.functions import get_plugins
+@permission_required("database_users.can_manage_libraries")
+def libraries(request):
+    return custom_render(request, "manager/library.html", {"libraries": [l for l in Library.objects.all()], "connectors": ConnectorBase.get_available_connectors()})
+
+from plugins.utils import get_plugins
 
 @permission_required("database_users.can_search")
 def manga_search(request):
     plugins = get_plugins()
     plugin_names = [name for _, _, name, _ in plugins]
-    return custom_render(request, "manga/search.html", {"plugins": [(category, domain, name, languages, name not in plugin_names) for category, domain, name, languages in plugins]})
+    return custom_render(request, "manga/search.html", {"plugins": [(category, domain, name, languages, name not in plugin_names) for category, domain, name, languages in plugins], "libraries": [l for l in Library.objects.all()]})
 
 from database.manga.models import MangaRequest, Manga
 
 @permission_required("database_users.can_manage_requests")
 def manga_requests(request):
-    return custom_render(request, "manga/requests.html", {"manga_requests": [{"plugin": r.plugin, "manga": r.variables, "pk": r.pk, "user": r.user or pgettext("User unknown text", "frontend.request_manga.user_unknown")} for r in MangaRequest.objects.all()]})
+    return custom_render(request, "manga/requests.html", {"manga_requests": [{"plugin": {"name": r.get_plugin_name(r.plugin)}, "manga": r.variables, "pk": r.pk, "user": r.user or pgettext("User unknown text", "frontend.request_manga.user_unknown"), "library": {"name": r.library.name, "id": r.library.id}} for r in MangaRequest.objects.all()], "libraries": [(l.id, l.name) for l in Library.objects.all()]})
 
 @login_required
 def manga_monitored(request):
-    return custom_render(request, "manga/monitored.html", {"mangas": sorted([{"name": m.name.value, "url": m.arguments.get("url"), "cover": m.arguments.get("cover", NO_THUMBNAIL_URL), "pk": m.pk, "plugin": m.get_plugin_display()} for m in Manga.objects.all()], key=lambda x: x["name"])})
+    return custom_render(request, "manga/monitored.html", {"mangas": sorted([{"name": m.name.value, "url": m.arguments.get("url"), "cover": m.arguments.get("cover", NO_THUMBNAIL_URL), "id": str(m.id), "plugin": m.get_plugin_display(), "library": m.library.name} for m in Manga.objects.all()], key=lambda x: x["name"])})
 
 @login_required
-def manga_view(request, pk):
-    if not Manga.objects.filter(pk=pk).exists():
+def manga_view(request, id):
+    if not Manga.objects.filter(id=id).exists():
         return redirect("monitored_mangas")
-    manga = Manga.objects.get(pk=pk)
+    manga = Manga.objects.get(id=id)
 
-    volumes = sorted([{"chapters": sorted([{**model_field_to_dict(ch), "chapter": ch.chapter, "id": ch.id, "will_edit": EditChapter.edit_exist(ch), "will_download": MonitorChapter.objects.filter(url=ch.url).exists()} for ch in v.chapters.all()], key=lambda a: a.get("chapter")), "volume": v.volume, "name": v.name.value, "pages": {"downloaded": len(v.chapters.filter(downloaded=True)), "of": len(v.chapters.all())}, "id": v.id} for v in manga.volumes.all()], key=lambda a: a.get("volume"))
-    return custom_render(request, "manga/view.html", {"manga": {**model_field_to_dict(manga), "cover": manga.arguments.get("cover", NO_THUMBNAIL_URL)}, "volumes": volumes})
+    volumes = sorted(
+        [
+            {
+                "chapters": sorted(
+                    [
+                        {
+                            **model_field_to_dict(ch),
+                            "chapter": ch.chapter,
+                            "id": ch.id,
+                            "will_edit": EditChapter.edit_exist(ch),
+                            "will_download": MonitorChapter.objects.filter(url=ch.url).exists()
+                        } for ch in v.chapters.all()
+                    ],
+                    key=lambda a: a.get("chapter")
+                ),
+                "volume": v.volume,
+                "name": v.name.value,
+                "pages": {
+                    "downloaded": len(v.chapters.filter(downloaded=True)),
+                    "of": len(v.chapters.all())},
+                    "id": v.id
+                }
+            for v in manga.volumes.all()
+        ],
+        key=lambda a: a.get("volume")
+    )
+    return custom_render(request, "manga/view.html", {"manga": {**model_field_to_dict(manga), "cover": manga.arguments.get("cover", NO_THUMBNAIL_URL)}, "volumes": volumes, "mangas": [(m.id, str(m)) for m in Manga.objects.exclude(id=manga.id)]})

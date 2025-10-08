@@ -1,12 +1,12 @@
 import os
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import redirect
-from frontend.functions import custom_render
+from frontend.utils import custom_render
 from django.contrib import messages
 from plugins.downloader import download_plugin
-from server.settings import PLUGINS_DIR, plugin_change_state, plugin_changed
+from core.settings import PLUGINS_DIR, plugin_change_state, plugin_changed
 from .manager import update_downloaded_metadata
-from .functions import load_metadata
+from .utils import load_metadata
 import logging
 logger = logging.getLogger(__name__)
 

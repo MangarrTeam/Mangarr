@@ -1,5 +1,5 @@
+
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 import tempfile
 
@@ -24,10 +24,6 @@ arguments = [
 for argument in arguments:
     options.add_argument(argument)
 
-# Temporary profile
 temp_data_dir = tempfile.mkdtemp()
 options.add_argument(f"--user-data-dir={temp_data_dir}")
-
-# Manually set the path to ChromeDriver
-service = Service("/usr/bin/chromedriver")  # ARM path in container
-DRIVER = webdriver.Chrome(service=service, options=options)
+DRIVER = webdriver.Chrome(options=options)

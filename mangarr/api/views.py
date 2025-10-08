@@ -2,25 +2,25 @@ from django.contrib.auth.models import User, Permission
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from server.functions import superuser_or_staff_required, superuser_required
+from core.utils import superuser_or_staff_required, superuser_required
+from core.settings import FILE_PATH_ROOT
 from database.users.models import UserProfile, RegisterToken
-from database.manga.models import Manga, Volume, Chapter
+from database.manga.models import Manga, Volume, Chapter, Library
 from django.contrib.contenttypes.models import ContentType
+from connectors.models import ConnectorBase
 from django.utils.translation import gettext_lazy as _, pgettext
 from django.contrib.auth.decorators import permission_required
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
-import json
-from .functions import manga_is_monitored, manga_is_requested, validate_token, require_DELETE, require_GET_PATCH, start_background_search
-from server.settings import NSFW_ALLOWED
+import json, os
+from .utils import manga_is_monitored, manga_is_requested, validate_token, require_DELETE, require_GET_PATCH, start_background_search
+from core.settings import NSFW_ALLOWED
 from processes.models import MonitorManga, MonitorChapter, EditChapter
 from django.db import IntegrityError
 from processes.tasks import trigger_monitor
 from django.utils.translation import override
-from server.settings import LANGUAGE_CODE
+from core.settings import LANGUAGE_CODE
 import logging
-import threading
-import uuid
 logger = logging.getLogger(__name__)
 
 
@@ -134,13 +134,13 @@ def delete_token(request, token_id):
 
 @permission_required("database_users.can_manage_plugins")
 def toggle_pause_downloads(request):
-    from server.settings import toggle_download_pause, is_download_paused
+    from core.settings import toggle_download_pause, is_download_paused
     toggle_download_pause()
     return JsonResponse({'success': True, 'paused': is_download_paused()})
 
 from .search_cache import get_result
 
-from plugins.functions import get_plugins_domains
+from plugins.utils import get_plugins_domains
 @permission_required("database_users.can_search")
 @require_POST
 def search_manga_start(request):
@@ -197,10 +197,17 @@ def request_manga(request):
             return JsonResponse({"error": "Missing parameter 'domain'"}, status=400)
         if domain not in get_plugins_domains(category):
             return JsonResponse({"error": "Domain does not exist"}, status=403)
+        library_id = data.get("library_id")
+        if library_id is None:
+            return JsonResponse({"error": "Missing parameter 'library_id'"}, status=400)
+        library = Library.objects.filter(id=library_id)
+        if not library.exists():
+            return JsonResponse({"error": "Library with this ID does not exist"}, status=400)
         
         if MangaRequest.has_plugin(category, domain):
             manga_request = MangaRequest()
             manga_request.choose_plugin(category, domain)
+            manga_request.library = library.first()
             manga_request.variables = data.get("manga")
             manga_request.user = request.user
 
@@ -223,6 +230,269 @@ def request_manga(request):
         return JsonResponse({"error": f"Error - {e}"}, status=500)
     
 
+
+@permission_required("database_users.can_manage_libraries")
+@require_POST
+def library_explore_path(request):
+    try:
+        data = json.loads(request.body)
+        path = data.get('path', FILE_PATH_ROOT)
+        
+        # Security: Normalize and validate the path
+        path = os.path.normpath(path)
+        root = os.path.normpath(FILE_PATH_ROOT)
+        
+        # Ensure path starts with root to prevent directory traversal
+        if not path.startswith(root):
+            return JsonResponse({
+                "success": False,
+                "error": "Invalid path: outside root directory"
+            }, status=403)
+        
+        # Check if path exists and is a directory
+        if not os.path.exists(path):
+            return JsonResponse({
+                "success": False,
+                "error": "Path does not exist"
+            }, status=404)
+        
+        if not os.path.isdir(path):
+            return JsonResponse({
+                "success": False,
+                "error": "Path is not a directory"
+            }, status=400)
+        
+        # List directory contents
+        folders = []
+        files = []
+        
+        try:
+            entries = os.listdir(path)
+        except PermissionError:
+            return JsonResponse({
+                "success": False,
+                "error": "Permission denied to access this directory"
+            }, status=403)
+        
+        for entry in sorted(entries):
+            entry_path = os.path.join(path, entry)
+            
+            # Skip hidden files/folders (starting with .)
+            if entry.startswith('.'):
+                continue
+            
+            try:
+                if os.path.isdir(entry_path):
+                    folders.append({
+                        "name": entry,
+                        "path": entry_path
+                    })
+                elif os.path.isfile(entry_path):
+                    files.append({
+                        "name": entry,
+                        "path": entry_path
+                    })
+            except (PermissionError, OSError):
+                # Skip entries we can't access
+                continue
+        
+        return JsonResponse({
+            "success": True,
+            "current_path": path,
+            "folders": folders,
+            "files": files
+        })
+        
+    except json.JSONDecodeError:
+        return JsonResponse({
+            "success": False,
+            "error": "Invalid JSON in request body"
+        }, status=400)
+    except Exception as e:
+        return JsonResponse({
+            "success": False,
+            "error": str(e)
+        }, status=500)
+
+    
+@permission_required("database_users.can_manage_libraries")
+@require_POST
+def library_add(request):
+    try:
+        data = json.loads(request.body)
+        name = data.get('name', 'Library')
+        path = data.get('path', FILE_PATH_ROOT)
+
+        library = Library.objects.filter(name=name)
+        if library.exists():
+            return JsonResponse({
+                "success": False,
+                "error": "Library already exists"
+            }, status=409)
+        Library.objects.create(name=name, folder=path)
+
+        return JsonResponse({"success": True}, status=200)
+    
+    except json.JSONDecodeError:
+        return JsonResponse({
+            "success": False,
+            "error": "Invalid JSON in request body"
+        }, status=400)
+    except Exception as e:
+        return JsonResponse({
+            "success": False,
+            "error": str(e)
+        }, status=500)
+
+
+
+@permission_required("database_users.can_manage_libraries")
+@require_POST
+def library_edit(request, id):
+    try:
+        data = json.loads(request.body)
+        name = data.get('name', 'Library')
+
+        library = Library.objects.filter(id=id)
+        if not library.exists():
+            return JsonResponse({
+                "success": False,
+                "error": "Library does not exist"
+            }, status=409)
+        library.update(name=name)
+
+        return JsonResponse({"success": True}, status=200)
+    
+    except json.JSONDecodeError:
+        return JsonResponse({
+            "success": False,
+            "error": "Invalid JSON in request body"
+        }, status=400)
+    except Exception as e:
+        return JsonResponse({
+            "success": False,
+            "error": str(e)
+        }, status=500)
+
+
+@permission_required("database_users.can_manage_libraries")
+@require_DELETE
+def library_delete(request, id):
+    try:
+        library = Library.objects.filter(id=id)
+        if not library.exists():
+            return JsonResponse({
+                "success": False,
+                "error": "Library does not exist"
+            }, status=409)
+        library.delete()
+
+        return JsonResponse({"success": True}, status=200)
+    
+    except Exception as e:
+        return JsonResponse({
+            "success": False,
+            "error": str(e)
+        }, status=500)
+    
+@permission_required("database_users.can_manage_connectors")
+@require_POST
+def connector_add(request):
+    try:
+        data = json.loads(request.body)
+        parameters = data.get('parameters', {})
+        library_id = data.get('library_id')
+        type = data.get('type')
+
+        library = Library.objects.filter(id=library_id)
+        if not library.exists():
+            return JsonResponse({
+                "success": False,
+                "error": f"Library does not exists"
+            }, status=400)
+        library = library.first()
+
+        connector_class = ConnectorBase.get_subclass_by_name(type)
+        connector = connector_class.objects.filter(library=library)
+        if connector.exists():
+            return JsonResponse({
+                "success": False,
+                "error": f"Library {library.name} already have {connector.first().name} connector"
+            }, status=409)
+        connector_class.objects.create(library=library, **parameters)
+
+        return JsonResponse({"success": True}, status=200)
+    
+    except json.JSONDecodeError:
+        return JsonResponse({
+            "success": False,
+            "error": "Invalid JSON in request body"
+        }, status=400)
+    except Exception as e:
+        return JsonResponse({
+            "success": False,
+            "error": str(e)
+        }, status=500)
+
+
+@permission_required("database_users.can_manage_connectors")
+@require_POST
+def connector_edit(request, id):
+    try:
+        data = json.loads(request.body)
+        parameters = data.get('parameters', {})
+        library_id = data.get('library_id')
+
+        library = Library.objects.filter(id=library_id)
+        if not library.exists():
+            return JsonResponse({
+                "success": False,
+                "error": f"Library does not exists"
+            }, status=400)
+        library = library.first()
+
+        connector = ConnectorBase.objects.filter(id=id, library=library)
+        if not connector.exists():
+            return JsonResponse({
+                "success": False,
+                "error": f"Library {library.name} does not have this {connector.first().name} connector"
+            }, status=409)
+        connector.update(**parameters)
+
+        return JsonResponse({"success": True}, status=200)
+    
+    except json.JSONDecodeError:
+        return JsonResponse({
+            "success": False,
+            "error": "Invalid JSON in request body"
+        }, status=400)
+    except Exception as e:
+        return JsonResponse({
+            "success": False,
+            "error": str(e)
+        }, status=500)
+
+
+@permission_required("database_users.can_manage_connectors")
+@require_DELETE
+def connector_delete(request, id):
+    try:
+        connector = ConnectorBase.objects.filter(id=id)
+        if not connector.exists():
+            return JsonResponse({
+                "success": False,
+                "error": f"Connector does not exist"
+            }, status=400)
+        connector.delete()
+
+        return JsonResponse({"success": True}, status=200)
+
+    except Exception as e:
+        return JsonResponse({
+            "success": False,
+            "error": str(e)
+        }, status=500)
+
 @permission_required("database_users.can_monitor")
 @require_POST
 def monitor_manga(request):
@@ -238,12 +508,18 @@ def monitor_manga(request):
             return JsonResponse({"error": "Missing parameter 'domain'"}, status=400)
         if domain not in get_plugins_domains(category):
             return JsonResponse({"error": "Domain does not exist"}, status=403)
+        library_id = data.get("library_id")
+        if library_id is None:
+            return JsonResponse({"error": "Missing parameter 'library_id'"}, status=400)
+        library = Library.objects.filter(id=library_id)
+        if not library.exists():
+            return JsonResponse({"error": "Library with this ID does not exist"}, status=400)
         
         plugin_key = f'{category}_{domain}'
         url = data.get("manga", {}).get("url")
         if url is not None:
             MangaRequest.delete_if_exist(url)
-        manga = MonitorManga(plugin=plugin_key, url=url, arguments=data.get("manga"))
+        manga = MonitorManga(library=library.first(), plugin=plugin_key, url=url, arguments=data.get("manga"))
 
         manga.save()
         trigger_monitor()
@@ -432,6 +708,38 @@ def request_redownload_chapter(request, chapter_id):
         return JsonResponse({"error": e}, status=500)
     
     return JsonResponse({"success": True}, status=200)
+
+@permission_required("database_users.can_manage_monitors")
+@require_POST
+def transfer_chapter(request, chapter_id, manga_id):
+    try:
+        chapter = Chapter.objects.get(id=chapter_id)
+    except Chapter.DoesNotExist:
+        return JsonResponse({'error': "Chapter not found"}, status=404)
+    try:
+        manga = Manga.objects.get(id=manga_id)
+    except Manga.DoesNotExist:
+        return JsonResponse({'error': "Manga not found"}, status=404)
+    
+    try:
+        volumes = Volume.objects.filter(manga=manga)
+        volume = None
+        for v in volumes:
+            if v.volume == chapter.volume.volume:
+                volume = v
+                break
+        
+        if volume is None:
+            ch_volume = chapter.volume
+            volume = Volume.objects.create(number=ch_volume.volume, manga=manga)
+        chapter.volume = volume
+        chapter.save()
+        EditChapter.objects.create(chapter=chapter)
+        trigger_monitor()
+        return JsonResponse({'success': True}, status=200)
+    except Exception as e:
+        return JsonResponse({'error': f"Error - {e}"}, status=500)
+
         
     
 @permission_required("database_users.can_manage_metadata")
@@ -444,17 +752,29 @@ def delete_manga(request, manga_id):
 @permission_required("database_users.can_manage_requests")
 @require_POST
 def approve_manga_request(request):
-    pk = request.headers.get("pk")
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': "Invalid JSON."}, status=400)
+    except Exception as e:
+        return JsonResponse({"error": f"Error - {e}"}, status=500)
+    pk = data.get("pk")
     if pk is None:
         return JsonResponse({"error": "PK needs to be difined"}, status=400)
     try:
         manga_request = MangaRequest.objects.get(pk=pk)
+        if manga_request is None:
+            return JsonResponse({"error": "Manga request not found"}, status=400)
         plugin = manga_request.plugin
         url = manga_request.variables.get("url")
         if url is None:
             raise TypeError("URL is None")
+        library_id = data.get("library", manga_request.library.id)
+        library = Library.objects.filter(id=library_id)
+        if not library.exists():
+            return JsonResponse({"error": "Library does not exist"}, status=400)
         
-        MonitorManga(plugin=plugin, url=url, arguments=manga_request.variables).save()
+        MonitorManga(library=library.first(), plugin=plugin, url=url, arguments=manga_request.variables).save()
 
         manga_request.delete()
         trigger_monitor()

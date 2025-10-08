@@ -4,6 +4,7 @@
 {% load int_or_float %}
 {% load has_permition %}
 {% load trim %}
+{% load is_in %}
 
 {% block title %}{{ manga.localized_name.value|default:manga.name.value }}{% endblock %}
 
@@ -57,7 +58,7 @@
       {% if user|has_permition:'database_users.can_manage_monitors' or user|has_permition:'database_users.can_manage_metadata' %}
         <div class="d-flex flex-column flex-md-row mr-4">
           {% if user|has_permition:'database_users.can_manage_monitors' %}
-          <button type="button" id="delete" class="btn btn-danger ml-auto mr-0 mr-md-2" onclick="confirmDeleteManga({{ manga.id }}, '{{ manga.name.value|escapejs }}')">{% trans "frontend.manga_view.delete" context "Delete button text" %}</button>
+          <button type="button" id="delete" class="btn btn-danger ml-auto mr-0 mr-md-2" onclick="confirmDeleteManga('{{ manga.id }}', '{{ manga.name.value|escapejs }}')">{% trans "frontend.manga_view.delete" context "Delete button text" %}</button>
           {% endif %}
           {% if user|has_permition:'database_users.can_manage_metadata' %}
           <div class="d-flex flex-row mt-2 mt-md-0">
@@ -80,10 +81,10 @@
 
     <div class="meta mb-3 small text-muted">
       {% if manga.genres.value %}
-        <div><strong>{% trans "frontend.manga_view.genres" context "Genres text" %}:</strong> {{ manga.genres.value }}</div>
+        <div><strong>{% trans "frontend.manga_view.genres" context "Genres text" %}:</strong> {{ manga.genres.value|join:", " }}</div>
       {% endif %}
       {% if manga.tags.value %}
-        <div><strong>{% trans "frontend.manga_view.tags" context "Tags text" %}:</strong> {{ manga.tags.value }}</div>
+        <div><strong>{% trans "frontend.manga_view.tags" context "Tags text" %}:</strong> {{ manga.tags.value|join:", " }}</div>
       {% endif %}
     </div>
 
@@ -134,6 +135,7 @@
               <th class="text-center border-0 py-2 col-1">{% trans "frontend.manga_view.page_count" context "Caption for page count column" %}</th>
               <th class="text-center border-0 px-0 py-2"><i class="fa fa-download"></i></th>
               {% if user|has_permition:'database_users.can_manage_metadata' %}
+              <th class="text-center border-0 px-0 py-2"><i class="fa fa-paper-plane"></i></th>
               <th class="text-center border-0 px-0 py-2"><i class="fa fa-pen-nib"></i></th>
               <th class="text-center border-0 px-0 py-2"><i class="fa fa-refresh"></i></th>
               {% endif %}
@@ -156,6 +158,9 @@
               <td class="text-center border-0 py-2">{{ chapter.page_count.value }}</td>
               <td class="text-center border-0 p-2">
                 <i class="fa {% if chapter.downloaded %}fa-check{% else %}fa-times{% endif %}"></i>
+              </td>
+              <td class="text-center border-0 p-2">
+                <button type="button" class="btn bg-transparent text-white ml-auto p-0" onclick="openTransferModal(`{% url 'api_transfer_chapter' chapter.id uuid_placeholder %}`)"><i class="fa fa-paper-plane"></i></button>
               </td>
               {% if user|has_permition:'database_users.can_manage_metadata' %}
               <td class="text-center border-0 p-2">
@@ -202,6 +207,46 @@
           <span id="successIcon" class="hidden pr-2"><i class="fas fa-check"></i></span>
           <span id="failIcon" class="hidden pr-2"><i class="fas fa-times"></i></span>
           {% trans "frontend.manga_view.confirm" context "Confirm button text" %}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="selectMangaModal" tabindex="-1" role="dialog" aria-labelledby="selectMangaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-white">
+      <div class="modal-header background-light border-0">
+        <h5 class="modal-title" id="selectMangaModalLabel">
+          {% trans "frontend.manga_requests.select_manga_title" context "Select Manga modal title" %}
+        </h5>
+        <button type="button" class="btn-close" data-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body background-light border-0">
+        <p>
+          {% trans "frontend.manga_requests.select_manga_text" context "Instruction text for selecting manga" %}
+        </p>
+        <div class="form-group">
+          <label for="mangaSelect" class="form-label">{% trans "frontend.manga_requests.choose_manga_label" context "Manga select label" %}</label>
+          <select id="mangaSelect" class="form-control bg-dark text-white">
+            {% for value, name in mangas %}
+            <option value="{{ value }}">{{ name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-footer background-light border-0">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          {% trans "frontend.manga_requests.cancel" context "Cancel button text" %}
+        </button>
+        <button type="button" class="btn btn-success" id="confirmSelectMangaBtn" onclick="requestChapterTransfer()">
+          <span id="loaderSelect" class="hidden pr-2"><i class="fas fa-spinner fa-spin"></i></span>
+          <span id="successIconSelect" class="hidden pr-2"><i class="fas fa-check"></i></span>
+          <span id="failIconSelect" class="hidden pr-2"><i class="fas fa-times"></i></span>
+          {% trans "frontend.manga_requests.confirm" context "Confirm button text" %}
         </button>
       </div>
     </div>
@@ -280,7 +325,7 @@ function confirmDeleteManga(mangaId, name) {
 
 function deleteManga() {
     fetchInit('loader', 'deleteBtn')
-    fetch("{% url 'api_delete_manga' 0 %}".replace('0', deletemangaId), {
+    fetch("{% url 'api_delete_manga' uuid_placeholder %}".replace('{{ uuid_placeholder }}', deletemangaId), {
         method: 'DELETE',
         headers: {
             'X-CSRFToken': '{{ csrf_token }}'
@@ -302,14 +347,34 @@ function deleteManga() {
 }
 
 
+var chapterURL = null;
 
+function openTransferModal(url) {
+  chapterURL = url;
+  const modal = new bootstrap.Modal(document.getElementById('selectMangaModal'));
+  modal.show();
+}
 
-
+function requestChapterTransfer() {
+  const select = document.getElementById("mangaSelect");
+  const selectedValue = select.value;
+  fetch(chapterURL.replace('{{ uuid_placeholder }}', selectedValue), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': '{{ csrf_token }}'
+    },
+  }).then(res => res.json()).then(d => {
+    console.log(d);
+    location.reload();
+  });
+}
 
 function openEditModal(url) {
   document.getElementById('EditModal').dataset.submitUrl = url;
   const form = document.getElementById('DynamicForm');
   form.innerHTML = '<p>{% trans "frontend.view.loading" context "Loading text for modal" %}</p>';
+  var checkboxes = [];
 
   fetch(url)
     .then(res => res.json())
@@ -366,6 +431,31 @@ function openEditModal(url) {
               lockBtn.dataset.locked = true;
               updateLockIcon(lockBtn);
             })
+            break;
+
+          case 'bool':
+            input = document.createElement('div');
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = key;
+            hiddenInput.value = "False";
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'form-check-input bg-transparent border-white text-white mr-2';
+            checkbox.id = `${key}_checkbox`;
+            checkbox.name = key;
+            checkbox.value = "True";
+            checkbox.dataset.reverse = '';
+            checkbox.dataset.groupCls = 'btn-group-sm mr-2';
+
+            const trueValues = ["1", "true", "True", "yes", "on"];
+            checkbox.checked = trueValues.includes(String(value));
+
+            input.appendChild(hiddenInput);
+            input.appendChild(checkbox);
+
+            checkboxes.push([checkbox.id, lockBtn]);
             break;
 
           case 'long_string':
@@ -474,6 +564,15 @@ function openEditModal(url) {
       }
 
       new bootstrap.Modal(document.getElementById('EditModal')).show();
+    })
+    .then(data => {
+      for(var [ch, lb] of checkboxes) {
+        $(`#${ch}`).checkboxpicker();
+        $(`#${ch}`).on('change',function(event) {
+          lb.dataset.locked = true;
+          updateLockIcon(lb);
+        });
+      }
     });
 }
 
@@ -560,7 +659,9 @@ function submitDynamicForm() {
         } else {
           data[name] = null;
         }
-      } else {
+      } else if (input.type === 'checkbox') {
+        data[name] = input.checked;
+      }else {
         data[name] = input.value;
       }
     }
@@ -624,6 +725,5 @@ function requestChapterRedownload(url) {
     location.reload();
   });
 }
-
 </script>
 {% endblock %}
