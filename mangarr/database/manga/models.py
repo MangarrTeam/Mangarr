@@ -116,6 +116,10 @@ class Manga(BaseModel):
     @property
     def folder(self) -> str:
         return Path(self.library.folder) / self.file_folder
+    
+    @property
+    def nsfw(self) -> bool:
+        return get_plugin_by_key(self.plugin).nsfw_allowed
 
     @staticmethod
     def monitor_exist(url:str) -> bool:

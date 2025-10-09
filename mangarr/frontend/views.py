@@ -318,7 +318,8 @@ def manga_monitored(request):
             "library": {
                 "id": m.library.id,
                 "name": m.library.name,
-                }
+                },
+            "nsfw": m.nsfw,
             } for m in Manga.objects.all()],
             key=lambda x: x["name"]),
         "libraries": [(l.id, l.name) for l in Library.objects.all()],
