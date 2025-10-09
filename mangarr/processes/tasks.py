@@ -104,8 +104,9 @@ def monitoring():
                         if stop_event.is_set():
                             return
                         try:
+                            library = editChapter.chapter.volume.manga.library
                             editChapter.update()
-                            update_updates(updates, editChapter.chapter.volume.manga.library, True)
+                            update_updates(updates, library, True)
                         except Exception as e:
                             logger.error(f"Error - {e}")
                     
