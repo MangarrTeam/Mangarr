@@ -119,7 +119,11 @@ class Manga(BaseModel):
     
     @property
     def nsfw(self) -> bool:
-        return get_plugin_by_key(self.plugin).nsfw_allowed
+        for volume in self.volumes.all():
+            for chapter in volume.chapters.all():
+                if chapter.age_rating in (AgeRating.MATURE_17_PLUS, AgeRating.R18_PLUS, AgeRating.ADULTS_ONLY_18_PLUS, AgeRating.X_18_PLUS):
+                    return True
+        return False
 
     @staticmethod
     def monitor_exist(url:str) -> bool:
