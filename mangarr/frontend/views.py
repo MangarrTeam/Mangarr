@@ -303,7 +303,27 @@ def manga_requests(request):
 
 @login_required
 def manga_monitored(request):
-    return custom_render(request, "manga/monitored.html", {"mangas": sorted([{"name": m.name.value, "url": m.arguments.get("url"), "cover": m.arguments.get("cover", NO_THUMBNAIL_URL), "id": str(m.id), "plugin": m.get_plugin_display(), "library": m.library.name} for m in Manga.objects.all()], key=lambda x: x["name"])})
+    plugins = get_plugins()
+    plugin_names = [name for _, _, name, _ in plugins]
+    return custom_render(request, "manga/monitored.html", {
+        "mangas": sorted([{
+            "name": m.name.value,
+            "url": m.arguments.get("url"),
+            "cover": m.arguments.get("cover", NO_THUMBNAIL_URL),
+            "id": str(m.id),
+            "plugin": {
+                "domain": m.plugin,
+                "name": m.get_plugin_display(),
+            },
+            "library": {
+                "id": m.library.id,
+                "name": m.library.name,
+                }
+            } for m in Manga.objects.all()],
+            key=lambda x: x["name"]),
+        "libraries": [(l.id, l.name) for l in Library.objects.all()],
+        "plugins": [(f"{category}_{domain}", name) for category, domain, name, _ in plugins]
+    })
 
 @login_required
 def manga_view(request, id):

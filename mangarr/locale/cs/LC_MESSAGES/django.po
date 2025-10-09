@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 01:36+0200\n"
+"POT-Creation-Date: 2025-10-09 10:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -144,157 +144,157 @@ msgctxt "Name field complete for Manga"
 msgid "database.models.manga.complete"
 msgstr "Kompletní?"
 
-#: .\database\manga\models.py:287
+#: .\database\manga\models.py:288
 msgctxt "Alternative names field name for MangaANLink"
 msgid "database.models.manga.alternative_name"
 msgstr "Alternativní název"
 
-#: .\database\manga\models.py:293 .\database\manga\models.py:345
+#: .\database\manga\models.py:294 .\database\manga\models.py:346
 msgctxt "Name field name for Volume"
 msgid "database.models.volume.name"
 msgstr "Název"
 
-#: .\database\manga\models.py:294 .\database\manga\models.py:351
+#: .\database\manga\models.py:295 .\database\manga\models.py:352
 msgctxt "Description field name for Volume"
 msgid "database.models.volume.description"
 msgstr "Popis"
 
-#: .\database\manga\models.py:295 .\database\manga\models.py:357
+#: .\database\manga\models.py:296 .\database\manga\models.py:358
 msgctxt "Number field name for Volume"
 msgid "database.models.volume.number"
 msgstr "Volume number"
 
-#: .\database\manga\models.py:296
+#: .\database\manga\models.py:297
 msgctxt "Mange FK field name for Volume"
 msgid "processes.models.volume.manga"
 msgstr "Manga"
 
-#: .\database\manga\models.py:297
+#: .\database\manga\models.py:298
 msgctxt "Arguments JSON field name for Volume"
 msgid "processes.models.volume.arguments"
 msgstr "Proměnné"
 
-#: .\database\manga\models.py:388 .\database\manga\models.py:658
+#: .\database\manga\models.py:389 .\database\manga\models.py:659
 msgctxt "Name field name for Chapter"
 msgid "database.models.chapter.name"
 msgstr "Název"
 
-#: .\database\manga\models.py:389 .\database\manga\models.py:664
+#: .\database\manga\models.py:390 .\database\manga\models.py:665
 msgctxt "Description field name for Chapter"
 msgid "database.models.chapter.description"
 msgstr "Popis"
 
-#: .\database\manga\models.py:390
+#: .\database\manga\models.py:391
 msgctxt "Localization field name for Chapter"
 msgid "database.models.chapter.localization"
 msgstr "Lokalizace"
 
-#: .\database\manga\models.py:391 .\database\manga\models.py:670
+#: .\database\manga\models.py:392 .\database\manga\models.py:671
 msgctxt "Publisher field name for Chapter"
 msgid "database.models.chapter.publisher"
 msgstr "Publisher"
 
-#: .\database\manga\models.py:392 .\database\manga\models.py:676
+#: .\database\manga\models.py:393 .\database\manga\models.py:677
 msgctxt "Imprint field name for Chapter"
 msgid "database.models.chapter.imprint"
 msgstr "Imprint"
 
-#: .\database\manga\models.py:393 .\database\manga\models.py:682
+#: .\database\manga\models.py:394 .\database\manga\models.py:683
 msgctxt "Release date field name for Chapter"
 msgid "database.models.chapter.release_date"
 msgstr "Datum vydání"
 
-#: .\database\manga\models.py:394 .\database\manga\models.py:688
+#: .\database\manga\models.py:395 .\database\manga\models.py:689
 msgctxt "Writer field name for Chapter"
 msgid "database.models.chapter.writer"
 msgstr "Writer"
 
-#: .\database\manga\models.py:395 .\database\manga\models.py:694
+#: .\database\manga\models.py:396 .\database\manga\models.py:695
 msgctxt "Penciller field name for Chapter"
 msgid "database.models.chapter.penciller"
 msgstr "Penciller"
 
-#: .\database\manga\models.py:396 .\database\manga\models.py:700
+#: .\database\manga\models.py:397 .\database\manga\models.py:701
 msgctxt "Inker field name for Chapter"
 msgid "database.models.chapter.inker"
 msgstr "Inker"
 
-#: .\database\manga\models.py:397 .\database\manga\models.py:706
+#: .\database\manga\models.py:398 .\database\manga\models.py:707
 msgctxt "Colorist field name for Chapter"
 msgid "database.models.chapter.colorist"
 msgstr "Colorist"
 
-#: .\database\manga\models.py:398 .\database\manga\models.py:712
+#: .\database\manga\models.py:399 .\database\manga\models.py:713
 msgctxt "Letterer field name for Chapter"
 msgid "database.models.chapter.letterer"
 msgstr "Letterer"
 
-#: .\database\manga\models.py:399 .\database\manga\models.py:718
+#: .\database\manga\models.py:400 .\database\manga\models.py:719
 msgctxt "Cover artist field name for Chapter"
 msgid "database.models.chapter.cover_artist"
 msgstr "Cover artist"
 
-#: .\database\manga\models.py:400 .\database\manga\models.py:724
+#: .\database\manga\models.py:401 .\database\manga\models.py:725
 msgctxt "Editor field name for Chapter"
 msgid "database.models.chapter.editor"
 msgstr "Editor"
 
-#: .\database\manga\models.py:401 .\database\manga\models.py:730
+#: .\database\manga\models.py:402 .\database\manga\models.py:731
 msgctxt "Translator field name for Chapter"
 msgid "database.models.chapter.translator"
 msgstr "Translator"
 
-#: .\database\manga\models.py:402 .\database\manga\models.py:736
+#: .\database\manga\models.py:403 .\database\manga\models.py:737
 msgctxt "Page count field name for Chapter"
 msgid "database.models.chapter.page_count"
 msgstr "Počet stran"
 
-#: .\database\manga\models.py:403 .\database\manga\models.py:742
+#: .\database\manga\models.py:404 .\database\manga\models.py:743
 msgctxt "Format field name for Chapter"
 msgid "database.models.chapter.format"
 msgstr "Formát"
 
-#: .\database\manga\models.py:404 .\database\manga\models.py:749
+#: .\database\manga\models.py:405 .\database\manga\models.py:750
 msgctxt "Age rating field name for Chapter"
 msgid "database.models.chapter.age_rating"
 msgstr "Age rating"
 
-#: .\database\manga\models.py:405 .\database\manga\models.py:756
+#: .\database\manga\models.py:406 .\database\manga\models.py:757
 msgctxt "ISBN field name for Chapter"
 msgid "database.models.chapter.isbn"
 msgstr "ISBN"
 
-#: .\database\manga\models.py:406 .\database\manga\models.py:762
+#: .\database\manga\models.py:407 .\database\manga\models.py:763
 msgctxt "Number field name for Chapter"
 msgid "database.models.chapter.number"
 msgstr "Číslo kapitoly"
 
-#: .\database\manga\models.py:407
+#: .\database\manga\models.py:408
 msgctxt "Volume FK field name for Chapter"
 msgid "database.models.chapter.volume"
 msgstr "Volume"
 
-#: .\database\manga\models.py:408
+#: .\database\manga\models.py:409
 msgctxt "File field name for Chapter"
 msgid "database.models.chapter.file_path"
 msgstr "Cesta k souboru"
 
-#: .\database\manga\models.py:409
+#: .\database\manga\models.py:410
 msgctxt "URL field name for Chapter"
 msgid "database.models.chapter.url"
 msgstr "URL"
 
-#: .\database\manga\models.py:410
+#: .\database\manga\models.py:411
 msgctxt "Source URL field name for Chapter"
 msgid "database.models.chapter.source_url"
 msgstr "Zdrojová URL"
 
-#: .\database\manga\models.py:411
+#: .\database\manga\models.py:412
 msgctxt "Downloaded field name for Chapter"
 msgid "database.models.chapter.downloaded"
 msgstr "Stažené?"
 
-#: .\database\manga\models.py:412
+#: .\database\manga\models.py:413
 msgctxt "Arguments JSON field name for Chapter"
 msgid "processes.models.manga.arguments"
 msgstr "Proměnné"
@@ -621,7 +621,7 @@ msgid "frontend.library_panel.reset_path"
 msgstr "Resetovat cestu"
 
 #: .\frontend\templates\manager\library.html:282
-#: .\frontend\templates\manager\library.html:514
+#: .\frontend\templates\manager\library.html:517
 msgctxt "Loading text"
 msgid "frontend.library_panel.loading"
 msgstr "Načítám"
@@ -647,7 +647,7 @@ msgid "frontend.library_panel.failed_save_library"
 msgstr "Chyba při ukládání knihovny"
 
 #: .\frontend\templates\manager\library.html:367
-#: .\frontend\templates\manager\library.html:458
+#: .\frontend\templates\manager\library.html:461
 msgctxt "Error occurred message"
 msgid "frontend.library_panel.error_occurred"
 msgstr "Error"
@@ -657,27 +657,27 @@ msgctxt "Failed to delete library message"
 msgid "frontend.library_panel.failed_delete_library"
 msgstr "Chyba při mazání knihovny"
 
-#: .\frontend\templates\manager\library.html:420
+#: .\frontend\templates\manager\library.html:423
 msgctxt "Edit connector title"
 msgid "frontend.library_panel.edit_connector"
 msgstr "Upravit přípojku"
 
-#: .\frontend\templates\manager\library.html:453
+#: .\frontend\templates\manager\library.html:456
 msgctxt "Failed to save connector message"
 msgid "frontend.library_panel.failed_save_connector"
 msgstr "Chyba při ukládání přípojky"
 
-#: .\frontend\templates\manager\library.html:482
+#: .\frontend\templates\manager\library.html:485
 msgctxt "Failed to delete connector message"
 msgid "frontend.library_panel.failed_delete_connector"
 msgstr "Chyba při mazání přípojky"
 
-#: .\frontend\templates\manager\library.html:549
+#: .\frontend\templates\manager\library.html:552
 msgctxt "No folders message"
 msgid "frontend.library_panel.no_folders"
 msgstr "Žádné složky"
 
-#: .\frontend\templates\manager\library.html:558
+#: .\frontend\templates\manager\library.html:561
 msgctxt "Failed to load folders"
 msgid "frontend.library_panel.failed_load_folders"
 msgstr "Chyba při načítání složek"
@@ -831,21 +831,58 @@ msgctxt "Title for monitored mangas"
 msgid "frontend.manga_monitored.monitored_mangas"
 msgstr "Monitorované mangy"
 
-#: .\frontend\templates\manga\monitored.html:31
+#: .\frontend\templates\manga\monitored.html:17
+msgctxt "Filters manga filter button text"
+msgid "frontend.manga_monitored.filters"
+msgstr "Filtry"
+
+#: .\frontend\templates\manga\monitored.html:30
+#: .\frontend\templates\manga\monitored.html:192
+msgctxt "Plugins (all) manga filter button text"
+msgid "frontend.manga_monitored.plugins_all"
+msgstr "Pluginy (Všechny)"
+
+#: .\frontend\templates\manga\monitored.html:45
+#: .\frontend\templates\manga\monitored.html:193
+msgctxt "Libraries (all) manga filter button text"
+msgid "frontend.manga_monitored.libraries_all"
+msgstr "Knihovny (Všechny)"
+
+#: .\frontend\templates\manga\monitored.html:59
+msgctxt "NSFW manga filter button text"
+msgid "frontend.manga_monitored.nsfw"
+msgstr "NSFW"
+
+#: .\frontend\templates\manga\monitored.html:65
+msgctxt "Reset manga filter button text"
+msgid "frontend.manga_monitored.reset"
+msgstr "Reset"
+
+#: .\frontend\templates\manga\monitored.html:98
 msgctxt "View manga button text"
 msgid "frontend.manga_monitored.view"
 msgstr "Zobrazit"
 
-#: .\frontend\templates\manga\monitored.html:34
+#: .\frontend\templates\manga\monitored.html:101
 msgctxt "View original manga button text"
 msgid "frontend.manga_monitored.view_original"
 msgstr "Zobrazit originál"
 
-#: .\frontend\templates\manga\monitored.html:47
-#: .\frontend\templates\manga\monitored.html:51
+#: .\frontend\templates\manga\monitored.html:114
+#: .\frontend\templates\manga\monitored.html:118
 msgctxt "No manga found text"
 msgid "frontend.manga_monitored.none_found"
 msgstr "Žádná manga"
+
+#: .\frontend\templates\manga\monitored.html:192
+msgctxt "Plugins manga filter button text"
+msgid "frontend.manga_monitored.plugins"
+msgstr "Pluginy"
+
+#: .\frontend\templates\manga\monitored.html:193
+msgctxt "Libraries manga filter button text"
+msgid "frontend.manga_monitored.libraries"
+msgstr "Knihovny"
 
 #: .\frontend\templates\manga\requests.html:6
 msgctxt "Request manga title"
@@ -1394,7 +1431,7 @@ msgctxt "Manga FK name"
 msgid "processes.models.monitor_chapter.manga"
 msgstr "Manga"
 
-#: .\processes\models.py:225
+#: .\processes\models.py:223
 msgctxt "Chapter FK name"
 msgid "processes.models.edit_chapter.chapter"
 msgstr "Kapitola"

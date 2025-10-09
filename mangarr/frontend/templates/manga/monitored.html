@@ -10,14 +10,81 @@
 
 {% block content %}
 <div class="text-white text-truncate">
+    <!-- Filter Toggle Button -->
+    <div class="d-flex flex-column justify-content-end mb-3">
+
+        <button class="btn btn-outline-light btn-sm mb-2" type="button" data-toggle="collapse" data-target="#filter-bar" aria-expanded="false" aria-controls="filter-bar">
+            <i class="fa fa-funnel"></i> {% trans "frontend.manga_monitored.filters" context "Filters manga filter button text" %}
+        </button>
+
+        <!-- Filter Bar -->
+        <div id="filter-bar" class="collapse px-3 py-3 mb-3 rounded background-light border-dark">
+            <div class="d-flex flex-wrap align-items-center justify-content-between">
+
+                <div class="d-flex flex-wrap align-items-center">
+
+                    <!-- Plugins -->
+                    <div class="dropdown mr-2 mb-2 position-static">
+                        <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" id="dropdownPlugin"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="bi bi-plug"></i> <span id="filter-plugin-label">{% trans "frontend.manga_monitored.plugins_all" context "Plugins (all) manga filter button text" %}</span>
+                        </button>
+                        <div class="dropdown-menu bg-dark border-secondary p-0" aria-labelledby="dropdownPlugin" style="max-height: 300px; overflow-y: auto; min-width: 180px;">
+                            {% for id, name in plugins %}
+                            <a class="dropdown-item text-light filter-plugin-option py-1 px-2" data-value="{{ id }}" href="#">
+                                {{ name }}
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Libraries -->
+                    <div class="dropdown mr-2 mb-2 position-static">
+                        <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" id="dropdownLibrary"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-collection"></i> <span id="filter-library-label">{% trans "frontend.manga_monitored.libraries_all" context "Libraries (all) manga filter button text" %}</span>
+                        </button>
+                        <div class="dropdown-menu bg-dark border-secondary p-0" aria-labelledby="dropdownLibrary" style="max-height: 300px; overflow-y: auto; min-width: 180px;">
+                            {% for id, name in libraries %}
+                            <a class="dropdown-item text-light filter-library-option py-1 px-2" data-value="{{ id }}" href="#">
+                                {{ name }}
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- NSFW -->
+                    <div class="ml-2 mb-2">
+                        <label class="text-white-50 small" for="filter-nsfw">{% trans "frontend.manga_monitored.nsfw" context "NSFW manga filter button text" %}</label>
+                        <input type="checkbox" id="filter-nsfw" data-off-label="false" data-on-label="false" data-off-icon-cls="fa fa-eye-slash" data-on-icon-cls="fa fa-eye" data-reverse hidden>
+                    </div>
+                </div>
+
+                <div class="mb-2">
+                    <button id="reset-filters" class="btn btn-outline-danger btn-sm">
+                        <i class="bi bi-x-circle"></i> {% trans "frontend.manga_monitored.reset" context "Reset manga filter button text" %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
     <div id="manga-grid" class="row">
         {% for manga in mangas %}
         <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
-            <div class="card bg-dark text-white border-0 overflow-hidden position-relative hover-buttons-container" style="aspect-ratio: 2 / 3;">
-                {% if manga.plugin %}
-                <span class="position-absolute bg-success text-white px-2 py-1 mr-1 mt-1 d-inline-block text-center multi-line-title" style="top: 0; right: 0; border-radius: 50rem; max-width: 75%; font-size: clamp(0.5rem, 0.75vw, 1rem)">{{ manga.plugin }}</span>
+            <div 
+                    class="card bg-dark text-white border-0 overflow-hidden position-relative hover-buttons-container"
+                    style="aspect-ratio: 2 / 3;"
+                    data-plugin-id="{{ manga.plugin.domain }}"
+                    data-library-id="{{ manga.library.id }}"
+                    data-nsfw="{{ manga.nsfw|yesno:'true,false' }}">
+                {% if manga.plugin.name %}
+                <span class="position-absolute bg-success text-white px-2 py-1 mr-1 mt-1 d-inline-block text-center multi-line-title" style="top: 0; right: 0; border-radius: 50rem; max-width: 75%; font-size: clamp(0.5rem, 0.75vw, 1rem)">{{ manga.plugin.name }}</span>
                 {% endif %}
-                <span class="position-absolute bg-warning text-white px-2 py-1 mr-1 mt-1 d-inline-block text-center multi-line-title" style="top: calc(2 * clamp(0.5rem, 0.75vw, 1rem)); right: 0; border-radius: 50rem; max-width: 75%; font-size: clamp(0.5rem, 0.75vw, 1rem)">{{ manga.library }}</span>
+                <span class="position-absolute bg-warning text-white px-2 py-1 mr-1 mt-1 d-inline-block text-center multi-line-title" style="top: calc(2 * clamp(0.5rem, 0.75vw, 1rem)); right: 0; border-radius: 50rem; max-width: 75%; font-size: clamp(0.5rem, 0.75vw, 1rem)">{{ manga.library.name }}</span>
                 <img class="card-img"
                     src="{{ manga.cover }}"
                     alt="{{ manga.name }}"
@@ -72,5 +139,132 @@
             });
         }
     })
+
+
+
+
+
+    // --- Cookie helpers ---
+    function setCookie(name, value, days = 30) {
+        var d = new Date();
+        d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+        document.cookie = name + "=" + encodeURIComponent(JSON.stringify(value)) + ";expires=" + d.toUTCString() + ";path=/";
+    }
+
+    function getCookie(name) {
+        var match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+        try {
+            return match ? JSON.parse(decodeURIComponent(match[2])) : null;
+        } catch {
+            return null;
+        }
+    }
+
+    // Elements
+    var nsfwCheckbox = document.getElementById("filter-nsfw");
+    var resetButton = document.getElementById("reset-filters");
+    var pluginLabel = document.getElementById("filter-plugin-label");
+    var libraryLabel = document.getElementById("filter-library-label");
+
+    // State
+    var pluginFilter = getCookie("filter_plugins") || [];
+    var libraryFilter = getCookie("filter_libraries") || [];
+    var nsfwFilter = getCookie("filter_nsfw") === true;
+
+    $('#filter-nsfw').prop('checked', nsfwFilter);
+
+    // Prevent dropdowns from closing when clicking inside
+    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+        menu.addEventListener('click', e => e.stopPropagation());
+    });
+
+    // Restore highlighted selections
+    pluginFilter.forEach(id => {
+        var el = document.querySelector(".filter-plugin-option[data-value='" + id + "']");
+        if (el) el.classList.add("active", "bg-secondary");
+    });
+    libraryFilter.forEach(id => {
+        var el2 = document.querySelector(".filter-library-option[data-value='" + id + "']");
+        if (el2) el2.classList.add("active", "bg-secondary");
+    });
+
+    updateLabels();
+    applyFilters();
+
+    // --- Core logic ---
+    function updateLabels() {
+        pluginLabel.textContent = pluginFilter.length > 0 ? `{% trans "frontend.manga_monitored.plugins" context "Plugins manga filter button text" %} (${pluginFilter.length})` : "{% trans "frontend.manga_monitored.plugins_all" context "Plugins (all) manga filter button text" %}";
+        libraryLabel.textContent = libraryFilter.length > 0 ? `{% trans "frontend.manga_monitored.libraries" context "Libraries manga filter button text" %} (${libraryFilter.length})` : "{% trans "frontend.manga_monitored.libraries_all" context "Libraries (all) manga filter button text" %}";
+    }
+
+    function applyFilters() {
+        document.querySelectorAll("#manga-grid > div").forEach(function (cardCol) {
+        var card = cardCol.querySelector(".card");
+        if (!card) return;
+
+        var pluginId = card.getAttribute("data-plugin-id") || "";
+        var libraryId = card.getAttribute("data-library-id") || "";
+        var isNsfw = card.getAttribute("data-nsfw") === "true";
+
+        var visible = true;
+        if (pluginFilter.length > 0 && !pluginFilter.includes(pluginId)) visible = false;
+        if (libraryFilter.length > 0 && !libraryFilter.includes(libraryId)) visible = false;
+        if (!nsfwFilter && isNsfw) visible = false;
+
+        cardCol.style.display = visible ? "" : "none";
+        });
+
+        setCookie("filter_plugins", pluginFilter);
+        setCookie("filter_libraries", libraryFilter);
+        setCookie("filter_nsfw", nsfwFilter);
+        updateLabels();
+    }
+
+    // --- Event handlers ---
+    document.querySelectorAll(".filter-plugin-option").forEach(function (el) {
+        el.addEventListener("click", function (e) {
+        e.preventDefault();
+        var val = this.getAttribute("data-value");
+        if (pluginFilter.includes(val)) {
+            pluginFilter = pluginFilter.filter(v => v !== val);
+            this.classList.remove("active", "bg-secondary");
+        } else {
+            pluginFilter.push(val);
+            this.classList.add("active", "bg-secondary");
+        }
+        applyFilters();
+        });
+    });
+
+    document.querySelectorAll(".filter-library-option").forEach(function (el) {
+        el.addEventListener("click", function (e) {
+        e.preventDefault();
+        var val = this.getAttribute("data-value");
+        if (libraryFilter.includes(val)) {
+            libraryFilter = libraryFilter.filter(v => v !== val);
+            this.classList.remove("active", "bg-secondary");
+        } else {
+            libraryFilter.push(val);
+            this.classList.add("active", "bg-secondary");
+        }
+        applyFilters();
+        });
+    });
+
+    $('#filter-nsfw').on("change", function () {
+        nsfwFilter = this.checked;
+        applyFilters();
+    });
+
+    resetButton.addEventListener("click", function () {
+        pluginFilter = [];
+        libraryFilter = [];
+        nsfwFilter = false;
+        nsfwCheckbox.checked = false;
+        $('#filter-nsfw').prop('checked', false);
+        document.querySelectorAll(".filter-plugin-option, .filter-library-option").forEach(e => e.classList.remove("active", "bg-secondary"));
+        applyFilters();
+    });
+    $(':checkbox').checkboxpicker();
 </script>
 {% endblock %}

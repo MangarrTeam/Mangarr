@@ -15,3 +15,16 @@
     font-size: 0.75rem;
     padding: 0.25rem 0.5rem;
 }
+
+.dropdown-item.active,
+.dropdown-item.active:focus,
+.dropdown-item.active:hover {
+    background: var(--background-lightest) !important;
+}
+
+/* Keep dropdowns open when interacting inside */
+.dropdown-item,
+.dropdown-menu {
+    background: var(--background-light) !important;
+    cursor: pointer;
+}
