@@ -173,9 +173,7 @@ class MonitorChapter(ProcessBase):
             if len(chapter_pages) == 0:
                 raise ChapterHadNoPages
 
-            if chapter.page_count.locked:
-                chapter.page_count.unlock()
-            chapter.page_count.value = len(chapter_pages)
+            chapter.page_count.set_value(len(chapter_pages), force=True)
             chapter.page_count.lock()
 
             with zipfile.ZipFile(chapter_cache_file_path_name, 'w', zipfile.ZIP_DEFLATED) as cbz:
