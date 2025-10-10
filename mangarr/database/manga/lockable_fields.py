@@ -1,6 +1,9 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 
+import logging
+logger = logging.getLogger(__name__)
+
 class LockableFieldBase(models.JSONField):
     """
     Base class for lockable fields. Stores data in JSON format with 'value' and 'locked' keys.
@@ -151,7 +154,8 @@ class LockableFieldProxy:
         data = self._get_data()
         
         if data.get('locked', False) and not force:
-            raise ValidationError(f"Field '{self._field_name}' is locked and cannot be modified.")
+            logger.debug(f"Field '{self._field_name}' is locked and cannot be modified.")
+            return
         
         # Validate and convert type if specified
         if self._validator:
