@@ -64,6 +64,9 @@
           <div class="d-flex flex-row mt-2 mt-md-0">
             <button type="button" class="btn bg-transparent text-white" onclick="openEditModal(`{% url 'api_edit_manga' manga.id %}`)"><i class="fas fa-pen"></i></button>
             <button type="button" class="btn bg-transparent text-white" onclick="requestChapterEdit(`{% url 'api_request_edit_manga' manga.id %}`)"><i class="fa fa-sync-alt"></i></button>
+            <button type="button" class="btn bg-transparent text-white" onclick="openMassEditModal()">
+              <i class="fa fa-edit"></i>
+            </button>
           </div>
           {% endif %}
         </div>
@@ -271,6 +274,39 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="MassEditModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content text-white">
+      <div class="modal-header background-light border-0">
+        <h5 class="modal-title">{% trans "frontend.manga_view.mass_edit_title" context "Mass edit modal title" %}</h5>
+        <button type="button" class="btn-close" data-dismiss="modal"></button>
+      </div>
+      <div class="modal-body background-light border-0">
+        <form id="MassEditForm">
+          <div class="mb-3">
+            <label for="fieldSelect" class="form-label">
+              {% trans "frontend.manga_view.select_field" context "Field selection label" %}
+            </label>
+            <select id="fieldSelect" class="form-control bg-dark text-white" onchange="updateMassEditInput()">
+              <option value="" disabled selected>{% trans "frontend.manga_view.select_field_placeholder" context "Select field placeholder" %}</option>
+              {% for field in fields %}
+              <option value="{{ field.name }}" data-type="{{ field.type }}" {% if field.choices %}data-choices='{{ field.choices|safe }}'{% endif %}>{{ field.display_name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div id="massEditInputContainer"></div>
+        </form>
+      </div>
+      <div class="modal-footer background-light border-0">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "frontend.view.cancel" context "Cancel button text" %}</button>
+        <button type="button" class="btn btn-primary" onclick="submitMassEdit()">{% trans "frontend.view.save" context "Save button text" %}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
 
 
@@ -724,6 +760,182 @@ function requestChapterRedownload(url) {
     console.log(d);
     location.reload();
   });
+}
+
+function openMassEditModal() {
+  const modalEl = document.getElementById('MassEditModal');
+  const modal = new bootstrap.Modal(modalEl);
+  document.getElementById('MassEditForm').reset();
+  document.getElementById('massEditInputContainer').innerHTML = '';
+  modal.show();
+}
+
+function updateMassEditInput() {
+    const select = document.getElementById('fieldSelect');
+    if (!select) return;
+    const selectedOption = select.options[select.selectedIndex];
+    if (!selectedOption) return;
+
+    const type = selectedOption.dataset.type;
+    const container = document.getElementById('massEditInputContainer');
+    container.innerHTML = '';
+
+    let input;
+
+    switch (type) {
+        case 'string':
+        case 'text':
+        case 'url':
+        case 'json':
+            input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'form-control bg-transparent text-white border-top-0 border-left-0 border-right-0 rounded-0';
+            input.name = 'value';
+            input.placeholder = '{% trans "frontend.manga_view.enter_text" context "Text input placeholder" %}';
+            break;
+
+        case 'long_string':
+            input = document.createElement('textarea');
+            input.rows = 5;
+            input.className = 'form-control bg-transparent text-white border-top-0 border-left-0 border-right-0 rounded-0';
+            input.name = 'value';
+            input.placeholder = '{% trans "frontend.manga_view.enter_text" context "Text input placeholder" %}';
+            break;
+
+        case 'int':
+        case 'integer':
+            input = document.createElement('input');
+            input.type = 'number';
+            input.step = '1';
+            input.className = 'form-control bg-transparent text-white border-top-0 border-left-0 border-right-0 rounded-0';
+            input.name = 'value';
+            input.placeholder = '{% trans "frontend.manga_view.enter_number" context "Number input placeholder" %}';
+            break;
+
+        case 'float':
+            input = document.createElement('input');
+            input.type = 'number';
+            input.step = 'any';
+            input.className = 'form-control bg-transparent text-white border-top-0 border-left-0 border-right-0 rounded-0';
+            input.name = 'value';
+            input.placeholder = '{% trans "frontend.manga_view.enter_number" context "Number input placeholder" %}';
+            break;
+
+        case 'bool':
+        case 'boolean':
+            input = document.createElement('select');
+            input.className = 'form-control bg-dark text-white';
+            input.name = 'value';
+            input.innerHTML = `
+                <option value="true">{% trans "frontend.view.true" %}</option>
+                <option value="false">{% trans "frontend.view.false" %}</option>
+            `;
+            break;
+
+        case 'date':
+        case 'datetime':
+            input = document.createElement('input');
+            input.type = 'datetime-local';
+            input.className = 'form-control bg-transparent text-white border-top-0 border-left-0 border-right-0 rounded-0';
+            input.name = 'value';
+            break;
+
+        case 'choice':
+            input = document.createElement('select');
+            input.className = 'form-control bg-dark text-white';
+            input.name = 'value';
+            try {
+                const raw = selectedOption.dataset.choices || '[]';
+                let choices = JSON.parse(raw);
+                if (choices.length && typeof choices[0] === 'object') {
+                    choices.forEach(choice => {
+                        const opt = document.createElement('option');
+                        opt.value = choice.key;
+                        opt.textContent = choice.display_name || choice.name || choice.key;
+                        input.appendChild(opt);
+                    });
+                } else {
+                    choices.forEach(choice => {
+                        const opt = document.createElement('option');
+                        opt.value = choice;
+                        opt.textContent = choice;
+                        input.appendChild(opt);
+                    });
+                }
+            } catch (e) {
+                console.warn('Invalid choices JSON', selectedOption.dataset.choices);
+            }
+            break;
+
+        default:
+            input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'form-control bg-transparent text-white';
+            input.name = 'value';
+    }
+
+    if (input) container.appendChild(input);
+}
+
+function submitMassEdit() {
+  const fieldSelect = document.getElementById('fieldSelect');
+  if (!fieldSelect) {
+    alert('No field selected');
+    return;
+  }
+  const field = fieldSelect.value;
+  const input = document.querySelector('#massEditInputContainer [name="value"]');
+  if (!field || !input) {
+    alert('{% trans "frontend.manga_view.select_field_alert" context "Please select a field first" %}');
+    return;
+  }
+
+  let value = input.value;
+  const type = fieldSelect.options[fieldSelect.selectedIndex].dataset.type;
+
+  // Convert booleans/numbers/dates before sending (server also validates)
+  if (type === 'int') {
+    value = value === '' ? null : parseInt(value, 10);
+  } else if (type === 'bool') {
+    value = (value === 'true' || value === true || value === '1' || value === 1);
+  } else if (type === 'date') {
+    // if user input is datetime-local, convert to ISO-like string
+    if (value) {
+      const dt = new Date(value);
+      // use toISOString() without milliseconds
+      value = dt.toISOString();
+    } else {
+      value = null;
+    }
+  }
+
+
+  const payload = {
+    field,
+    value
+  };
+
+  fetch("{% url 'api_mass_edit_manga' manga.id %}", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': '{{ csrf_token }}'
+    },
+    body: JSON.stringify(payload)
+  })
+    .then(async res => {
+      if (res.ok) return res.json();
+      const text = await res.text();
+      throw new Error(text || 'Request failed');
+    })
+    .then(d => {
+      console.log('Mass edit result:', d);
+      location.reload();
+    })
+    .catch(err => {
+      console.error(err);
+      alert('{% trans "frontend.manga_view.mass_edit_error" context "Error performing mass edit" %}');
+    });
 }
 </script>
 {% endblock %}

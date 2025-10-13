@@ -10,7 +10,7 @@ from plugins.base import NO_THUMBNAIL_URL
 from core.settings import CONFIG, LANGUAGE_CODE
 from core.settings import LANGUAGES, LANGUAGES_KEYS
 from database.users.models import User, UserProfile, RegisterToken
-from database.manga.models import Library
+from database.manga.models import Library, Chapter
 from connectors.models import ConnectorBase
 from processes.models import EditChapter, MonitorChapter
 from django.utils.translation import pgettext
@@ -358,4 +358,4 @@ def manga_view(request, id):
         ],
         key=lambda a: a.get("volume")
     )
-    return custom_render(request, "manga/view.html", {"manga": {**model_field_to_dict(manga), "cover": manga.arguments.get("cover", NO_THUMBNAIL_URL)}, "volumes": volumes, "mangas": [(m.id, str(m)) for m in Manga.objects.exclude(id=manga.id)]})
+    return custom_render(request, "manga/view.html", {"manga": {**model_field_to_dict(manga), "cover": manga.arguments.get("cover", NO_THUMBNAIL_URL)}, "volumes": volumes, "mangas": [(m.id, str(m)) for m in Manga.objects.exclude(id=manga.id)], "fields": Chapter.get_model_fields()})

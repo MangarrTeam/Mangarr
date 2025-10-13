@@ -749,6 +749,61 @@ def delete_manga(request, manga_id):
     manga.delete()
     return JsonResponse({'success': True})
 
+@permission_required("database_users.can_manage_metadata")
+@require_POST
+def mass_edit_manga(request, manga_id):
+    try:
+        manga = Manga.objects.get(id=manga_id)
+    except Manga.DoesNotExist:
+        return JsonResponse({'error': "Manga not found"}, status=404)
+    
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': "Invalid JSON."}, status=400)
+    
+    field = data.get("field")
+    value = data.get("value")
+
+    if field is None or value is None:
+        return JsonResponse({
+            "error": f"{'Field ' if field is None else ''}{('and Value' if field is None else 'Value') if value is None else '' } can't be None"
+        }, status=400)
+
+    allowed_fields = {
+        "name": str,
+        "description": str,
+        "release_date": str,
+        "format": int,
+        "age_rating": int,
+        "isbn": str
+    }
+
+    if field not in allowed_fields.keys():
+        return JsonResponse({
+            "error": f"Field '{field}' is not in allowed list of fields"
+        }, status=400)
+    
+    chapter_to_update = []
+
+    for volume in manga.volumes.all():
+        for chapter in volume.chapters.all():
+            try:
+                target_type = allowed_fields.get(field, str)
+                chapter_field = getattr(chapter, field)
+                if hasattr(chapter_field, "set_value"):
+                    chapter_field.set_value(target_type(value), force=True)
+                    chapter_field.lock()
+                    chapter_to_update.append(chapter)
+            except Exception as e:
+                logger.error(f"Error - {e}")
+
+    Chapter.objects.bulk_update(chapter_to_update, [field])
+    
+    return JsonResponse({
+        "success": True
+    }, status=200)
+
 @permission_required("database_users.can_manage_requests")
 @require_POST
 def approve_manga_request(request):

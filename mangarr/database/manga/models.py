@@ -13,6 +13,7 @@ from django.utils import timezone
 from .utils import make_valid_filename, BaseModel
 from pathlib import Path
 from datetime import datetime
+import json
 
 # Create your models here.
 class Library(BaseModel):
@@ -776,6 +777,70 @@ class Chapter(BaseModel):
 
     def get_file_name(self) -> str:
         return make_valid_filename(f"{self.volume.manga.name.value} - Vol. {self.volume.volume} Ch. {self.chapter}.cbz")
+
+    @staticmethod
+    def get_model_fields():
+        def determine_type(field):
+            info = {"type": None, "choices": None}
+
+            # Custom fields
+            if isinstance(field, LockableCharField):
+                info["type"] = "string"
+            elif isinstance(field, LockableIntegerField):
+                info["type"] = "integer"
+            elif isinstance(field, LockableFloatField):
+                info["type"] = "float"
+            elif isinstance(field, LockableDateTimeField):
+                info["type"] = "datetime"
+            elif isinstance(field, LockableEnumField):
+                info["type"] = "choice"
+                # choices as list of (NAME, VALUE)
+                info["choices"] = json.dumps([{"name": choice.name, "display_name": (choice.label or choice.name.capitalize()).replace("'", "&apos;").replace('"', '&quot;'), "key": choice.value} for choice in field.enum_class], ensure_ascii=False)
+
+            # Standard Django fields
+            elif isinstance(field, models.CharField):
+                info["type"] = "string"
+            elif isinstance(field, models.TextField):
+                info["type"] = "text"
+            elif isinstance(field, models.IntegerField):
+                info["type"] = "integer"
+            elif isinstance(field, models.FloatField):
+                info["type"] = "float"
+            elif isinstance(field, models.BooleanField):
+                info["type"] = "boolean"
+            elif isinstance(field, models.DateTimeField):
+                info["type"] = "datetime"
+            elif isinstance(field, models.DateField):
+                info["type"] = "date"
+            elif isinstance(field, models.ForeignKey):
+                info["type"] = f"foreignkey ({field.related_model.__name__})"
+            elif isinstance(field, models.URLField):
+                info["type"] = "url"
+            elif isinstance(field, models.JSONField):
+                info["type"] = "json"
+
+            # Fallback
+            if info["type"] is None:
+                info["type"] = field.get_internal_type().lower()
+
+            return info
+
+        return [
+            {
+                "name": field.name,
+                "display_name": field.verbose_name,
+                **determine_type(field)
+            }
+            for field in Chapter._meta.fields
+            if field.name.lower() in (
+                "name",
+                "description",
+                "release_date",
+                "format",
+                "age_rating",
+                "isbn"
+            )
+        ]
 
     def get_fields_values_for_xml(self) -> dict:
         date = self.release_date.value
