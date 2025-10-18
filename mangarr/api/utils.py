@@ -7,6 +7,8 @@ from uuid import uuid4
 import threading
 from .search_cache import mark_processing, store_result
 from plugins.utils import get_plugin
+import logging
+logger = logging.getLogger(__name__)
 
 def manga_is_monitored(manga:dict) -> bool:
     url = manga.get("url")
@@ -48,6 +50,10 @@ def start_background_search(query, category, domain, language=None, nsfw=False):
     def worker():
         try:
             plugin = get_plugin(category, domain, nsfw)
+            if not nsfw and plugin.nsfw_only:
+                result = []
+                store_result(task_id, result)
+                return
             if language and language in plugin.get_languages():
                 manga = plugin.search_manga(query, language)
             else:
