@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import pgettext
+from database.manga.models import Library
 
 # Create your models here.
 class PermissionCodename:
@@ -21,6 +22,8 @@ class PermissionCodename:
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     token = models.CharField(max_length=64, unique=True)
+    allowed_libraries = models.ManyToManyField(Library, related_name='allowed_users')
+    nsfw_allowed = models.BooleanField(default=False)
 
     class Meta:
         permissions = [

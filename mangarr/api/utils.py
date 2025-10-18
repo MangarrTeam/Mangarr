@@ -41,13 +41,13 @@ require_GET_PATCH = require_http_methods(["GET", "PATCH"])
 require_GET_PATCH.__doc__ = "Decorator to require that a view only accepts the GET and PATCH method."
 
 
-def start_background_search(query, category, domain, language=None):
+def start_background_search(query, category, domain, language=None, nsfw=False):
     task_id = str(uuid4())
     mark_processing(task_id)
 
     def worker():
         try:
-            plugin = get_plugin(category, domain)
+            plugin = get_plugin(category, domain, nsfw)
             if language and language in plugin.get_languages():
                 manga = plugin.search_manga(query, language)
             else:

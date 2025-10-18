@@ -54,10 +54,12 @@
                     </div>
 
                     <!-- NSFW -->
+                    {% if nsfw_allowed %}
                     <div class="ml-2 mb-2">
                         <label class="text-white-50 small" for="filter-nsfw">{% trans "frontend.manga_monitored.nsfw" context "NSFW manga filter button text" %}</label>
                         <input type="checkbox" id="filter-nsfw" data-off-label="false" checked data-on-label="false" data-off-icon-cls="fa fa-eye-slash" data-on-icon-cls="fa fa-eye" data-reverse hidden>
                     </div>
+                    {% endif %}
                 </div>
 
                 <div class="mb-2">

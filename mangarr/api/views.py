@@ -87,6 +87,20 @@ def get_user_permissions(request, user_id):
    })
 
 @superuser_or_staff_required
+def get_user_libraries(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+
+    user_libraries = user.profile.allowed_libraries.all()
+    all_libraries = Library.objects.all()
+
+    return JsonResponse({
+        "libraries": [
+            {"id": lib.id, "name": str(lib), "can": lib in user_libraries}
+            for lib in all_libraries
+        ]
+   })
+
+@superuser_or_staff_required
 def update_user_permissions(request, user_id):
     if request.method == "POST":
         user = get_object_or_404(User, pk=user_id)
@@ -97,6 +111,17 @@ def update_user_permissions(request, user_id):
         return JsonResponse({"status": "success"})
     return JsonResponse({"error": "Invalid request"}, status=400)
 
+@superuser_or_staff_required
+def update_user_libraries(request, user_id):
+    if request.method == "POST":
+        user = get_object_or_404(User, pk=user_id)
+        library_str = request.POST.get('libraries')
+        library_ids = library_str.split(",") if len(library_str) > 0 else []
+        libraries = Library.objects.filter(id__in=library_ids)
+        user.profile.allowed_libraries.set(libraries)
+        return JsonResponse({"status": "success"})
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
 @superuser_required
 def toggle_staff_user(request, user_id):
     if request.method == 'POST':
@@ -104,6 +129,23 @@ def toggle_staff_user(request, user_id):
         if user.is_superuser:
             return JsonResponse({"error": "Forbidden"}, status=403)
         user.is_staff = not user.is_staff
+        user.save()
+        source = request.POST.get("zource")
+        if source is None:
+            source = 'index'
+        try:
+            reverse(source)
+        except:
+            source = 'index'
+
+        return redirect(source)
+    return JsonResponse({"error": "Forbidden"}, status=400)
+
+@superuser_required
+def toggle_nsfw_user(request, user_id):
+    if request.method == 'POST':
+        user = get_object_or_404(User, id=user_id).profile
+        user.nsfw_allowed = not user.nsfw_allowed
         user.save()
         source = request.POST.get("zource")
         if source is None:
@@ -162,8 +204,9 @@ def search_manga_start(request):
     if domain not in get_plugins_domains(category):
         return JsonResponse({"error": "Domain does not exist"}, status=403)
     language = data.get("language")
+    nsfw = data.get("nsfw", False)
     
-    task_id = start_background_search(query, category, domain, language)
+    task_id = start_background_search(query, category, domain, language, nsfw)
     
     return JsonResponse({"task_id": task_id})
 

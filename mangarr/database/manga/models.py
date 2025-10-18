@@ -36,6 +36,9 @@ class Library(BaseModel):
         self.default = True
         self.save()
 
+    def __str__(self):
+        return f"{self.name} ({self.folder})"
+
 class MangaRequest(BaseModel):
     library = models.ForeignKey(Library, on_delete=models.CASCADE, blank=False, null=False, verbose_name=pgettext("Library field name for Manga request", "database.models.manga_request.library"))
     plugin = models.CharField(max_length=64, choices=get_plugin_choices(), verbose_name=pgettext("Plugin field name for MangaRequest", "database.models.manga_request.plugin"))
@@ -45,9 +48,6 @@ class MangaRequest(BaseModel):
     @staticmethod
     def has_plugin(category:str, domain:str) -> bool:
         return any([ch[0] == f'{category}_{domain}' for ch in get_plugin_choices()])
-    
-    def get_plugin(self) -> MangaPluginBase:
-        return get_plugin_by_key(self.plugin)    
     
     def get_plugin_name(self, key:str) -> str:
         choices = get_plugin_choices()

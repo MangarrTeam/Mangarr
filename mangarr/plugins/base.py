@@ -113,6 +113,7 @@ class Status(BaseEnum):
 
 class MangaPluginBase(ABC, metaclass=EnforceStructureMeta):
     languages = []
+    nsfw_only = False
 
     def __init__(self, nsfw_allowed = False, *args, **kwargs):
         self.nsfw_allowed = nsfw_allowed

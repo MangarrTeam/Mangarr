@@ -236,7 +236,7 @@ document.getElementById('search-form').addEventListener('submit', async (e) => {
         // Request button
         {% if user|has_permition:'database_users.can_request' %}
         const requestBtn = document.createElement("button");
-        requestBtn.className = `btn btn-sm btn-primary mr-2 w-100 text-truncate ${manga["monitored"] ? "d-none" : ""}`;
+        requestBtn.className = `btn btn-sm btn-primary {% if user|has_permition:'database_users.can_download' %}mr-2 {% endif %}w-100 text-truncate ${manga["monitored"] ? "d-none" : ""}`;
         requestBtn.textContent = '{% trans "frontend.search.request" context "Request button text" %}';
         requestBtn.disabled = manga["requested"];
         requestBtn.onclick = async (e) => {

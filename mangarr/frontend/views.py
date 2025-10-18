@@ -287,24 +287,26 @@ def create_register_token(request):
 def libraries(request):
     return custom_render(request, "manager/library.html", {"libraries": [l for l in Library.objects.all()], "connectors": ConnectorBase.get_available_connectors()})
 
-from plugins.utils import get_plugins
+from plugins.utils import get_plugins, get_plugin_by_key
 
 @permission_required("database_users.can_search")
 def manga_search(request):
+    user = request.user.profile
     plugins = get_plugins()
-    plugin_names = [name for _, _, name, _ in plugins]
-    return custom_render(request, "manga/search.html", {"plugins": [(category, domain, name, languages, name not in plugin_names) for category, domain, name, languages in plugins], "libraries": [l for l in Library.objects.all()]})
+    plugin_names = [name for _, _, name, _, nsfw in plugins if not nsfw or user.nsfw_allowed]
+    return custom_render(request, "manga/search.html", {"plugins": [(category, domain, name, languages, name not in plugin_names) for category, domain, name, languages, nsfw in plugins if not nsfw or user.nsfw_allowed], "libraries": [l for l in user.allowed_libraries.all()]})
 
 from database.manga.models import MangaRequest, Manga
 
 @permission_required("database_users.can_manage_requests")
 def manga_requests(request):
-    return custom_render(request, "manga/requests.html", {"manga_requests": [{"plugin": {"name": r.get_plugin_name(r.plugin)}, "manga": r.variables, "pk": r.pk, "user": r.user or pgettext("User unknown text", "frontend.request_manga.user_unknown"), "library": {"name": r.library.name, "id": r.library.id}} for r in MangaRequest.objects.all()], "libraries": [(l.id, l.name) for l in Library.objects.all()]})
+    user = request.user.profile
+    return custom_render(request, "manga/requests.html", {"manga_requests": [{"plugin": {"name": r.get_plugin_name(r.plugin)}, "manga": r.variables, "pk": r.pk, "user": r.user or pgettext("User unknown text", "frontend.request_manga.user_unknown"), "library": {"name": r.library.name, "id": r.library.id}} for r in MangaRequest.objects.all() if (not get_plugin_by_key(r.plugin).nsfw_only or user.nsfw_allowed) and r.library in user.allowed_libraries.all()], "libraries": [(l.id, l.name) for l in user.allowed_libraries.all()]})
 
 @login_required
 def manga_monitored(request):
+    user = request.user.profile
     plugins = get_plugins()
-    plugin_names = [name for _, _, name, _ in plugins]
     return custom_render(request, "manga/monitored.html", {
         "mangas": sorted([{
             "name": m.name.value,
@@ -320,10 +322,11 @@ def manga_monitored(request):
                 "name": m.library.name,
                 },
             "nsfw": m.nsfw,
-            } for m in Manga.objects.all()],
+            } for m in Manga.objects.all() if (not m.nsfw or user.nsfw_allowed) and m.library in user.allowed_libraries.all()],
             key=lambda x: x["name"]),
-        "libraries": [(l.id, l.name) for l in Library.objects.all()],
-        "plugins": [(f"{category}_{domain}", name) for category, domain, name, _ in plugins]
+        "libraries": [(l.id, l.name) for l in user.allowed_libraries.all()],
+        "plugins": [(f"{category}_{domain}", name) for category, domain, name, _, nsfw in plugins if not nsfw or user.nsfw_allowed],
+        "nsfw_allowed": user.nsfw_allowed,
     })
 
 @login_required

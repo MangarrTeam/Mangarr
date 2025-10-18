@@ -18,7 +18,7 @@ def update_metadata():
         repos = fetch_json_list(source_url)
         for repo in repos:
             manifest = fetch_repo_manifest(repo)
-            if manifest and all([k_name in list(manifest.keys()) and type(manifest[k_name]) == k_type for k_name, k_type in MANIFEST_KEYS]) and (not manifest.get("nsfw") or NSFW_ALLOWED):
+            if manifest and all([k_name in list(manifest.keys()) and type(manifest[k_name]) == k_type for k_name, k_type in MANIFEST_KEYS]):
                 key = f"{category}:{manifest['domain']}"
                 known_keys.add(key)
                 version = Version(manifest["version"])
@@ -50,7 +50,7 @@ def update_metadata():
 
             try:
                 manifest = get_downloaded_manifest(category, domain)
-                if manifest and all([k_name in list(manifest.keys()) and type(manifest[k_name]) == k_type for k_name, k_type in MANIFEST_KEYS]) and (not manifest.get("nsfw") or NSFW_ALLOWED):
+                if manifest and all([k_name in list(manifest.keys()) and type(manifest[k_name]) == k_type for k_name, k_type in MANIFEST_KEYS]):
                     version = Version(manifest["version"])
                     plugin_data.append({
                         **{key:value for key, value in manifest.items() if (key, type(value)) in MANIFEST_KEYS},

@@ -42,12 +42,13 @@ class ProcessBase(models.Model):
     url = models.URLField(verbose_name=pgettext("URL field name", "processes.models.process_base.url"), unique=True)
     last_run = models.DateTimeField(blank=True, null=True, verbose_name=pgettext("Last run field name", "processes.models.process_base.last_run"))
     arguments = models.JSONField(default=dict, verbose_name=pgettext("Arguments JSON field name", "processes.models.process_base.arguments"), blank=True)
+    manga = models.ForeignKey(Manga, on_delete=models.CASCADE, blank=True, null=True, verbose_name=pgettext("Monitor manga name", "processes.models.monitor.manga"))
     
     class Meta:
         abstract = True
 
     def get_plugin(self) -> MangaPluginBase:
-        return get_plugin_by_key(self.plugin)
+        return get_plugin_by_key(self.plugin, self.manga.nsfw if self.manga else False)
 
     def __str__(self):
         return f'{self.arguments.get("name") or super().__str__()} ({self.plugin})'
@@ -65,7 +66,6 @@ def get_hash(text: str) -> str:
      
 class MonitorManga(ProcessBase):
     library = models.ForeignKey(Library, on_delete=models.CASCADE, blank=False, null=False, verbose_name=pgettext("Library field name for Manga monitor", "database.models.manga_monitor.library"))
-    manga = models.ForeignKey(Manga, on_delete=models.CASCADE, blank=True, null=True, verbose_name=pgettext("Monitor manga manga name", "processes.models.monitor_manga.manga"))
 
     def update(self):
         try:
@@ -137,7 +137,6 @@ class ChapterHadNoPages(Exception):
     pass
    
 class MonitorChapter(ProcessBase):
-    manga = models.ForeignKey(Manga, on_delete=models.CASCADE, verbose_name=pgettext("Manga FK name", "processes.models.monitor_chapter.manga"))
     def update(self):
         try:
             plugin = self.get_plugin()

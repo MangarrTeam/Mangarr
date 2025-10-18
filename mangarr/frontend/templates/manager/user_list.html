@@ -46,17 +46,33 @@
             <button class="btn btn-sm btn-primary my-1" onclick="editPermissions({{ luser.id }}, '{{ luser.username }}')">
               {% trans "frontend.manager_panel.edit_permissions" context "Edit permissions button title" %}
             </button>
+            <button class="btn btn-sm btn-primary my-1" onclick="editLibraryAccess({{ luser.id }}, '{{ luser.username }}')">
+              {% trans "frontend.manager_panel.edit_library_access" context "Edit library access button title" %}
+            </button>
             {% if user.is_superuser %}
             <form method="post" action="{% url 'toggle_user_staff' luser.id %}" class="my-1">
               {% csrf_token %}
               <input type="hidden" value="manager_user_list" id="zource" name="zource">
               {% if not luser.is_staff %}
-              <button type="submit" class="btn btn-sm btn-info w-100" onclick="editPermissions({{ luser.id }}, '{{ luser.username }}')">
+              <button type="submit" class="btn btn-sm btn-info w-100">
                 {% trans "frontend.manager_panel.add_staff" context "Add staff button title" %}
               </button>
               {% else %}
-              <button type="submit" class="btn btn-sm btn-warning w-100" onclick="editPermissions({{ luser.id }}, '{{ luser.username }}')">
+              <button type="submit" class="btn btn-sm btn-warning w-100">
                 {% trans "frontend.manager_panel.remove_staff" context "Remove staff button title" %}
+              </button>
+              {% endif %}
+            </form>
+            <form method="post" action="{% url 'toggle_user_nsfw' luser.id %}" class="my-1">
+              {% csrf_token %}
+              <input type="hidden" value="manager_user_list" id="zource" name="zource">
+              {% if not luser.profile.nsfw_allowed %}
+              <button type="submit" class="btn btn-sm btn-info w-100">
+                {% trans "frontend.manager_panel.nsfw_allowed" context "Allow NSFW button title" %}
+              </button>
+              {% else %}
+              <button type="submit" class="btn btn-sm btn-warning w-100">
+                {% trans "frontend.manager_panel.nsfw_not_allowed" context "Disallow NSFW button title" %}
               </button>
               {% endif %}
             </form>
@@ -126,7 +142,7 @@
     <div class="modal-content text-white">
       <div class="modal-header background-dark border-0">
         <h5 class="modal-title" id="permissionModalLabel">
-          {% blocktrans with username="<span id='modalUsername'></span>" context "Edit permission for 'user' title" %}frontend.manager_panel.edit_permissions_for {{ username }}{% endblocktrans %}
+          {% blocktrans with username="<span id='permissionModalUsername'></span>" context "Edit permission for 'user' title" %}frontend.manager_panel.edit_permissions_for {{ username }}{% endblocktrans %}
         </h5>
         <button type="button" class="btn-close" data-dismiss="modal"></button>
       </div>
@@ -141,6 +157,32 @@
       <div class="modal-footer background-light border-0">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "frontend.manager_panel.close" context "Close button text" %}</button>
         <button type="button" class="btn btn-success" onclick="submitPermissions()">{% trans "frontend.manager_panel.save_changes" context "Save button text" %}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Libraries Modal -->
+<div class="modal fade" id="librariesModal" tabindex="-1" role="dialog" aria-labelledby="librariesModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content text-white">
+      <div class="modal-header background-dark border-0">
+        <h5 class="modal-title" id="librariesModalLabel">
+          {% blocktrans with username="<span id='librariesModalUsername'></span>" context "Edit libraries for 'user' title" %}frontend.manager_panel.edit_libraries_for {{ username }}{% endblocktrans %}
+        </h5>
+        <button type="button" class="btn-close" data-dismiss="modal"></button>
+      </div>
+      <div class="modal-body background-light">
+        <form id="librariesForm">
+          <div id="librariesList" class="form-check">
+            <!-- Filled dynamically -->
+          </div>
+          <input type="hidden" name="user_id" id="modalUserId">
+        </form>
+      </div>
+      <div class="modal-footer background-light border-0">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "frontend.manager_panel.close" context "Close button text" %}</button>
+        <button type="button" class="btn btn-success" onclick="submitLibraries()">{% trans "frontend.manager_panel.save_changes" context "Save button text" %}</button>
       </div>
     </div>
   </div>
@@ -189,7 +231,7 @@
 <script>
 function editPermissions(userId, username) {
     $('#modalUserId').val(userId);
-    $('#modalUsername').text(username);
+    $('#permissionModalUsername').text(username);
     $('#permissionsList').html('');
     fetch("{% url 'get_user_permissions' 0 %}".replace('0', userId))
         .then(res => res.json())
@@ -205,6 +247,27 @@ function editPermissions(userId, username) {
                 `);
             });
             $('#permissionModal').modal('show');
+        });
+}
+
+function editLibraryAccess(userId, username) {
+    $('#modalUserId').val(userId);
+    $('#librariesModalUsername').text(username);
+    $('#librariesList').html('');
+    fetch("{% url 'get_user_libraries' 0 %}".replace('0', userId))
+        .then(res => res.json())
+        .then(data => {
+            data.libraries.forEach(p => {
+                $('#librariesList').append(`
+                  <div class="form-check py-1 d-flex align-items-center hover-highlight">
+                      <input class="form-check-input me-2" type="checkbox" value="${p.id}" id="lib_${p.id}" ${p.can ? 'checked' : ''}>
+                      <label class="form-check-label w-100 cursor-pointer" for="lib_${p.id}">
+                          ${p.name}
+                      </label>
+                  </div>
+                `);
+            });
+            $('#librariesModal').modal('show');
         });
 }
 
@@ -226,6 +289,28 @@ function submitPermissions() {
     .then(res => res.json())
     .then(() => {
         $('#permissionModal').modal('hide');
+    })
+    .catch(err => console.error(err));
+}
+
+function submitLibraries() {
+    const userId = document.getElementById('modalUserId').value;
+    const checked = Array.from(document.querySelectorAll('#librariesList input:checked'))
+                         .map(input => input.value);
+
+    fetch("{% url 'update_user_libraries' 0 %}".replace('0', userId), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: new URLSearchParams({
+            libraries: checked,
+        })
+    })
+    .then(res => res.json())
+    .then(() => {
+        $('#librariesModal').modal('hide');
     })
     .catch(err => console.error(err));
 }

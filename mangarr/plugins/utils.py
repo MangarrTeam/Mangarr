@@ -34,17 +34,17 @@ def get_plugin_name(category: str, domain: str) -> str:
 
 import threading
 _registry_lock = threading.Lock()
-def get_plugin_by_key(key:str) -> MangaPluginBase:
+def get_plugin_by_key(key:str, nsfw:bool = False) -> MangaPluginBase:
     plugins_loaded.wait()
     with _registry_lock:
         if key in PLUGIN_REGISTRY:
-            return PLUGIN_REGISTRY[key](NSFW_ALLOWED)
+            return PLUGIN_REGISTRY[key](nsfw)
         
         logger.error(f"Can't find plugin with key {key}")
-    return MangaPluginBase(NSFW_ALLOWED)
+    return MangaPluginBase(nsfw)
     
-def get_plugin(category: str, domain: str) -> type[MangaPluginBase]:
-    return get_plugin_by_key(f'{category}_{domain}')
+def get_plugin(category: str, domain: str, nsfw:bool = False) -> type[MangaPluginBase]:
+    return get_plugin_by_key(f'{category}_{domain}', nsfw)
 
 def get_plugins_domains(category: str) -> list:
     plugins_loaded.wait()
@@ -62,10 +62,10 @@ def get_plugins() -> list:
         for key, plugin in PLUGIN_REGISTRY.items():
             if key.startswith("core"):
                 domain = key.removeprefix("core_")
-                output.append(("core", domain, get_plugin_name("core", domain), sorted(plugin.get_languages())))
+                output.append(("core", domain, get_plugin_name("core", domain), sorted(plugin.get_languages()), plugin.nsfw_only))
             if key.startswith("community"):
                 domain = key.removeprefix("community_")
-                output.append(("community", domain, get_plugin_name("community", domain), sorted(plugin.get_languages())))
+                output.append(("community", domain, get_plugin_name("community", domain), sorted(plugin.get_languages()), plugin.nsfw_only))
         return output
     
 def fetch_repo_manifest(repo):
