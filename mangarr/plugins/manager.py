@@ -2,7 +2,7 @@ import os, json
 from plugins.plugin_sources import SOURCE_LISTS
 from plugins.utils import fetch_repo_manifest, fetch_json_list
 import logging
-from core.settings import PLUGINS_DIR, PLUGINS_METADATA_PATH, NSFW_ALLOWED
+from core.settings import PLUGINS_DIR, PLUGINS_METADATA_PATH
 from .manifest_requirements import MANIFEST_KEYS
 from packaging.version import Version
 from django.core.cache import cache

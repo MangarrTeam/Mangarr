@@ -1,5 +1,5 @@
 import json, requests, logging
-from core.settings import PLUGINS_METADATA_PATH, PLUGIN_REGISTRY, NSFW_ALLOWED, plugins_loaded
+from core.settings import PLUGINS_METADATA_PATH, PLUGIN_REGISTRY, plugins_loaded
 from .base import MangaPluginBase
 logger = logging.getLogger(__name__)
 

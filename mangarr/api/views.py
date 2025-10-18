@@ -14,7 +14,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
 import json, os
 from .utils import manga_is_monitored, manga_is_requested, validate_token, require_DELETE, require_GET_PATCH, start_background_search
-from core.settings import NSFW_ALLOWED
 from processes.models import MonitorManga, MonitorChapter, EditChapter
 from django.db import IntegrityError
 from processes.tasks import trigger_monitor
