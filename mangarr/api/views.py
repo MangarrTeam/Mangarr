@@ -203,9 +203,8 @@ def search_manga_start(request):
     if domain not in get_plugins_domains(category):
         return JsonResponse({"error": "Domain does not exist"}, status=403)
     language = data.get("language")
-    nsfw = data.get("nsfw", False)
     
-    task_id = start_background_search(query, category, domain, language, nsfw)
+    task_id = start_background_search(query, category, domain, language, request.user.profile.nsfw_allowed)
     
     return JsonResponse({"task_id": task_id})
 
