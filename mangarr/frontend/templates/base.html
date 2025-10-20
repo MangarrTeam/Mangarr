@@ -254,8 +254,8 @@ document.addEventListener('click', function (event) {
 
 
 
-
-const socket = new WebSocket("ws://" + window.location.host + "/ws/stats/");
+const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+const socket = new WebSocket(protocol + window.location.host + "/ws/stats/");
 
 socket.onmessage = function(event) {
     const data = JSON.parse(event.data);
