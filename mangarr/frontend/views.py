@@ -313,6 +313,7 @@ def manga_monitored(request):
                 "id": m.library.id,
                 "name": m.library.name,
                 },
+            "complete": m.complete.value,
             "nsfw": m.nsfw,
             } for m in Manga.objects.all() if (not m.nsfw or user.nsfw_allowed) and m.library in user.allowed_libraries.all()],
             key=lambda x: x["name"]),

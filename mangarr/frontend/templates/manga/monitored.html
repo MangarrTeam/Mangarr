@@ -52,6 +52,10 @@
                             {% endfor %}
                         </div>
                     </div>
+                    <div class="ml-2 mb-2">
+                        <label class="text-white-50 small" for="filter-complete">{% trans "frontend.manga_monitored.complete" context "Complete manga filter button text" %}</label>
+                        <input type="checkbox" id="filter-complete" data-off-label="false" checked data-on-label="false" data-off-icon-cls="fa fa-eye-slash" data-on-icon-cls="fa fa-eye" data-reverse hidden>
+                    </div>
 
                     <!-- NSFW -->
                     {% if nsfw_allowed %}
@@ -82,6 +86,7 @@
                     style="aspect-ratio: 2 / 3;"
                     data-plugin-id="{{ manga.plugin.domain }}"
                     data-library-id="{{ manga.library.id }}"
+                    data-complete="{{ manga.complete|yesno:'true,false' }}"
                     data-nsfw="{{ manga.nsfw|yesno:'true,false' }}">
                 {% if manga.plugin.name %}
                 <span class="position-absolute bg-success text-white px-2 py-1 mr-1 mt-1 d-inline-block text-center multi-line-title" style="top: 0; right: 0; border-radius: 50rem; max-width: 75%; font-size: clamp(0.5rem, 0.75vw, 1rem)">{{ manga.plugin.name }}</span>
@@ -163,6 +168,7 @@
     }
 
     // Elements
+    var completeCheckbox = document.getElementById("filter-complete");
     var nsfwCheckbox = document.getElementById("filter-nsfw");
     var resetButton = document.getElementById("reset-filters");
     var pluginLabel = document.getElementById("filter-plugin-label");
@@ -171,8 +177,10 @@
     // State
     var pluginFilter = getCookie("filter_plugins") || [];
     var libraryFilter = getCookie("filter_libraries") || [];
+    var completeFilter = getCookie("filter_complete") === false;
     var nsfwFilter = getCookie("filter_nsfw") === true;
 
+    $('#filter-complete').prop('checked', completeFilter);
     $('#filter-nsfw').prop('checked', nsfwFilter);
 
     // Prevent dropdowns from closing when clicking inside
@@ -206,11 +214,13 @@
 
         var pluginId = card.getAttribute("data-plugin-id") || "";
         var libraryId = card.getAttribute("data-library-id") || "";
+        var isComplete = card.getAttribute("data-complete") === "true";
         var isNsfw = card.getAttribute("data-nsfw") === "true";
 
         var visible = true;
         if (pluginFilter.length > 0 && !pluginFilter.includes(pluginId)) visible = false;
         if (libraryFilter.length > 0 && !libraryFilter.includes(libraryId)) visible = false;
+        if (!completeFilter && isComplete) visible = false;
         if (!nsfwFilter && isNsfw) visible = false;
 
         cardCol.style.display = visible ? "" : "none";
@@ -218,6 +228,7 @@
 
         setCookie("filter_plugins", pluginFilter);
         setCookie("filter_libraries", libraryFilter);
+        setCookie("filter_complete", completeFilter);
         setCookie("filter_nsfw", nsfwFilter);
         updateLabels();
     }
@@ -253,6 +264,11 @@
         });
     });
 
+    $('#filter-complete').on("change", function () {
+        completeFilter = this.checked;
+        applyFilters();
+    });
+
     $('#filter-nsfw').on("change", function () {
         nsfwFilter = this.checked;
         applyFilters();
@@ -261,8 +277,10 @@
     resetButton.addEventListener("click", function () {
         pluginFilter = [];
         libraryFilter = [];
+        completeFilter = true;
         nsfwFilter = false;
-        nsfwCheckbox.checked = false;
+        completeCheckbox.checked = completeFilter;
+        nsfwCheckbox.checked = nsfwFilter;
         $('#filter-nsfw').prop('checked', false);
         document.querySelectorAll(".filter-plugin-option, .filter-library-option").forEach(e => e.classList.remove("active", "bg-secondary"));
         applyFilters();

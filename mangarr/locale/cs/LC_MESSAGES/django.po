@@ -872,6 +872,11 @@ msgid "frontend.manga_monitored.libraries_all"
 msgstr "Knihovny (Všechny)"
 
 #: .\frontend\templates\manga\monitored.html:59
+msgctxt "Complete manga filter button text"
+msgid "frontend.manga_monitored.complete"
+msgstr "Kompletní"
+
+#: .\frontend\templates\manga\monitored.html:59
 msgctxt "NSFW manga filter button text"
 msgid "frontend.manga_monitored.nsfw"
 msgstr "NSFW"
