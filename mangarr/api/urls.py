@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     #path('', views.index, name="index"),
     path('search', views.search, name='api_search'),
+    path('stats', views.stats, name='api_stats'),
 
     path('manager/users/token/regenerate', views.regenerate_token_view, name='regenerate_token'),
     path('manager/users/<int:user_id>/staff/', views.toggle_staff_user, name='toggle_user_staff'),

@@ -46,6 +46,17 @@ def search(request):
 
     return JsonResponse({"mangas": mangas, "volumes": volumes, "chapters": chapters})
 
+@validate_token
+def stats(request):
+    return JsonResponse(
+        {
+            "monitored": Manga.objects.filter(complete=False).count(),
+            "completed": Manga.objects.filter(complete=True).count(),
+            "requested": MangaRequest.objects.count(),
+            "mangas": Manga.objects.count(),
+            "chapters": Chapter.objects.count(),
+        })
+
 @csrf_exempt
 @require_POST
 @validate_token
