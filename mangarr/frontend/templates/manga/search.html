@@ -172,6 +172,7 @@ document.getElementById('search-form').addEventListener('submit', async (e) => {
 
         const img = document.createElement("img");
         img.className = "card-img";
+        img.loading = "lazy";
         img.src = "/uploads/static/no_thumbnail.png";
         img.alt = '{% trans "frontend.manga_search.no_manga_found" context "No manga found text" %}';
         img.style.objectFit = "cover";
@@ -211,6 +212,7 @@ document.getElementById('search-form').addEventListener('submit', async (e) => {
 
         const img = document.createElement("img");
         img.className = "card-img";
+        img.loading = "lazy";
         img.src = manga.cover;
         img.alt = manga.name;
         img.style.objectFit = "cover";

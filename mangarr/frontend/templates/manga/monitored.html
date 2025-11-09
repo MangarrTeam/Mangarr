@@ -95,6 +95,7 @@
                 <img class="card-img"
                     src="{{ manga.cover }}"
                     alt="{{ manga.name }}"
+                    loading="lazy"
                     style="object-fit: cover; height: 100%;">
                 <div class="card-img-overlay d-flex flex-column justify-content-end p-2"
                     style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));">
@@ -119,6 +120,7 @@
                 <img class="card-img"
                     src="/uploads/static/no_thumbnail.png"
                     alt="{% trans 'frontend.manga_monitored.none_found' context 'No manga found text' %}"
+                    loading="lazy"
                     style="object-fit: cover; height: 100%;">
                 <div class="card-img-overlay d-flex flex-column justify-content-end p-2"
                     style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));">
