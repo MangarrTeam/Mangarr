@@ -48,12 +48,13 @@ def search(request):
 
 @validate_token
 def stats(request):
+    mangas = [m.complete == True for m in Manga.objects.all()]
     return JsonResponse(
         {
-            "monitored": Manga.objects.filter(complete=False).count(),
-            "completed": Manga.objects.filter(complete=True).count(),
+            "monitored": mangas.count(False),
+            "completed": mangas.count(True),
             "requested": MangaRequest.objects.count(),
-            "mangas": Manga.objects.count(),
+            "mangas": len(mangas),
             "chapters": Chapter.objects.count(),
         })
 
